@@ -383,8 +383,8 @@ function checklistTable(items, cond){
   return `<div class="${cond?`cond ${cond}`:''}"><table class="data"><thead><tr><th>Component Inspected</th><th style="width:70px">Tick</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
-/* Component section builder used heavily in Chapter 6 (returns full HTML) */
-function componentSection(opts){
+/* Component  builder used heavily in Chapter 6 (returns full HTML) */
+function component(opts){
   // opts: {title, cond, note, typeFieldLabel, designRows, bodyMaterialOptions, bodyMaterialLabel, extraSimpleFields:[], obsItems:[{title,consider}] }
   let html = `<div class="cond ${opts.cond||''}"><div class="subhead">${opts.title}</div>`;
   if(opts.note) html += note(opts.note);
@@ -463,16 +463,21 @@ let ch1 = subhead('1.1 Objective of CDSE');
 ch1 += statictext(`The CDSE is:
   <ul><li>A holistic, periodic safety reassessment</li>
   <li>Intended to re-validate design assumptions against current knowledge</li>
-  <li>A decision-support document for: continued operation, remedial measures, further detailed studies, risk-informed prioritisation</li></ul>`, 'section-box');
+  <li>A decision-support document for: continued operation, remedial measures, further detailed studies, risk-informed prioritisation</li></ul>`, '-box');
 ch1 += subhead('1.2 Provision under the Dam Safety Act, 2021');
-ch1 += subsubhead('1.2.1 Section 38');
-ch1 += statictext(`The owner of a specified dam shall cause a comprehensive dam safety evaluation through an Independent Panel of Experts, for determining the condition of the dam and its reservoir. The first CDSE for an existing specified dam shall be conducted within five years of commencement of the Act, and thereafter at intervals specified by the Regulations. The CDSE shall consist of, but not be limited to: (a) review of design, construction, operation, maintenance and performance data; (b) hydrologic/hydraulic assessment including design floods; (c) seismic safety assessment including site-specific seismic parameters where required; (d) evaluation of O&amp;M and inspection procedures; and (e) evaluation of any other hazard-causing condition.`, 'statute-text');
-ch1 += subsubhead('1.2.2 Section 39');
+ch1 += subsubhead('1.2.1  38');
+ch1 += statictext(`The owner of a specified dam shall cause a comprehensive dam safety evaluation through an Independent Panel of Experts, for determining the condition of the dam and its reservoir. The first CDSE for an existing specified dam shall be conducted within five years of commencement of the Act, and thereafter at intervals specified by the Regulations. The CDSE shall consist of, but not be limited to: 
+(a) review of design, construction, operation, maintenance and performance data; 
+(b) hydrologic/hydraulic assessment including design floods; 
+(c) seismic safety assessment including site-specific seismic parameters where required; 
+d) evaluation of O&amp;M and inspection procedures; and 
+(e) evaluation of any other hazard-causing condition.`, 'statute-text');
+ch1 += subsubhead('1.2.2  39');
 ch1 += statictext(`CDSE is compulsory in case of: (a) major modification to the original structure or design criteria; (b) discovery of an unusual condition at the dam or reservoir rim; and (c) an extreme hydrological or seismic event.`, 'statute-text');
-ch1 += subsubhead('1.2.3 Section 40');
+ch1 += subsubhead('1.2.3  40');
 ch1 += statictext(`The owner shall report CDSE results to the SDSO, including assessment of condition, emergency-measure recommendations, remedial-measure recommendations, recommendations for further studies, and recommendations for improved routine maintenance/inspection. Where remedial action is recommended, the SDSO shall pursue the owner to ensure timely completion; unresolved matters go to the SDSO and, failing agreement, to the NDSA.`, 'statute-text');
 ch1 += subhead('1.3 Regulatory Purpose of CDSE');
-ch1 += statictext(`The CDSE is a statutory obligation under Chapter IX (Sections 38–40) of the Dam Safety Act, 2021, and is read together with: hazard classification (Sec. 17), pre/post-monsoon &amp; special inspections (Sec. 31), instrumentation (Sec. 32), hydro-meteorological &amp; seismological stations (Sec. 33–34), inflow forecasting/EAP/risk assessment (Sec. 35–36).`, 'section-box');
+ch1 += statictext(`The CDSE is a statutory obligation under Chapter IX (s 38–40) of the Dam Safety Act, 2021, and is read together with: hazard classification (Sec. 17), pre/post-monsoon &amp; special inspections (Sec. 31), instrumentation (Sec. 32), hydro-meteorological &amp; seismological stations (Sec. 33–34), inflow forecasting/EAP/risk assessment (Sec. 35–36).`, 'section-box');
 ch1 += subhead('1.4 Regulations related to the Comprehensive Dam Safety Evaluation made under the Act');
 ch1 += annexRefHtml('regCDSE');
 addChapter(1, 'Objective and Regulatory Context of CDSE', ch1);
