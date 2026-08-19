@@ -1,4 +1,4 @@
-    const GOLD = "FFD700";
+
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
@@ -2152,12 +2152,12 @@ function wxBuildDocxDocument(data){
     });
   }
 
-  function annexBlockRenderer(b){
-    const out = [];
-    out.push(new Paragraph({spacing:{before:160,after:80}, children:[
-      new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:GOLD, font:FONT_SANS}),
-      new TextRun({text: b.title ? `  —  ${b.title}` : '', bold:true, size:19, color:NAVY, font:FONT_SANS})
-    ]}));
+ function annexBlockRenderer(b){
+  const out = [];
+  out.push(new Paragraph({spacing:{before:160,after:80}, children:[
+    new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:GOLD, font:FONT_SANS}), // ❌ ERROR YAHAN HAI
+    new TextRun({text: b.title ? `  —  ${b.title}` : '', bold:true, size:19, color:NAVY, font:FONT_SANS})
+  ]}));
     if(!b.files || !b.files.length){
       out.push(new Paragraph({spacing:{after:200}, children:[
         new TextRun({text:'(No document attached)', italics:true, size:17, color:MUTED, font:FONT_SANS})
