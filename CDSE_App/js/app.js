@@ -1,4 +1,4 @@
-
+    const GOLD = "FFD700";
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
@@ -2151,7 +2151,7 @@ function wxBuildDocxDocument(data){
       rows
     });
   }
-    const GOLD = "FFD700";
+
   function annexBlockRenderer(b){
     const out = [];
     out.push(new Paragraph({spacing:{before:160,after:80}, children:[
