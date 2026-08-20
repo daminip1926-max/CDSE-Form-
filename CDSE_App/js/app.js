@@ -916,7 +916,7 @@ const mainEl = document.getElementById('mainContent');
 const tocEl = document.getElementById('toc');
 
 let tocHtml = `<a href="#cover" onclick="closeTocOnMobile()">Cover Page</a>`;
-mainEl.innerHTML += `<div class="chapter" id="cover"><div class="chapter-head">Cover Page</div><div class="chapter-body">${coverHtml}</div></div>`;
+mainEl.innerHTML += `<div class="chapter" id="cover"><div class="chapter-head">Cover Page</div><div class="chapter-body" style="padding: 0; margin: 0;">${coverHtml}</div></div>`;
 
 chapters.forEach(ch=>{
   const anchor = 'ch'+ch.no;
