@@ -195,7 +195,6 @@ function componentSection(opts){
 const annexCoreMeta = [
   {id:'regCDSE', name:'Regulations related to CDSE made under the Act'},
   {id:'ipoeOrder', name:'IPoE Constitution Order'},
-  {id:'coiDeclaration', name:'Conflict of Interest Declarations (IPoE Members)'}
 ];
 function annexRefHtml(id){
   return `<div class="field"><span class="annexref" data-annex-id="${id}">Attached in Annexure <b class="annexroman"></b></span></div>`;
