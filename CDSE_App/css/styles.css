@@ -239,7 +239,7 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 .annexref b.annexroman::before{content:"";}
 .annexref{font-size:12.8px;font-weight:600;color:var(--navy2);display:inline-block;padding:6px 0;}
 
-@page{size:A4;margin:2mm;}
+@page{size:A4;margin:1mm;}
 @media print{
   .controls,.toc,.topbar button,.hamburger,.addrow-btn{display:none !important;}
   .select-add-dropdown{display:none !important;}
