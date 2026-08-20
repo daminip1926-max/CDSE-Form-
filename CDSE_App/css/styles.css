@@ -275,7 +275,7 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
   }
   /* Never leave a heading alone at the bottom of a page with its content pushed over */
   .subhead, .subsubhead{ break-after:avoid; page-break-after:avoid; }
-  .cover{ break-inside:avoid; page-break-inside:avoid; }
+  /* .cover{ break-inside:avoid; page-break-inside:avoid; } */
 
   /* Each uploaded annexure document prints on its own fresh A4 page.
      (Flex centering here previously caused the image to render small with
