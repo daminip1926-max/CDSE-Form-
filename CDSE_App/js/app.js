@@ -2529,7 +2529,7 @@ async function submitToDrive(overwrite){
     if(result && result.status === 'exists'){
       btn.disabled = false;
       status.textContent = '';
-      const confirmReplace = confirm(`PIC "${pic}" ke liye ek report Google Drive mein pehle se hai.\nUse REPLACE karna hai?`);
+      const confirmReplace = confirm(`PIC "${pic}" The report is already saved in Google Drive.\nUse Do you want to replace it?`);
       if(confirmReplace) return submitToDrive(true);
       return;
     }
