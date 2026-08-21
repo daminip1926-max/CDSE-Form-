@@ -36,7 +36,8 @@ function emptyTextFor(el){
   const labelEl = wrap ? wrap.querySelector('label') : null;
   let labelText = labelEl ? labelEl.textContent.replace(/\s+/g,' ').trim() : '';
   labelText = labelText.replace(/\s*auto\s*$/i, '').trim(); // strip the "auto" badge text
-  return labelText ? `${labelText} — Not available` : 'Not available';
+  // return labelText ? `${labelText} — Not available` : 'Not available';
+      return labelText ? `Not available` : 'Not available';
 }
 
 function field(label, opts={}){
