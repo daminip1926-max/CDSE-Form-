@@ -204,6 +204,13 @@ table.data td textarea{resize:vertical;min-height:60px;overflow:visible;white-sp
 .statictext ul{margin:4px 0;padding-left:22px;}
 
 /* ===== PIC Autofill ===== */
+.autofillbox { /* ya jo bhi aapki class ka naam ho */
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #fcfbfa; /* Background solid rakhna zaroori hai taaki peeche ka text na dikhe */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* Thoda shadow taaki alag se uth kar dikhe */
+}
 .autofillbox{border:1px solid var(--accent);background:#fff9ec;border-radius:6px;padding:14px 16px;margin-bottom:18px;}
 .autofillbox .abtitle{font-weight:700;color:var(--navy2);font-size:13.5px;margin-bottom:8px;}
 .autofillrow{
