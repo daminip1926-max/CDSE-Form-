@@ -397,8 +397,7 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 
 @keyframes scrollLeftToRight {
     0% { transform: translateX(-100%); }
-    100% { transform: translateX(350%); }
+    100% { transform: translateX(100vw); }
 }
-
 
 
