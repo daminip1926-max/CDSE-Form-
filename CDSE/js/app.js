@@ -2167,7 +2167,7 @@ function wxBuildDocxDocument(data){
   function annexBlockRenderer(b){
   const out = [];
   out.push(new Paragraph({spacing:{before:160,after:80}, children:[
-    new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:"FFD700", font:FONT_SANS}),
+    new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:ACCENT, font:FONT_SANS}),
     new TextRun({text: b.title ? `  —  ${b.title}` : '', bold:true, size:19, color:NAVY, font:FONT_SANS})
   ]}));
     if(!b.files || !b.files.length){
