@@ -375,3 +375,30 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
   table.data{font-size:11.5px;}
   .controls button{flex:1 1 auto;}
 }
+
+/* --- Scroller Animation (Left to Right) --- */
+.scroller-container {
+    width: 100%;
+    overflow: hidden;
+    background-color: #2f5994; /* Light yellow background */
+    padding: 5px 0;
+    margin-bottom: 2px;
+    border: 1px solid #ffdf7e;
+}
+
+.scrolling-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #d1e70b;
+    /* Animation: Name, Duration, Speed, Loop */
+    animation: scrollLeftToRight 8s linear infinite; 
+}
+
+@keyframes scrollLeftToRight {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(350%); }
+}
+
+
+
