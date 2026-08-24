@@ -197,7 +197,11 @@
       <label>Date of Visit</label>
       <input type="date" id="dateOfVisitQuickInput">
     </div>
-   
+    <div class="field" !important>
+      <label>Dam Reservoir Level on the Day of Inspection
+      </label>
+      <input type="text" id="reservoirLevelQuickInput" placeholder="e.g. 0.00">
+    </div>
     <div class="field">
       <label>Name</label>
       <input type="text" id="ipoeNameInput" placeholder="e.g. Dr. A. B. Sharma">
@@ -207,11 +211,7 @@
       <input type="text" id="ipoeDesigInput" placeholder="e.g. Chief Engineer (Retd.)">
     </div>
     <button type="button" class="autofillbtn" onclick="addIpoeMemberFromTop()">+ Add Member</button>
-     <div class="field">
-      <label>Dam Reservoir Level on the Day of Inspection
-      </label>
-      <input type="text" id="reservoirLevelQuickInput" placeholder="e.g. 362.60">
-    </div>
+    
   </div>
 
   <div class="autofillstatus no-print" id="autofillStatus">
