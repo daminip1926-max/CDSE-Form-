@@ -861,7 +861,11 @@ addChapter(13, 'Overall Safety Classification', ch13);
 let ch14 = '';
 ch14 += subhead('Summary of Findings');
 ch14 += statictext('Per Section 40(2), findings shall set out: (a) assessment of structure condition; (b) recommendations for emergency measures; (c) recommendations for remedial measures/actions (design, construction, O&amp;M, inspection); (d) recommendations for additional studies/investigations; (e) recommendations for improvements in routine maintenance and inspection.');
-ch14 += field('Summary of findings',{type:'textarea', value:'Test'});
+ch14 += field('Summary of findings',{type:'textarea', value:'In the absence of the required historical records, design documents, inspection records, instrumentation data and other relevant dam safety documents, a comprehensive assessment of the structural and functional safety of the dam could not be fully established. Based on the available information and field observations, the present condition of the dam and its appurtenant structures shall be assessed through detailed inspection.
+The Dam Owner shall compile and furnish all available design, construction, hydrological, geological, structural, operational, maintenance and previous inspection records. Detailed studies/investigations shall be carried out, wherever required, to establish the adequacy and safety of the dam.
+Any deficiencies identified during inspection shall be addressed through appropriate emergency measures, remedial measures and corrective actions, as applicable. The adequacy of design, construction, operation and maintenance practices shall be reviewed. Routine maintenance and periodic inspection shall be strengthened, and appropriate dam safety instrumentation and monitoring arrangements shall be provided/maintained wherever required.
+The EAP, Dam Break Analysis (DBA), hydrological studies, structural safety assessment and other mandatory dam safety studies shall be completed/updated as per the applicable Dam Safety Guidelines and statutory requirements. All findings, recommendations and actions shall be documented and incorporated into the final Dam Safety Record.
+'});
 ch14 += note('Select a recommendation from the dropdown to add it below (repeat for more than one)');
 ch14 += selectAddField('Standard recommendations', [
   
