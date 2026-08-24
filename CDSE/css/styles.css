@@ -380,7 +380,7 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 .scroller-container {
     width: 100%;
     overflow: hidden;
-    background-color: #2f5994; /* Light yellow background */
+    background-color: #13315c; /* Light yellow background */
     padding: 5px 0;
     margin-bottom: 2px;
     border: 1px solid #ffdf7e;
@@ -390,7 +390,7 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
     display: inline-block;
     white-space: nowrap;
     font-weight: bold;
-    color: #d1e70b;
+    color: #fff;
     /* Animation: Name, Duration, Speed, Loop */
     animation: scrollLeftToRight 8s linear infinite; 
 }
