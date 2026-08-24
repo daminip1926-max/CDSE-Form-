@@ -1,4 +1,4 @@
-
+const GOLD = "FFD700";
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
