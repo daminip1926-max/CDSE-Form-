@@ -1300,10 +1300,6 @@ function indexDamRows(headers, rows){
   });
   if(dl) dl.innerHTML = opts;
   const statusEl = document.getElementById('autofillStatus');
-  if(statusEl){
-    statusEl.textContent = `Dataset ready: ${Object.keys(csvIndex).length.toLocaleString('en-IN')} dam records loaded. Type a PIC or dam name above and click "Fetch & Auto-fill".`;
-    statusEl.classList.add('ok');
-  }
 }
 function parseCSV(text){
   const rows = [];
