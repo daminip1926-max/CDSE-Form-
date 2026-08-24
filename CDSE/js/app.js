@@ -226,7 +226,19 @@ let coverHtml = `<div class="cover">
   <input type="text" data-field="${nid()}" id="coverDocNo"
   placeholder="e.g. 1/MH293LH3309/CDSE/2026/WRD" >
 </div>
-
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Name of Dam Owning Agency</label><input type="text" data-field="${nid()}" data-autofill="Dam Owner" id="coverAgency" placeholder="e.g. Water Resources Department, Maharashtra"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Name of Dam Incharge</label><input type="text" data-field="${nid()}" placeholder="e.g. Dr. A. B. Sharma"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Designation of Dam Incharge</label><input type="text" data-field="${nid()}" placeholder="e.g. Chief Engineer (Retd.)"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Phone No (With STD Code)</label><input type="text" data-field="${nid()}" placeholder="e.g. +91-2025-123456"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Fax No</label><input type="text" data-field="${nid()}" placeholder="e.g. +91-2025-123457"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Email</label><input type="text" data-field="${nid()}" placeholder="e.g. damIncharge@waterresources.gov.in"></div>
+  
+  <div class="field" style="max-width:420px;margin:10px auto"><label>Contact Address</label><textarea data-field="${nid()}" placeholder="Complete office address with pin code" oninput="autoResize(this)"></textarea></div>
   <div class="damtitle" id="coverDamName">DAM</div>
   <div class="damtitle" id="coverDamPIC">PIC</div>
   <div class="cover-tagline" style="font-weight:600;color:var(--navy2);font-size:13.5px">Comprehensive Dam Safety Evaluation Report</div>
@@ -300,11 +312,6 @@ ch3 += row(field('PIC (Project Identification Code)', {autofill:'PIC', keepVisib
 ch3 += row(field('River', {autofill:'River'}), field('State', {autofill:'State'}));
 ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
 ch3 += row(field('Ownership / Owning Agency', {autofill:'Dam Owner', keepVisible:true}), field('Dam Type', {ph:'e.g. Gravity / Earthen / Composite / Barrage', autofill:'Type of Dam', keepVisible:true}));
-
-ch3 += row(field('Name of Dam Incharge', {autofill:'PIC', keepVisible:true}), field('Designation', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
-
-ch3 += row(field('Contact number', {autofill:'PIC', keepVisible:true}), field('Email ID', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
-
 ch3 += row(field('Hazard Classification', {type:'select', keepDropdown:true, id:'hazardClassificationInput', options:['Extreme','High','Significant','Low']}), field('Purpose of the Dam', {autofill:'Purpose'}));
 
 ch3 += subhead('Salient Features of the Dam');
@@ -861,13 +868,7 @@ addChapter(13, 'Overall Safety Classification', ch13);
 let ch14 = '';
 ch14 += subhead('Summary of Findings');
 ch14 += statictext('Per Section 40(2), findings shall set out: (a) assessment of structure condition; (b) recommendations for emergency measures; (c) recommendations for remedial measures/actions (design, construction, O&amp;M, inspection); (d) recommendations for additional studies/investigations; (e) recommendations for improvements in routine maintenance and inspection.');
-
-// Added the requested text as the default value for 'Summary of findings'
-ch14 += field('Summary of findings', {
-  type: 'textarea', 
-  value: 'In the absence of the required historical records, design documents, inspection records, instrumentation data and other relevant dam safety documents, a comprehensive assessment of the structural and functional safety of the dam could not be fully established. Based on the available information and field observations, the present condition of the dam and its appurtenant structures shall be assessed through detailed inspection.\n\nThe Dam Owner shall compile and furnish all available design, construction, hydrological, geological, structural, operational, maintenance and previous inspection records. Detailed studies/investigations shall be carried out, wherever required, to establish the adequacy and safety of the dam.\n\nAny deficiencies identified during inspection shall be addressed through appropriate emergency measures, remedial measures and corrective actions, as applicable. The adequacy of design, construction, operation and maintenance practices shall be reviewed. Routine maintenance and periodic inspection shall be strengthened, and appropriate dam safety instrumentation and monitoring arrangements shall be provided/maintained wherever required.\n\nThe EAP, Dam Break Analysis (DBA), hydrological studies, structural safety assessment and other mandatory dam safety studies shall be completed/updated as per the applicable Dam Safety Guidelines and statutory requirements. All findings, recommendations and actions shall be documented and incorporated into the final Dam Safety Record.'
-});
-
+ch14 += field('Summary of findings', {type:'textarea'});
 ch14 += subhead('Regulatory Recommendations to SDSO/NDSA');
 ch14 += note('Select a recommendation from the dropdown to add it below (repeat for more than one)');
 ch14 += selectAddField('Standard recommendations', [
@@ -881,33 +882,25 @@ ch14 += selectAddField('Standard recommendations', [
   'Maintain as-built drawings, construction and inspection records, logbooks, and component history.',
   'SDSO to monitor implementation through periodic inspections and report progress to NDSA.'
 ]);
-
-// Renamed from 'Additional regulatory recommendations, if any' to 'Standard recommendations'
-ch14 += field('Standard recommendations', {
-  type: 'textarea', 
-  value: 'Based on the available records and visual inspections, the dam and its principal components are generally in satisfactory physical condition. The reservoir, upstream and downstream slopes, dam crest, abutment contacts, downstream drainage, toe drain, approach channel, access roads and intake/outlet structure were generally observed to be in good condition. No significant seepage, boiling, sinkholes, animal burrows or major visible distress were reported during the inspection.\nThe ungated spillway was also structurally sound. No evidence of active distress was observed during the latest inspection. Continued surveillance of the repaired spillway is nevertheless required.'
-});
-
+ch14 += field('Additional regulatory recommendations, if any', {type:'textarea', value:'Based on the available records and visual inspections, the dam and its principal components are generally in satisfactory physical condition. The reservoir, upstream and downstream slopes, dam crest, abutment contacts, downstream drainage, toe drain, approach channel, access roads and intake/outlet structure were generally observed to be in good condition. No significant seepage, boiling, sinkholes, animal burrows or major visible distress were reported during the inspection.\nThe ungated spillway was also structurally sound. No evidence of active distress was observed during the latest inspection. Continued surveillance of the repaired spillway is nevertheless required.'});
 ch14 += subhead('Proposed Timeline for Next CDSE');
-ch14 += field('Proposed date / interval', {value: 'As per Regulation by NDSA'});
-
+ch14 += field('Proposed date / interval', {value:'As per Regulation by NDSA'});
 ch14 += subhead('Prioritised Recommendations and Action Plan');
 ch14 += note('Classify each recommendation as Immediate, Short-term or Long-term, with responsible agency and target timeline, for SDSO/NDSA monitoring under Section 40(3).');
 ch14 += `<table class="data" id="actionPlanTable"><thead><tr><th style="width:36px">Sl.No</th><th>Recommendation</th><th style="width:110px">Priority</th><th>Responsibility</th><th style="width:120px">Target Timeline</th></tr></thead><tbody id="actionPlanBody"></tbody></table>`;
 ch14 += `<button class="addrow-btn" onclick="addActionPlanRow()">+ Add Recommendation Row</button>`;
-
 addChapter(14, 'Conclusions and Recommendations', ch14);
 
 /* ---------- CERTIFICATION ---------- */
 let certHtml = `
-<div class="damtitle" id="certDamName" style="text-align:center;margin:0 0 12px">DAM</div>
-<div class="damtitle" id="certPIC" style="text-align:center;margin:0 0 12px">PIC</div>
+<div class="damtitle" id="certDamName" style="text-align:left;margin:0 0 12px">DAM</div>
+<div class="damtitle" id="certPIC" style="text-align:left;margin:0 0 12px">PIC</div>
 `;
-
+certHtml += `<div class="field" style="max-width:260px"><label>Date of Visit</label><input type="date" data-field="certDateOfVisit" id="certDateOfVisitInput"></div>`;
 certHtml += statictext('<b>CDSE Report Certification by Independent Panel of Experts</b><br>We hereby certify that this evaluation was conducted consistent with generally accepted engineering practices and the applicable NDSA CDSE Regulations and Guidelines. This certification represents professional engineering opinion regarding current safety condition and does not guarantee future performance. The findings, interpretations and recommendations are those of the IPoE and are free from the influence of the Dam Owner.');
 certHtml += `<table class="data" id="ipoeTable"><thead><tr><th style="width:36px">Sl.No</th><th>Name</th><th>Designation / Discipline</th><th>Signature</th></tr></thead><tbody id="ipoeBody"></tbody></table>`;
 certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
-
+certHtml += `<div style="text-align:center;margin:15px 0;"><div class="field" style="max-width:300px;margin:0 auto;"><label>Full Reservoir Level (m)</label><input type="text" data-field="fullReservoirLevel" id="reservoirLevelInput" placeholder="e.g. 452.5"></div></div>`;
 certHtml += subsubhead('Certification by SDSO / NDSA');
 certHtml += statictext('This is to certify that the submitted CDSE Report for the dam has been perused, due diligence and necessary appraisal done, and necessary suggestions given by SDSO/NDSA have been incorporated in the final CDSE Report. The dam owner has been directed to implement the suggestions/recommendations and submit a time-bound action plan for monitoring implementation. This CDSE Report is to be considered published.');
 certHtml += row(field('Signature of Head SDSO — Name'), field('Date', {type:'date'}));
@@ -2171,12 +2164,12 @@ function wxBuildDocxDocument(data){
       rows
     });
   }
- function annexBlockRenderer(b){
-  const out = [];
-  out.push(new Paragraph({spacing:{before:160,after:80}, children:[
-    new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:"FFD700", font:FONT_SANS}), // ✅ ISE REPLACE KAREIN
-    new TextRun({text: b.title ? `  —  ${b.title}` : '', bold:true, size:19, color:NAVY, font:FONT_SANS})
-  ]}));
+  function annexBlockRenderer(b){
+    const out = [];
+    out.push(new Paragraph({spacing:{before:160,after:80}, children:[
+      new TextRun({text:`Annexure ${b.roman||''}`, bold:true, size:19, color:GOLD, font:FONT_SANS}),
+      new TextRun({text: b.title ? `  —  ${b.title}` : '', bold:true, size:19, color:NAVY, font:FONT_SANS})
+    ]}));
     if(!b.files || !b.files.length){
       out.push(new Paragraph({spacing:{after:200}, children:[
         new TextRun({text:'(No document attached)', italics:true, size:17, color:MUTED, font:FONT_SANS})
