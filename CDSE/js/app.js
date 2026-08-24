@@ -1014,8 +1014,7 @@ ch14 += statictext('Per Section 40(2), findings shall set out: (a) assessment of
 // Added the requested text as the default value for 'Summary of findings'
 ch14 += field('Summary of findings', {
   type: 'textarea', 
-  value: '(a) Assessment of Structural Condition:
-
+  value: `(a) Assessment of Structural Condition:
 Based on the available records, site inspection, field observations and interactions with the project authorities, the dam and its appurtenant structures are observed to be generally in a condition conducive to safe operation. The assessment may be further enhanced through systematic compilation, updating and review of historical records, inspection data and relevant technical information.
 (b) Emergency Measures:
 Based on the conditions observed during the inspection, no immediate emergency intervention is considered necessary at this stage. The Dam Owner shall continue regular surveillance and promptly initiate appropriate action in the event of any abnormality, distress or unusual behaviour being noticed.
@@ -1026,8 +1025,8 @@ For further strengthening the technical basis and confidence of the dam safety a
 (e) Routine Maintenance and Inspection:
 The existing practices of routine maintenance, surveillance and periodic inspection are being followed and shall be continued with further strengthening wherever required. Proper documentation of inspection observations, timely rectification of deficiencies, effective monitoring and maintenance of instrumentation will contribute to the continued safe and dependable performance of the dam.
 Overall Finding
-The observations and information reviewed indicate that the dam is being operated and maintained with appropriate attention to dam safety. The recommended hydrological/design flood assessment and seismic safety analysis, together with continued strengthening of monitoring, documentation, maintenance and inspection practices, will further enhance the overall safety assurance and provide a sound technical basis for ensuring the long-term structural integrity, functional adequacy and safe operation of the dam.
-'});
+The observations and information reviewed indicate that the dam is being operated and maintained with appropriate attention to dam safety. The recommended hydrological/design flood assessment and seismic safety analysis, together with continued strengthening of monitoring, documentation, maintenance and inspection practices, will further enhance the overall safety assurance and provide a sound technical basis for ensuring the long-term structural integrity, functional adequacy and safe operation of the dam.`
+});
 
 ch14 += subhead('Regulatory Recommendations to SDSO/NDSA');
 
