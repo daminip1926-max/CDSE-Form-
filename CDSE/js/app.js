@@ -1042,8 +1042,7 @@ ch14 += subhead('Regulatory Recommendations to SDSO/NDSA');
 // Renamed from 'Additional regulatory recommendations, if any' to 'Standard recommendations'
 ch14 += field('Standard recommendations', {
   type: 'textarea', 
-  value: 'Based on the available records and visual inspections, the dam and its principal components are generally in satisfactory physical condition. The reservoir, upstream and downstream slopes, dam crest, abutment contacts, downstream drainage, toe drain, approach channel, access roads and intake/outlet structure were generally observed to be in good condition. No significant seepage, boiling, sinkholes, animal burrows or major visible distress were reported during the inspection.\nThe ungated spillway was also structurally sound. No evidence of active distress was observed during the latest inspection. Continued surveillance of the repaired spillway is nevertheless required.'
-});
+  value: 'Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
 
 ch14 += subhead('Proposed Timeline for Next CDSE');
 ch14 += field('Proposed date / interval', {value: 'As per Regulation by NDSA'});
