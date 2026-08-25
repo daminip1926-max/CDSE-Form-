@@ -43,9 +43,9 @@
   </div>
 </div>
 
-<!-- FAQ Modal Overlay (Topbar ke BAHAR rakha gaya hai taaki properly overlay ho sake) -->
+<!-- FAQ Modal Overlay -->
 <div id="faqModal" class="no-print" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; justify-content: center; align-items: center;">
-  <div style="background: #ffffff; width: 90%; max-width: 650px; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; font-family: 'Times New Roman', Times, serif;">
+  <div style="background: #ffffff; width: 90%; max-width: 750px; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; font-family: 'Times New Roman', Times, serif;">
     
     <!-- Modal Header -->
     <div style="background: #0B2545; color: #ffffff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;">
@@ -53,88 +53,238 @@
       <button type="button" onclick="closeFaqModal()" style="background: none; border: none; color: #ffffff; font-size: 22px; cursor: pointer; font-weight: bold;">&times;</button>
     </div>
 
-    <!-- Modal Body (Accordion List) -->
+    <!-- Modal Body (Accordion List with Groups) -->
     <div style="padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
       
-      <!-- FAQ Item 1 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- ================= GROUP 1: Before / During CDSE ================= -->
+      <h3 style="margin: 0 0 -4px 0; font-size: 16px; color: #0B2545; border-bottom: 2px solid #D8D2C2; padding-bottom: 4px; flex-shrink: 0;">Before / During CDSE</h3>
+      
+      <!-- FAQ Q1 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
           <span>Q1. Where should the date of the CDSE/inspection visit be uploaded in DHARMA?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: The date of the CDSE/inspection visit should be entered in the relevant CDSE/Inspection module of DHARMA, along with the required inspection details.
+          A: The visit date should be updated in the designated CDSE/Inspection section of DHARMA against the respective dam.
         </div>
       </div>
 
-      <!-- FAQ Item 2 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q8 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
-          <span>Q2. What should be done after the Comprehensive Dam Safety Evaluation report is signed?</span>
+          <span>Q8. Who constitutes the Independent Panel of Experts (IPoE) for CDSE?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: After signing by the concerned experts/Panel of Experts, the signed CDSE report should be submitted to the Dam Owner through the prescribed DHARMA process.
+          A: The Dam Owner constitutes the IPoE in accordance with the NDSA regulations. The Panel shall have at least three experts, including a Dam Safety Expert.
         </div>
       </div>
 
-      <!-- FAQ Item 3 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q9 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q9. What is the timeline for completing the first CDSE of existing specified dams?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: As per Section 38 of the Dam Safety Act, 2021, the first CDSE of every existing specified dam shall be completed within five years from the commencement of the Act. Subsequent CDSEs shall be carried out at the intervals prescribed by regulations.
+        </div>
+      </div>
+
+      <!-- FAQ Q10 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q10. What are the main components of a CDSE report?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: The CDSE covers design, construction, O&M, hydrology, hydraulics, structural and geotechnical safety, seismic safety, instrumentation, EAP and other factors affecting dam safety.
+        </div>
+      </div>
+
+      <!-- FAQ Q11 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q11. Can the CDSE report be prepared using the standard NDSA template?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: Yes. The latest NDSA-prescribed CDSE template should be used for preparing the report.
+        </div>
+      </div>
+
+      <!-- FAQ Q15 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q15. What should be done if important historical data is missing?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: The missing information should be recorded in the CDSE report. The Dam Owner should try to retrieve the records, and the IPoE should recommend suitable measures if required.
+        </div>
+      </div>
+
+      <!-- ================= GROUP 2: After the CDSE Report is Signed ================= -->
+      <h3 style="margin: 10px 0 -4px 0; font-size: 16px; color: #0B2545; border-bottom: 2px solid #D8D2C2; padding-bottom: 4px; flex-shrink: 0;">After the CDSE Report is Signed</h3>
+
+      <!-- FAQ Q2 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q2. What should be done after the CDSE report is signed?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: The signed CDSE report should be submitted to the Dam Owner and reported to the SDSO as per the prescribed procedure.
+        </div>
+      </div>
+
+      <!-- FAQ Q3 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
           <span>Q3. What should the Dam Owner do after receiving the CDSE report?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: The Dam Owner should examine the observations/recommendations and submit the required Interim Report/Action Taken Report and Final Report, as applicable, within the prescribed timeline.
+          A: The Dam Owner should upload the report in DHARMA and take necessary action on the recommendations within the prescribed timeline.
         </div>
       </div>
 
-      <!-- FAQ Item 4 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q4 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
-          <span>Q4. Where should the Dam Owner submit the Interim and Final Reports?</span>
+          <span>Q4. What are the Interim and Final Reports, and where should they be submitted?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: The Dam Owner should upload/submit the Interim and Final Reports in the designated DHARMA module, along with the required compliance/action taken against the CDSE recommendations.
+          A: The Interim Report provides the status of action taken on CDSE recommendations, while the Final Report confirms completion of the required corrective actions. Both should be submitted by the Dam Owner to the SDSO through the designated DHARMA module, as per the prescribed procedure.
         </div>
       </div>
 
-      <!-- FAQ Item 5 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q12 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q12. Who uploads the signed CDSE report in DHARMA?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: The Dam Owner or authorised person should upload the signed CDSE report in the designated DHARMA module.
+        </div>
+
+      <!-- ================= GROUP 3: Monitoring & Compliance in DHARMA ================= -->
+      <h3 style="margin: 10px 0 -4px 0; font-size: 16px; color: #0B2545; border-bottom: 2px solid #D8D2C2; padding-bottom: 4px; flex-shrink: 0;">Monitoring & Compliance in DHARMA</h3>
+
+      <!-- FAQ Q5 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
           <span>Q5. Is the EAP for Sunny Day Condition available in DHARMA?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: The availability of the Sunny Day Condition EAP should be verified in the respective dam's EAP section/documents in DHARMA. If unavailable, the Dam Owner should be advised to prepare/update the EAP and upload the approved document in DHARMA.
+          A: Yes, where available, the relevant Sunny Day EAP/inundation information can be accessed through the appropriate DHARMA module.
         </div>
       </div>
 
-      <!-- FAQ Item 6 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q6 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
           <span>Q6. What CDSE-related information should be updated in DHARMA?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: Important milestones such as date of visit, inspection status, signed CDSE report, submission to Dam Owner, Interim Report, Final Report, compliance/action taken and pending actions should be updated regularly for effective monitoring and traceability.
+          A: Key information such as IPoE constitution, site-visit date, CDSE report, Action Taken Reports and compliance status should be updated.
         </div>
       </div>
 
-      <!-- FAQ Item 7 -->
-      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden;">
+      <!-- FAQ Q7 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
         <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
           <span>Q7. What action should be taken for delayed submission by the Dam Owner?</span>
           <span style="font-size: 18px;">+</span>
         </div>
         <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
-          A: The concerned SDSO should monitor pending submissions through DHARMA and issue reminders for delays. Persistent non-compliance should be escalated to the competent authority for appropriate action.
+          A: SDSO should follow up and issue reminders to the Dam Owner. Continued delay should be escalated to the appropriate authority, as applicable.
+        </div>
+      </div>
+
+      <!-- FAQ Q16 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q16. How is the progress of CDSE monitored at State and National level?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: CDSE progress is monitored through DHARMA by SDSO and NDSA, based on updated milestones and compliance status.
+        </div>
+      </div>
+
+      <!-- FAQ Q17 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q17. What is the role of SDSO after the CDSE report is submitted?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: SDSO should monitor the report, follow up on recommendations and remedial measures, and ensure timely compliance by the Dam Owner.
+        </div>
+      </div>
+
+      <!-- FAQ Q19 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q19. What happens if the Dam Owner does not submit the Action Taken Report on time?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: SDSO should issue reminders and follow up with the Dam Owner. Persistent delay may be escalated to the appropriate higher authority/NDSA.
+        </div>
+      </div>
+
+      <!-- ================= GROUP 4: General Clarifications ================= -->
+      <h3 style="margin: 10px 0 -4px 0; font-size: 16px; color: #0B2545; border-bottom: 2px solid #D8D2C2; padding-bottom: 4px; flex-shrink: 0;">General Clarifications</h3>
+
+      <!-- FAQ Q14 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q14. Is there a difference between Pre/Post-Monsoon Inspection and CDSE?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: Yes. Pre/Post-Monsoon Inspection is a routine inspection, while CDSE is a comprehensive dam safety evaluation carried out through an IPoE.
+        </div>
+      </div>
+
+      <!-- FAQ Q18 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q18. Can a simplified CDSE be used for small Minor Irrigation (MI) tanks?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: For specified dams, the applicable CDSE requirements must be followed. For non-specified structures, the applicable safety inspection procedure may be used.
+        </div>
+      </div>
+
+      <!-- FAQ Q20 -->
+      <div class="faq-item" style="border: 1px solid #D8D2C2; border-radius: 6px; overflow: hidden; flex-shrink: 0;">
+        <div onclick="toggleFaqAnswer(this)" style="background: #EAF1FB; padding: 12px 15px; cursor: pointer; font-weight: bold; color: #13315C; font-size: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <span>Q20. Where can the latest CDSE regulations, SOP and template be found?</span>
+          <span style="font-size: 18px;">+</span>
+        </div>
+        <div class="faq-ans" style="display: none; padding: 12px 15px; background: #ffffff; font-size: 15px; color: #1C2530; border-top: 1px solid #D8D2C2;">
+          A: The latest regulations, SOPs and templates should be referred to from the official NDSA/DHARMA platforms. Always use the latest notified version.
         </div>
       </div>
 
     </div>
 
+    <!-- Modal Footer -->
+    <div style="background: #f8f9fa; padding: 12px 20px; text-align: right; border-top: 1px solid #D8D2C2; flex-shrink: 0;">
+      <button type="button" onclick="closeFaqModal()" style="background: #0B2545; color: #ffffff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">Close</button>
+    </div>
+
+  </div>
+</div>
     <!-- Modal Footer -->
     <div style="background: #f8f9fa; padding: 12px 20px; text-align: right; border-top: 1px solid #D8D2C2;">
       <button type="button" onclick="closeFaqModal()" style="background: #0B2545; color: #ffffff; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: bold;">Close</button>
