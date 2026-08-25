@@ -1,0 +1,420 @@
+
+:root{
+  --navy:#0b2545; --navy2:#13315c; --accent:#b5842a; --blue-light:#eaf1fb;
+  --border:#d8d2c2; --bg:#f7f4ec; --text:#1c2530; --muted:#5b6b82; --ok:#1e7d43; --warn:#b23b2e;
+  --green:#0f5c34;
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:15px;}
+h1,h2,.serif{font-family:Georgia,"Times New Roman",serif;}
+
+.topbar{position:sticky;top:0;z-index:60;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 8px rgba(0,0,0,.2);display:flex;align-items:center;gap:12px;}
+.hamburger{display:none;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:18px;width:36px;height:36px;border-radius:5px;cursor:pointer;flex-shrink:0;}
+.topbar .titlewrap{min-width:0;flex:1;}
+.topbar h1{margin:0;font-size:16px;font-weight:700;letter-spacing:.2px;line-height:1.25;}
+.topbar .sub{font-size:11px;color:#b7c4da;margin-top:2px;}
+
+.controls{background:var(--navy2);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:54px;z-index:55;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.controls label{font-size:12px;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.controls select, .controls input[type=text]{padding:6px 8px;border-radius:4px;border:none;font-size:13px;}
+.controls .grp{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);padding:6px 10px;border-radius:6px;}
+.controls .radiogrp{display:flex;gap:2px;background:rgba(255,255,255,.08);border-radius:6px;padding:3px;}
+.controls .radiogrp label{padding:6px 12px;border-radius:4px;cursor:pointer;margin:0;font-weight:600;}
+.controls .radiogrp input{position:absolute;opacity:0;pointer-events:none;}
+.controls .radiogrp label.active{background:var(--accent);color:#2b1c00;}
+.controls button{background:var(--accent);color:#2b1c00;border:none;padding:8px 14px;border-radius:4px;font-weight:700;cursor:pointer;font-size:12.5px;}
+.controls button.secondary{background:rgba(255,255,255,.15);color:#fff;}
+
+.layout{display:flex;max-width:1400px;margin:0 auto;position:relative;}
+.tocbackdrop{display:none;}
+.toc{width:270px;flex-shrink:0;padding:18px 12px;position:sticky;top:112px;align-self:flex-start;max-height:calc(100vh - 130px);overflow-y:auto;background:var(--bg);}
+.toc .toclabel{font-size:11px;font-weight:800;letter-spacing:.6px;color:var(--muted);padding:4px 10px 8px;}
+.toc a{display:block;padding:7px 10px;font-size:12.5px;color:var(--navy2);text-decoration:none;border-radius:4px;line-height:1.3;}
+.toc a:hover{background:var(--blue-light);}
+.main{flex:1;padding:22px 22px 90px;min-width:0;}
+
+.chapter{background:#fff;border:1px solid var(--border);border-radius:6px;margin-bottom:20px;overflow:hidden;}
+.chapter-head{background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;padding:14px 18px;font-size:16px;font-weight:700;font-family:Georgia,serif;letter-spacing:.2px;display:flex;align-items:baseline;gap:10px;}
+.chapter-head .chnum{color:var(--accent);font-size:22px;font-weight:800;line-height:1;}
+.chapter-body{padding:18px 20px;overflow-x:hidden;}
+.subhead{font-size:14.5px;font-weight:700;color:var(--navy2);margin:22px 0 10px;padding:6px 0 6px 12px;border-left:4px solid var(--accent);background:linear-gradient(90deg,var(--blue-light),transparent);}
+.subhead .num{color:var(--accent);margin-right:6px;}
+.subsubhead{font-size:13px;font-weight:700;color:var(--navy);margin:14px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.statictext.statute-text{background:#fdf7d6;padding:8px 12px;border-radius:3px;border-left:4px solid #e0c94a;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.subsubhead .num{color:var(--muted);margin-right:5px;font-weight:700;}
+.checklist-list{margin:8px 0 14px;}
+.chk-item{display:flex;align-items:flex-start;gap:8px;padding:5px 2px;font-size:13px;line-height:1.45;border-bottom:1px dashed var(--border);}
+.chk-item:last-child{border-bottom:none;}
+.chk-item input[type=checkbox]{margin-top:3px;flex-shrink:0;}
+.select-add-field .select-add-dropdown{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:5px;font-size:13px;background:#fff;margin-bottom:8px;}
+.tag-list{display:flex;flex-direction:column;gap:6px;}
+.tag-item{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;background:var(--blue-light);border:1px solid var(--border);border-radius:5px;padding:7px 10px;font-size:13px;line-height:1.4;}
+.tag-item span{flex:1;}
+.tag-remove{background:none;border:none;color:#8a2020;font-size:16px;line-height:1;cursor:pointer;padding:0 2px;flex-shrink:0;}
+.note{font-size:12px;color:var(--muted);font-style:italic;margin:2px 0 8px;}
+.quotebox{border-left:3px solid var(--navy2);background:#f7f9fc;padding:10px 14px;margin:6px 0 14px;font-size:12.8px;line-height:1.6;color:#2c3540;}
+.quotebox b{color:var(--navy2);}
+.quotebox ul{margin:4px 0;padding-left:22px;}
+
+.field{margin-bottom:10px;min-width:0;}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--navy2);margin-bottom:3px;}
+.field input[type=text], .field input[type=date], .field select, .field textarea{
+  width:100%;padding:8px 9px;border:1px solid var(--border);border-radius:4px;font-size:13.5px;font-family:inherit;background:#fbfcfe;
+}
+.field input:focus, .field select:focus, .field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+.field textarea{
+    width:100%;
+    min-height:52px;
+    resize:vertical;
+    overflow:visible;
+    box-sizing:border-box;
+    line-height:1.4;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+.row{display:flex;gap:14px;flex-wrap:wrap;}
+.row .field{flex:1;min-width:200px;}
+
+.tablewrap{width:100%;overflow-x:auto;margin:8px 0 16px;-webkit-overflow-scrolling:touch;}
+table.data{width:100%;border-collapse:collapse;font-size:12.5px;min-width:480px;}
+table.data th{background:var(--blue-light);border:1px solid var(--border);padding:7px 8px;text-align:left;color:var(--navy2);}
+table.data td{border:1px solid var(--border);padding:4px 6px;}
+table.data td input, table.data td select, table.data td textarea{width:100%;border:none;padding:6px;font-size:12.5px;background:transparent;min-height:34px;box-sizing:border-box;}
+table.data td input:focus, table.data td select:focus, table.data td textarea:focus{background:#fff;outline:1px solid var(--accent);}
+table.data td textarea{resize:vertical;min-height:60px;overflow:visible;white-space:pre-wrap;word-break:break-word;}
+.block{border:1px solid var(--border);border-radius:5px;padding:12px 14px;margin-bottom:14px;background:#fcfdff;}
+.cond{transition:none;}
+.cond.hidden{display:none !important;}
+.badge{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:10px;background:var(--blue-light);color:var(--navy2);margin-left:8px;font-weight:600;}
+.addrow-btn{background:var(--blue-light);border:1px solid var(--border);padding:8px 12px;border-radius:4px;font-size:12.5px;cursor:pointer;color:var(--navy2);min-height:38px;}
+.print-only-page{
+    display:none;
+}
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .scroller-container {
+        display: none !important; 
+    }
+}
+@media print {
+  textarea {
+    border: none;
+    background: transparent;
+    resize: none;
+    overflow: visible;
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+@media print{
+    /* The page @page margin is already tiny (2mm), so just let the cover
+       image fill the normal content area — this is far more reliable across
+       print engines than the negative-margin "full bleed" trick, which
+       several Android print pipelines silently ignore, leaving white
+       padding around the image instead of removing it. */
+    .print-only-page{
+        display:block;
+        width:100%;
+        height:auto;
+        min-height:0;
+        text-align:center;
+        page-break-after:always; break-after:page;
+        page-break-inside:avoid; break-inside:avoid;
+        margin:0;
+        padding:0;
+    }
+
+    .print-only-page img{
+        display:block;
+        margin:0 auto;
+        max-width:100%;
+        max-height:293mm;
+        width:auto;
+        height:auto;
+        object-fit:contain;
+    }
+}
+/* Row 89 ko isse replace/update karein */
+#coverDamPIC {
+  display: inline-block;
+    width: max-content;
+
+}
+.cover {
+  text-align: center;
+  padding: 32px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Row 89 ke niche ye naya block add karein taaki sabhi fields center rahein */
+.cover .field {
+  width: 100%;
+  max-width: 500px;
+  margin: 10px auto;
+  text-align: center;
+}
+
+  .cover input[type=text],
+  .cover textarea {
+    text-align: center;
+    font-weight: 600;
+  }
+  @media print {
+    .cover input[type=text],
+    .cover textarea {
+      padding: 4px 8px !important;
+      font-size: 11px !important;
+      min-height: 24px !important;
+    }
+    .cover .field label {
+      font-size: 10px !important;
+      margin-bottom: 2px !important;
+    }
+  }
+.cover .ministry{font-size:12.5px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;}
+.cover .goi-emblem{width:56px;height:auto;margin:0 auto 6px;display:block;}
+.cover .cover-hero-img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:6px;margin:14px auto;display:block;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.cover-hero-wrap{position:relative;max-width:200px;margin:14px auto;cursor:pointer;}
+.cover-hero-wrap .cover-hero-img{margin:0;}
+.cover-hero-overlay{position:absolute;left:0;right:0;bottom:0;background:rgba(11,37,69,.78);color:#fff;font-size:11px;text-align:center;padding:4px 6px;border-radius:0 0 6px 6px;opacity:0;transition:opacity .15s;}
+.cover-hero-wrap:hover .cover-hero-overlay{opacity:1;}
+.cover h2{color:var(--green);font-size:clamp(19px,4vw,26px);margin:6px 0 2px;font-family:Georgia,serif;}
+.cover .sub2{color:var(--navy2);font-size:13.5px;margin-bottom:14px;}
+.cover .damtitle{color:var(--navy);font-size:clamp(17px,3.4vw,22px);font-weight:700;margin:16px 0 4px;font-family:Georgia,serif;}
+.photogrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px;text-align:left;}
+@media print{
+  /* 3 columns x 2 rows = 6 photos comfortably on one printed page */
+  #annexPhotos .photogrid{grid-template-columns:repeat(3,1fr);gap:8px;}
+  #annexPhotos .photobox .thumbwrap{aspect-ratio:4/3;}
+  #annexPhotos.no-photos{display:none !important;}
+}
+.photobox{border:2px dashed var(--border);border-radius:6px;padding:8px;background:#fbfcfe;min-width:0;}
+.photobox b{display:block;font-size:11.5px;color:var(--navy2);margin-bottom:6px;line-height:1.25;}
+.photobox input[type=file]{font-size:10.5px;max-width:100%;}
+.photobox .thumbwrap{width:100%;aspect-ratio:4/3;margin-top:8px;border-radius:4px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.photobox .thumbwrap img{display:none;width:100%;height:100%;object-fit:contain;}
+.statictext{font-size:12.8px;line-height:1.55;color:#333;margin-bottom:10px;}
+.statictext.section-box{background:#f3f1e7;border:1px solid var(--border);border-left:4px solid #c9a227;border-radius:4px;padding:10px 14px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.statictext b{color:var(--navy2);}
+.statictext ul{margin:4px 0;padding-left:22px;}
+
+/* ===== PIC Autofill ===== */
+.autofillbox {
+    border: 1px solid var(--accent);
+    background: #fff9ec;
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+    
+    /* --- Add these 3 lines to make it sticky --- */
+    position: sticky;
+    top: 0;         /* Sticks to the very top of the window */
+    z-index: 100;   /* Keeps it layered above other content */
+}
+
+.autofillbox .abtitle {
+    font-weight: 700;
+    color: var(--navy2);
+    font-size: 13.5px;
+    margin-bottom: 8px;
+}
+.autofillrow{
+  display:grid;
+  grid-template-columns: minmax(180px,1.4fr) auto minmax(130px,1fr) minmax(130px,1fr) minmax(130px,1fr) minmax(130px,1fr) auto;
+  gap:12px 14px;
+  align-items:end;
+}
+.autofillrow .field{min-width:0;margin-bottom:0;}
+@media (max-width:900px){
+  /* Not enough room for six even columns — fall back to a simple 2-column
+     grid so fields stay evenly sized instead of stretching unevenly. */
+  .autofillrow{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:520px){
+  /* On phones, one field per line reads far more cleanly than a cramped grid. */
+  .autofillrow{grid-template-columns:1fr;}
+}
+.autofillbtn{background:var(--navy2);color:#fff;border:none;padding:9px 14px;border-radius:4px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+.autofillbtn.secondary{background:#fff;color:var(--navy2);border:1px solid var(--border);}
+.autofillstatus{font-size:11.5px;color:var(--muted);margin-top:8px;}
+.autofillstatus.ok{color:var(--ok);font-weight:600;}
+
+.field-autofilled{position:relative;}
+.field-autofilled.collapsed{display:none;}
+.autofill-badge{display:inline-block;font-size:9.5px;font-weight:700;background:var(--ok);color:#fff;padding:1px 6px;border-radius:8px;margin-left:6px;vertical-align:middle;}
+
+#reviewBanner{display:none;background:#fff6da;border:1px solid #e0c46c;color:#6b4e00;padding:10px 16px;margin:14px 22px 0;border-radius:6px;font-size:12.5px;align-items:center;justify-content:space-between;gap:10px;}
+#reviewBanner button{background:var(--navy2);color:#fff;border:none;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;}
+body.reviewMode #reviewBanner{display:flex;}
+body.reviewMode .field-autofilled.collapsed{display:block !important;}
+body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;border-radius:4px;}
+
+/* ===== Annexures ===== */
+.annex-block{border:1px solid var(--border);border-radius:6px;padding:14px 16px;margin-bottom:16px;background:#fcfdff;}
+.annex-block-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.annex-roman-badge{font-weight:800;color:var(--navy2);font-size:13.5px;font-family:Georgia,serif;}
+.annex-remove-btn{background:#fde8e8;color:#8a2020;border:1px solid #f0c4c4;padding:5px 10px;border-radius:4px;font-size:11.5px;cursor:pointer;}
+.annex-pages{margin-top:10px;}
+.annex-page{border:1px dashed var(--border);border-radius:5px;padding:10px 12px;margin-bottom:10px;background:#fff;}
+.annex-page img{display:none;width:100%;max-width:100%;height:auto;margin-top:8px;border-radius:4px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.annex-page .filepill{display:none;font-size:12px;color:var(--navy2);margin-top:6px;background:var(--blue-light);padding:6px 8px;border-radius:4px;}
+.annex-page .pdf-pages{margin-top:8px;}
+.annex-page .pdf-page-img{display:block;width:100%;max-width:100%;height:auto;margin-top:10px;border-radius:4px;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.annexref b.annexroman::before{content:"";}
+.annexref{font-size:12.8px;font-weight:600;color:var(--navy2);display:inline-block;padding:6px 0;}
+
+@page{size:A4;margin:2mm;}
+@media print{
+  .controls,.toc,.topbar button,.hamburger,.addrow-btn{display:none !important;}
+  .select-add-dropdown{display:none !important;}
+  .tag-remove{display:none !important;}
+  .topbar{position:static;background:#fff;color:#000;border-bottom:2px solid #000;}
+  .topbar .sub{color:#333;}
+  .layout{display:block;}
+  .main{padding:0;}
+  /* Chapters are often taller than one A4 page, so forcing break-inside:avoid-page here
+     used to push the whole chapter to a fresh page and still fail to fit it, leaving a big
+     blank gap and then splitting content at a random spot. Let chapters flow freely and
+     instead protect the small pieces inside them (below) so nothing gets cut mid-way. */
+  .chapter{border:none;}
+  .chapter-head{background:#e4e9f2 !important;color:#000 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+    break-after:avoid-page; page-break-after:avoid;}
+  .statictext.statute-text{background:#fdf7d6 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:#fff;}
+  .tablewrap{overflow-x:visible;}
+  #reviewBanner{display:none !important;}
+  .print-not-available{color:#6b7280 !important;font-style:italic;}
+  .field-autofilled.collapsed{display:block !important;}
+  .field-autofilled{outline:none !important;background:transparent !important;}
+  .autofill-badge{display:none !important;}
+  .autofillbox{display:none !important;}
+  .autofillbtn,.annex-remove-btn{display:none !important;}
+
+  /* Keep small, indivisible pieces of content together so print/PDF doesn't slice a
+     field's label from its box, cut a table row in half, or split a checklist item. */
+  .field, .row, .block, .quotebox, .statictext, .checklist-list, .chk-item,
+  .tag-item, .photogrid, .photobox, .annex-block, .annexref, table.data tr,
+  .subhead, .subsubhead{
+    break-inside:avoid; page-break-inside:avoid;
+  }
+  /* Never leave a heading alone at the bottom of a page with its content pushed over */
+  .subhead, .subsubhead{ break-after:avoid; page-break-after:avoid; }
+  .cover{ break-inside:avoid; page-break-inside:avoid; }
+
+  /* Print-specific cover page styling to fit on one page */
+  .cover {
+    padding: 16px 12px !important;
+  }
+  .cover .field {
+    margin: 4px auto !important;
+  }
+  .cover .ministry {
+    font-size: 10px !important;
+    margin: 1px 0 !important;
+  }
+  .cover h2 {
+    font-size: 18px !important;
+    margin: 3px 0 1px !important;
+  }
+  .cover .sub2 {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+  }
+  .cover .damtitle {
+    font-size: 14px !important;
+    margin: 4px 0 2px !important;
+  }
+  .cover-hero-img {
+    max-width: 120px !important;
+    margin: 6px auto !important;
+  }
+  .cover .row {
+    margin: 4px auto !important;
+  }
+  .cover .goi-emblem {
+    width: 40px !important;
+    margin: 0 auto 3px !important;
+  }
+
+  /* Each uploaded annexure document prints on its own fresh A4 page.
+     (Flex centering here previously caused the image to render small with
+     large blank gaps on some Android print pipelines — same issue we saw
+     with the cover image — so this uses plain block flow instead.) */
+  .annex-page{
+    page-break-before:always; break-before:page;
+    page-break-inside:avoid; break-inside:avoid;
+    border:none; padding:0; margin:0;
+    text-align:center;
+  }
+  .annex-block:first-of-type .annex-pages .annex-page:first-child{page-break-before:always;}
+  .annex-page > .field{display:none;} /* hide the "Choose file" control itself when printing */
+  .annex-page img{
+    display:block !important; margin:0 auto; width:100%; max-width:100%; height:auto; max-height:283mm;
+    object-fit:contain; box-shadow:none; border:none;
+  }
+  .annex-page .filepill{background:#fff;border:1px solid #ccc;text-align:center;padding:40px 10px;}
+  /* Multi-page PDFs: every rendered page gets its own fresh A4 sheet */
+  .annex-page .pdf-page-img{
+    display:block; margin:0 auto; width:100%; max-width:100%; height:auto; max-height:283mm;
+    object-fit:contain;
+    box-shadow:none; border:none;
+  }
+  .annex-page .pdf-page-img:not(:first-child){page-break-before:always; break-before:page;}
+  #annexures{page-break-before:always !important; break-before:page !important;}
+  #annexPhotos{page-break-before:always !important; break-before:page !important;}
+}
+
+/* ===== Responsive ===== */
+@media (max-width:900px){
+  .hamburger{display:inline-block;}
+  .toc{
+    position:fixed; top:0; left:0; height:100vh; z-index:80; width:78vw; max-width:300px;
+    background:#fff; box-shadow:2px 0 12px rgba(0,0,0,.25); transform:translateX(-100%);
+    transition:transform .22s ease; top:0; padding-top:70px; max-height:100vh;
+  }
+  .toc.open{transform:translateX(0);}
+  .tocbackdrop.open{display:block;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:70;}
+  .main{padding:16px 12px 90px;}
+  .controls{gap:8px;padding:10px;}
+  .controls .grp, .controls .radiogrp{flex:1 1 auto;}
+}
+@media (max-width:560px){
+  .topbar h1{font-size:14px;}
+  .topbar .sub{display:none;}
+  .chapter-head{font-size:14.5px;padding:12px 14px;}
+  .chapter-body{padding:14px 14px;}
+  .row .field{min-width:100%;}
+  table.data{font-size:11.5px;}
+  .controls button{flex:1 1 auto;}
+}
+/* --- Scroller Animation (Left to Right) --- */
+.scroller-container {
+    width: 100%;
+    overflow: hidden;
+    background-color: #d8bd23; /* Light yellow background */
+    padding: 5px 0;
+    margin-bottom: 2px;
+    border: 1px solid #faf8f2;
+}
+
+.scrolling-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-weight: bold;
+    color: #141412;
+    /* Animation: Name, Duration, Speed, Loop */
+    animation: scrollLeftToRight 8s linear infinite; 
+}
+
+@keyframes scrollLeftToRight {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100vw); }
+}
