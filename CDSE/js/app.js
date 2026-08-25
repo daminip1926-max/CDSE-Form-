@@ -1042,7 +1042,7 @@ ch14 += subhead('Regulatory Recommendations to SDSO/NDSA');
 // Renamed from 'Additional regulatory recommendations, if any' to 'Standard recommendations'
 ch14 += field('Standard recommendations', {
   type: 'textarea', 
-  value: 'Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
+  value: 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
 
 ch14 += subhead('Proposed Timeline for Next CDSE');
 ch14 += field('Proposed date / interval', {value: 'As per Regulation by NDSA'});
