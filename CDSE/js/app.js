@@ -2984,7 +2984,7 @@ window.addEventListener('load', () => {
         { 
           id: 'preload1', 
           name: 'Geotechnical Investigation Report', 
-          filePath: 'document/geo_report.pdf', 
+          filePath: 'Doc/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf', 
           fileName: 'geo_report.pdf' 
         },
         { 
