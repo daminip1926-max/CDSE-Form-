@@ -1496,7 +1496,7 @@ function autofillFromRow(row){
     const lenVal = parseFloat((row['Dam Length(m)']||'').toString().replace(/[^\d.]/g,''));
     const gscVal = parseFloat((row['Gross Storage Capacity(MCM)']||'').toString().replace(/[^\d.]/g,''));
     if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal > 1000 && gscVal > 12){
-      text += ' Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
+      text += '\n\n Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
     }
 
     const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
