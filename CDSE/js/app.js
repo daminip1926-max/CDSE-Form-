@@ -1501,20 +1501,31 @@ function autofillFromRow(row){
 
     const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
     if(seepageVal === 'yes'){
-      text += ' Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
+      text += '\n\n Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
     }
 
     // ---- Height >= 30m: EWS and Dam Break Analysis required
     const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
     console.log('DEBUG — raw height value:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal);
     if(!isNaN(heightVal) && heightVal >= 30){
-      text += 'An Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
+      text += '\n\nAn Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
     }
 // ---- Seismic Zone III, IV or V: comprehensive seismic assessment required
     const zoneVal = (row['Seismic Zone']||'').toString().trim().toUpperCase();
     const isHighSeismicZone = /\b(3|III)\b/.test(zoneVal) || /\b(4|IV)\b/.test(zoneVal) || /\b(5|V)\b/.test(zoneVal);
     if(isHighSeismicZone){
       text += '\n\nA comprehensive seismic safety assessment shall be carried out considering the applicable DBE/MCE loading conditions. The structural and geotechnical stability of the dam and appurtenant structures shall be verified, and necessary strengthening/remedial measures shall be implemented based on the assessment. Adequate seismic instrumentation and a post-earthquake inspection procedure shall also be ensured.';
+    }
+
+        // ---- Missing Flood Cushion or Freeboard: recommendation
+    function isMissingValue(v){
+      const s = (v||'').toString().trim().toLowerCase();
+      return s === '' || s === '0' || s === 'na' || s === 'n/a';
+    }
+    const floodCushionVal = row['Flood Cushion (MWL-FRL)(MCM)'];
+    const freeboardVal = row['Available FreeBoard(m)'];
+    if(isMissingValue(floodCushionVal) || isMissingValue(freeboardVal)){
+      text += '\n\nThe dam does not have adequate flood cushion/freeboard as per available records. It is recommended that the flood cushion and freeboard be reviewed and provided in accordance with CWC/NDSA guidelines and IS 11223, and the reservoir operation rule curve be revised accordingly to ensure adequate flood-moderation capacity and safety against overtopping.';
     }
     el.value = text;
     autoResize(el);
