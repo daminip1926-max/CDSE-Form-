@@ -1487,14 +1487,15 @@ function autofillFromRow(row){
           // ---- Standard Recommendations (Section 14.2): rebuild from the base
   // text each time, then append condition-based sentences so re-selecting
   // a dam never duplicates text and always reflects the current dam's data.
-  (function updateStandardRecommendations(){
+
+    (function updateStandardRecommendations(){
     const el = document.getElementById('stdRecommendationsInput');
     if(!el) return;
     let text = STANDARD_RECOMMENDATIONS_BASE;
 
     const lenVal = parseFloat((row['Dam Length(m)']||'').toString().replace(/[^\d.]/g,''));
     const gscVal = parseFloat((row['Gross Storage Capacity(MCM)']||'').toString().replace(/[^\d.]/g,''));
-    if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal >= 1000 && gscVal >= 0){
+    if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal > 1000 && gscVal > 12){
       text += ' Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
     }
 
@@ -1503,9 +1504,16 @@ function autofillFromRow(row){
       text += ' Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
     }
 
+    // ---- Height >= 30m: EWS and Dam Break Analysis required
+    const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
+    if(!isNaN(heightVal) && heightVal >= 30){
+      text += ' Since the dam height is 30 m or more, an Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
+    }
+
     el.value = text;
     autoResize(el);
-  })();  
+  })();
+
      // ---- IPoE Members: fill however many members exist in the dataset row,
   // using columns 'IPoE Member 1 Name' / 'IPoE Member 1 Designation', etc.
   // First 3 rows always get filled (or "Not available" if missing), same as
