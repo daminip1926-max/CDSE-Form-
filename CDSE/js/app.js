@@ -1517,15 +1517,20 @@ function autofillFromRow(row){
       text += '\n\nA comprehensive seismic safety assessment shall be carried out considering the applicable DBE/MCE loading conditions. The structural and geotechnical stability of the dam and appurtenant structures shall be verified, and necessary strengthening/remedial measures shall be implemented based on the assessment. Adequate seismic instrumentation and a post-earthquake inspection procedure shall also be ensured.';
     }
 
-        // ---- Missing Flood Cushion or Freeboard: recommendation
+    // ---- Missing Flood Cushion or Freeboard: recommendation
     function isMissingValue(v){
       const s = (v||'').toString().trim().toLowerCase();
       return s === '' || s === '0' || s === 'na' || s === 'n/a';
     }
     const floodCushionVal = row['Flood Cushion (MWL-FRL)(MCM)'];
     const freeboardVal = row['Available FreeBoard(m)'];
-    if(isMissingValue(floodCushionVal) || isMissingValue(freeboardVal)){
-      text += '\n\nThe dam does not have adequate flood cushion/freeboard as per available records. It is recommended that the flood cushion and freeboard be reviewed and provided in accordance with CWC/NDSA guidelines and IS 11223, and the reservoir operation rule curve be revised accordingly to ensure adequate flood-moderation capacity and safety against overtopping.';
+    const missingItems = [];
+    if(isMissingValue(floodCushionVal)) missingItems.push('flood cushion');
+    if(isMissingValue(freeboardVal)) missingItems.push('freeboard');
+
+    if(missingItems.length > 0){
+      const itemsText = missingItems.join(' and ');
+      text += '\n\nThe dam does not have adequate ' + itemsText + ' as per available records. It is recommended that the ' + itemsText + ' be reviewed and provided in accordance with CWC/NDSA guidelines and IS 11223, and the reservoir operation rule curve be revised accordingly to ensure adequate flood-moderation capacity and safety against overtopping.';
     }
     el.value = text;
     autoResize(el);
