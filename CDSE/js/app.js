@@ -1074,7 +1074,7 @@ ch14 += `<button class="addrow-btn" onclick="addActionPlanRow()">+ Add Recommend
 addChapter(14, 'Conclusions and Recommendations', ch14);
 /* ---------- CERTIFICATION ---------- */
 let certHtml = `
-<div class="damtitle" id="certDamName" style="text-align:Center;margin:0 0 12px">DAM</div>
+<div class="damtitle" id="certDamName" style="text-align:Center;margin:0 0 12px"></div>
 <div class="damtitle" id="certPIC" style="text-align:Center;margin:0 0 12px">PIC</div>
 `;
 certHtml += statictext('<b>CDSE Report Certification by Independent Panel of Experts</b><br>We hereby certify that this evaluation was conducted consistent with generally accepted engineering practices and the applicable NDSA CDSE Regulations and Guidelines. This certification represents professional engineering opinion regarding current safety condition and does not guarantee future performance. The findings, interpretations and recommendations are those of the IPoE and are free from the influence of the Dam Owner.');
