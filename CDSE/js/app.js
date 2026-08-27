@@ -50,14 +50,27 @@ function field(label, opts={}){
   // empty (Word export, print, and blanket autofill-time fill). Falls back
   // to the global default ("Not available") wherever this isn't set.
   const et = opts.emptyText ? ` data-empty-text="${opts.emptyText.replace(/"/g,'&quot;')}"` : '';
-  if(type==='textarea'){
+//   if(type==='textarea'){
+//   const esc = (opts.value||'').replace(/</g,'&lt;');
+//   return `${wrapOpen}
+//     <label>${label}${badge}</label>
+//     <textarea
+//       data-field="${id}"${et}
+//       ${af?`data-autofill="${af}"`:''}
+//       placeholder="${opts.ph||''}"
+//       oninput="autoResize(this)"
+//     >${esc}</textarea>
+//   </div>`;
+// }
+    if(type==='textarea'){
   const esc = (opts.value||'').replace(/</g,'&lt;');
+  const elId = opts.id ? ` id="${opts.id}"` : '';
   return `${wrapOpen}
     <label>${label}${badge}</label>
     <textarea
-      data-field="${id}"${et}
+      data-field="${id}"${elId}${et}
       ${af?`data-autofill="${af}"`:''}
-      placeholder="${opts.ph||''}"
+      placeholder="${opts.ph||''}"000
       oninput="autoResize(this)"
     >${esc}</textarea>
   </div>`;
@@ -1040,9 +1053,15 @@ The observations and information reviewed indicate that the dam is being operate
 ch14 += subhead('Regulatory Recommendations to SDSO/NDSA');
 
 // Renamed from 'Additional regulatory recommendations, if any' to 'Standard recommendations'
+const STANDARD_RECOMMENDATIONS_BASE = 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.';
 ch14 += field('Standard recommendations', {
   type: 'textarea', 
-  value: 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
+  id: 'stdRecommendationsInput',
+  value: STANDARD_RECOMMENDATIONS_BASE});
+
+// ch14 += field('Standard recommendations', {
+//   type: 'textarea', 
+//   value: 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
 
 ch14 += subhead('Proposed Timeline for Next CDSE');
 ch14 += field('Proposed date / interval', {value: 'As per Regulation by NDSA'});
@@ -1465,7 +1484,28 @@ function autofillFromRow(row){
   const reservoirCanonical = document.getElementById('reservoirLevelInput');
   const reservoirQuick = document.getElementById('reservoirLevelQuickInput');
   if(reservoirCanonical && reservoirQuick) reservoirQuick.value = reservoirCanonical.value;
-            
+          // ---- Standard Recommendations (Section 14.2): rebuild from the base
+  // text each time, then append condition-based sentences so re-selecting
+  // a dam never duplicates text and always reflects the current dam's data.
+  (function updateStandardRecommendations(){
+    const el = document.getElementById('stdRecommendationsInput');
+    if(!el) return;
+    let text = STANDARD_RECOMMENDATIONS_BASE;
+
+    const lenVal = parseFloat((row['Dam Length(m)']||'').toString().replace(/[^\d.]/g,''));
+    const gscVal = parseFloat((row['Gross Storage Capacity(MCM)']||'').toString().replace(/[^\d.]/g,''));
+    if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal >= 1000 && gscVal >= 0){
+      text += ' Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
+    }
+
+    const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
+    if(seepageVal === 'yes'){
+      text += ' Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
+    }
+
+    el.value = text;
+    autoResize(el);
+  })();  
      // ---- IPoE Members: fill however many members exist in the dataset row,
   // using columns 'IPoE Member 1 Name' / 'IPoE Member 1 Designation', etc.
   // First 3 rows always get filled (or "Not available" if missing), same as
