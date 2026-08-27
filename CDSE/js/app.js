@@ -1039,33 +1039,26 @@ const Summary_of_Findings = `(a) Assessment of Structural Condition:
 Based on the available records, site inspection, field observations and interactions with the project authorities, the dam and its appurtenant structures are observed to be generally in a condition conducive to safe operation. The assessment may be further enhanced through systematic compilation, updating and review of historical records, inspection data and relevant technical information.
 
 (b) Emergency Measures:
+Based on the conditions observed during the inspection, no immediate emergency intervention is considered necessary at this stage. The Dam Owner shall continue regular surveillance and promptly initiate appropriate action in the event of any abnormality, distress or unusual behaviour being noticed.const SUMMARY_FINDINGS_BASE = `(a) Assessment of Structural Condition:
+Based on the available records, site inspection, field observations and interactions with the project authorities, the dam and its appurtenant structures are observed to be generally in a condition conducive to safe operation. The assessment may be further enhanced through systematic compilation, updating and review of historical records, inspection data and relevant technical information.
+(b) Emergency Measures:
 Based on the conditions observed during the inspection, no immediate emergency intervention is considered necessary at this stage. The Dam Owner shall continue regular surveillance and promptly initiate appropriate action in the event of any abnormality, distress or unusual behaviour being noticed.
-
 (c) Remedial Measures/Actions:
 The existing arrangements relating to design, construction, operation, maintenance and inspection may be continued, with suitable improvements or strengthening measures wherever warranted. Deficiencies, if observed during routine inspections, may be taken up systematically and addressed in a timely manner under the dam safety management programme.
-
 (d) Additional Studies/Investigations:
 For further strengthening the technical basis and confidence of the dam safety assessment, the Dam Owner shall undertake/update the Design Flood Assessment/Hydrological Review to establish the applicable design flood and verify the adequacy of the spillway and flood management arrangements. In addition, a comprehensive Seismic Safety Assessment/Seismic Analysis shall be carried out in accordance with applicable codes, guidelines and prevailing seismic parameters to assess the adequacy and safety of the dam and its appurtenant structures under the governing seismic conditions.
-
 (e) Routine Maintenance and Inspection:
 The existing practices of routine maintenance, surveillance and periodic inspection are being followed and shall be continued with further strengthening wherever required. Proper documentation of inspection observations, timely rectification of deficiencies, effective monitoring and maintenance of instrumentation will contribute to the continued safe and dependable performance of the dam.
-
 Overall Finding
 The observations and information reviewed indicate that the dam is being operated and maintained with appropriate attention to dam safety. The recommended hydrological/design flood assessment and seismic safety analysis, together with continued strengthening of monitoring, documentation, maintenance and inspection practices, will further enhance the overall safety assurance and provide a sound technical basis for ensuring the long-term structural integrity, functional adequacy and safe operation of the dam.`;
-
-// Pass the constant into your field function (replacing the stray '});')
 ch14 += field('Summary of findings', {
-  type: 'textarea',
-      id: 'summaryInput',
-  value: Summary_of_Findings
+  type: 'textarea', 
+  id: 'summaryFindingsInput',
+  value: SUMMARY_FINDINGS_BASE
 });
-// Renamed from 'Additional regulatory recommendations, if any' to 'Standard recommendations'
-const STANDARD_RECOMMENDATIONS_BASE = 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.';
 ch14 += field('Standard recommendations', {
   type: 'textarea', 
-  id: 'stdRecommendationsInput',
-  value: STANDARD_RECOMMENDATIONS_BASE});
-
+  value: 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
 // ch14 += field('Standard recommendations', {
 //   type: 'textarea', 
 //   value: 'Regulation on Funding Availability for O&M and Staffing:Prescribe a standard funding and staffing framework for O&M based on dam size, hazard and risk category, including minimum staffing levels and minimum wage norms. Staffing may be permanent or outsourced, with separate requirements for monsoon and non-monsoon periods, enabling timely Government approval and adequate manpower for dam-safety activities.'});
@@ -1491,46 +1484,42 @@ function autofillFromRow(row){
   const reservoirCanonical = document.getElementById('reservoirLevelInput');
   const reservoirQuick = document.getElementById('reservoirLevelQuickInput');
   if(reservoirCanonical && reservoirQuick) reservoirQuick.value = reservoirCanonical.value;
-          // ---- Standard Recommendations (Section 14.2): rebuild from the base
-  // text each time, then append condition-based sentences so re-selecting
-  // a dam never duplicates text and always reflects the current dam's data.
-
-    (function updateStandardRecommendations(){
-    const el = document.getElementById('stdRecommendationsInput');
+ 
+// ---- Summary of Findings: rebuild from base text, then append
+  // condition-based sentences (same conditions as before, different target field)
+  (function updateSummaryFindings(){
+    const el = document.getElementById('summaryFindingsInput');
     if(!el) return;
-    let text = STANDARD_RECOMMENDATIONS_BASE;
+    let text = SUMMARY_FINDINGS_BASE;
 
+    // Fishing recommendation
     const lenVal = parseFloat((row['Dam Length(m)']||'').toString().replace(/[^\d.]/g,''));
     const gscVal = parseFloat((row['Gross Storage Capacity(MCM)']||'').toString().replace(/[^\d.]/g,''));
     if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal > 1000 && gscVal > 12){
-      text += '\n\n Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
+      text += '\n\nDevelop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
     }
 
+    // Seepage
     const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
     if(seepageVal === 'yes'){
-      text += '\n\n Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
+      text += '\n\nRemove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
     }
-
-   // ---- Height >= 30m AND PAR > 1000: EWS and Dam Break Analysis required
+      
+    // Height 
 const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
-const parVal = parseFloat((row['PAR']||'').toString().replace(/[^\d.]/g,''));
-
-console.log('DEBUG — raw height:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal,
-            '| raw PAR:', JSON.stringify(row['PAR']), '| parsed parVal:', parVal);
-
-if(!isNaN(heightVal) && heightVal >= 30 && !isNaN(parVal) && parVal > 1000){
-     text += '\n\nEWS installed at Dam Site';
+    const parVal = parseFloat((row['PAR Value']||'').toString().replace(/[^\d.]/g,''));
+    if(!isNaN(heightVal) && !isNaN(parVal) && heightVal >= 30 && parVal >= 1000){
+      text += '\n\nSince the dam height is 30 m or more and the Population at Risk (PAR) is 1000 or more, an Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
     }
-  // EWS and Dam Break Analysis required
-}
-// ---- Seismic Zone III, IV or V: comprehensive seismic assessment required
+
+    // Seismic Zone III, IV or V
     const zoneVal = (row['Seismic Zone']||'').toString().trim().toUpperCase();
     const isHighSeismicZone = /\b(3|III)\b/.test(zoneVal) || /\b(4|IV)\b/.test(zoneVal) || /\b(5|V)\b/.test(zoneVal);
     if(isHighSeismicZone){
       text += '\n\nA comprehensive seismic safety assessment shall be carried out considering the applicable DBE/MCE loading conditions. The structural and geotechnical stability of the dam and appurtenant structures shall be verified, and necessary strengthening/remedial measures shall be implemented based on the assessment. Adequate seismic instrumentation and a post-earthquake inspection procedure shall also be ensured.';
     }
 
-    // ---- Missing Flood Cushion or Freeboard: recommendation
+    // Missing Flood Cushion or Freeboard
     function isMissingValue(v){
       const s = (v||'').toString().trim().toLowerCase();
       return s === '' || s === '0' || s === 'na' || s === 'n/a';
@@ -1540,69 +1529,14 @@ if(!isNaN(heightVal) && heightVal >= 30 && !isNaN(parVal) && parVal > 1000){
     const missingItems = [];
     if(isMissingValue(floodCushionVal)) missingItems.push('flood cushion');
     if(isMissingValue(freeboardVal)) missingItems.push('freeboard');
-
     if(missingItems.length > 0){
       const itemsText = missingItems.join(' and ');
       text += '\n\nThe dam does not have adequate ' + itemsText + ' as per available records. It is recommended that the ' + itemsText + ' be reviewed and provided in accordance with CWC/NDSA guidelines and IS 11223, and the reservoir operation rule curve be revised accordingly to ensure adequate flood-moderation capacity and safety against overtopping.';
     }
+
     el.value = text;
     autoResize(el);
   })();
-
- (function updateSummaryOfFinding(){
-    const el = document.getElementById('summaryInput');
-    if(!el) return;
-    let text = STANDARD_RECOMMENDATIONS_BASE;
-
-    const lenVal = parseFloat((row['Dam Length(m)']||'').toString().replace(/[^\d.]/g,''));
-    const gscVal = parseFloat((row['Gross Storage Capacity(MCM)']||'').toString().replace(/[^\d.]/g,''));
-    if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal > 1000 && gscVal > 12){
-      text += '\n\n Develop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
-    }
-
-    const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
-    if(seepageVal === 'yes'){
-      text += '\n\n Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
-    }
-
-   // ---- Height >= 30m AND PAR > 1000: EWS and Dam Break Analysis required
-const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
-const parVal = parseFloat((row['PAR']||'').toString().replace(/[^\d.]/g,''));
-
-console.log('DEBUG — raw height:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal,
-            '| raw PAR:', JSON.stringify(row['PAR']), '| parsed parVal:', parVal);
-
-if(!isNaN(heightVal) && heightVal >= 30 && !isNaN(parVal) && parVal > 1000){
-     text += '\n\nEWS installed at Dam Site';
-    }
-  // EWS and Dam Break Analysis required
-}
-// ---- Seismic Zone III, IV or V: comprehensive seismic assessment required
-    const zoneVal = (row['Seismic Zone']||'').toString().trim().toUpperCase();
-    const isHighSeismicZone = /\b(3|III)\b/.test(zoneVal) || /\b(4|IV)\b/.test(zoneVal) || /\b(5|V)\b/.test(zoneVal);
-    if(isHighSeismicZone){
-      text += '\n\nA comprehensive seismic safety assessment shall be carried out considering the applicable DBE/MCE loading conditions. The structural and geotechnical stability of the dam and appurtenant structures shall be verified, and necessary strengthening/remedial measures shall be implemented based on the assessment. Adequate seismic instrumentation and a post-earthquake inspection procedure shall also be ensured.';
-    }
-
-    // ---- Missing Flood Cushion or Freeboard: recommendation
-    function isMissingValue(v){
-      const s = (v||'').toString().trim().toLowerCase();
-      return s === '' || s === '0' || s === 'na' || s === 'n/a';
-    }
-    const floodCushionVal = row['Flood Cushion (MWL-FRL)(MCM)'];
-    const freeboardVal = row['Available FreeBoard(m)'];
-    const missingItems = [];
-    if(isMissingValue(floodCushionVal)) missingItems.push('flood cushion');
-    if(isMissingValue(freeboardVal)) missingItems.push('freeboard');
-
-    if(missingItems.length > 0){
-      const itemsText = missingItems.join(' and ');
-      text += '\n\nThe dam does not have adequate ' + itemsText + ' as per available records. It is recommended that the ' + itemsText + ' be reviewed and provided in accordance with CWC/NDSA guidelines and IS 11223, and the reservoir operation rule curve be revised accordingly to ensure adequate flood-moderation capacity and safety against overtopping.';
-    }
-    el.value = text;
-    autoResize(el);
-  })();
-
      // ---- IPoE Members: fill however many members exist in the dataset row,
   // using columns 'IPoE Member 1 Name' / 'IPoE Member 1 Designation', etc.
   // First 3 rows always get filled (or "Not available" if missing), same as
