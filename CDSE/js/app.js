@@ -1465,7 +1465,33 @@ function autofillFromRow(row){
   const reservoirCanonical = document.getElementById('reservoirLevelInput');
   const reservoirQuick = document.getElementById('reservoirLevelQuickInput');
   if(reservoirCanonical && reservoirQuick) reservoirQuick.value = reservoirCanonical.value;
-                let s1 = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
+            
+     // ---- IPoE Members: fill however many members exist in the dataset row,
+  // using columns 'IPoE Member 1 Name' / 'IPoE Member 1 Designation', etc.
+  // First 3 rows always get filled (or "Not available" if missing), same as
+  // before. From member 4 onwards, a new row is added automatically only if
+  // that member's data actually exists in the dataset — so 1 dam can have 3
+  // members and another can have 6, with no fixed cap.
+  (function fillIpoeMembers(){
+    const tbody = document.getElementById('ipoeBody');
+    if(!tbody) return;
+    let i = 1;
+    while(true){
+      const nameVal = (row['IPoE Member '+i+' Name']||'').toString().trim();
+      const desigVal = (row['IPoE Member '+i+' Designation']||'').toString().trim();
+      if(i > 3 && !nameVal && !desigVal) break; // no more members beyond the default 3
+      if(tbody.children.length < i) addIpoeRow();
+      const tr = tbody.children[i-1];
+      const nameEl = tr.children[1] ? tr.children[1].querySelector('input') : null;
+      const desigEl = tr.children[2] ? tr.children[2].querySelector('input') : null;
+      if(nameEl) nameEl.value = nameVal || emptyTextFor(nameEl);
+      if(desigEl) desigEl.value = desigVal || emptyTextFor(desigEl);
+      i++;
+    }
+  })();
+
+    
+    let s1 = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
 
   updateDocumentNo(row, s1);
   docNoEdited = false;
