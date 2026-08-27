@@ -2997,15 +2997,27 @@ window.addEventListener('load', () => {
         }
       ];
 
-      const annexList = document.getElementById('annexureList');
+        const annexList = document.getElementById('annexureList');
       if (!annexList) return; // Agar annexure section nahi mila toh ruk jaye
+
+      const insertBeforeEl = annexList.firstElementChild;
 
       for (const annx of myLocalAnnexures) {
         // 1. Naya Annexure box UI mein create karein
         const div = document.createElement('div');
         div.innerHTML = annexBlockHtml(annx.id, annx.name, true);
-        annexList.appendChild(div.firstElementChild);
+        annexList.insertBefore(div.firstElementChild, insertBeforeEl);
         renumberAnnexures();
+
+      // const annexList = document.getElementById('annexureList');
+      // if (!annexList) return; 
+
+      // for (const annx of myLocalAnnexures) {
+      
+      //   const div = document.createElement('div');
+      //   div.innerHTML = annexBlockHtml(annx.id, annx.name, true);
+      //   annexList.appendChild(div.firstElementChild);
+      //   renumberAnnexures();
 
         // 2. Folder se file ko fetch karein
         const response = await fetch(annx.filePath);
