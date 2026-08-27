@@ -1506,8 +1506,9 @@ function autofillFromRow(row){
 
     // ---- Height >= 30m: EWS and Dam Break Analysis required
     const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
+    console.log('DEBUG — raw height value:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal);
     if(!isNaN(heightVal) && heightVal >= 30){
-      text += ' Since the dam height is 30 m or more, an Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
+      text += 'An Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
     }
 
     el.value = text;
