@@ -1510,7 +1510,12 @@ function autofillFromRow(row){
     if(!isNaN(heightVal) && heightVal >= 30){
       text += 'An Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
     }
-
+// ---- Seismic Zone III, IV or V: comprehensive seismic assessment required
+    const zoneVal = (row['Seismic Zone']||'').toString().trim().toUpperCase();
+    const isHighSeismicZone = /\b(3|III)\b/.test(zoneVal) || /\b(4|IV)\b/.test(zoneVal) || /\b(5|V)\b/.test(zoneVal);
+    if(isHighSeismicZone){
+      text += '\n\nA comprehensive seismic safety assessment shall be carried out considering the applicable DBE/MCE loading conditions. The structural and geotechnical stability of the dam and appurtenant structures shall be verified, and necessary strengthening/remedial measures shall be implemented based on the assessment. Adequate seismic instrumentation and a post-earthquake inspection procedure shall also be ensured.';
+    }
     el.value = text;
     autoResize(el);
   })();
