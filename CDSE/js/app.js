@@ -2985,9 +2985,9 @@ window.addEventListener('load', () => {
       const myLocalAnnexures = [
         { 
           id: 'preload1', 
-          name: 'Geotechnical Investigation Report', 
+          name: 'Regulations For Independent Panel of Experts for CDSE of each specified dam', 
           filePath: 'Doc/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf', 
-          fileName: 'geo_report.pdf' 
+
         },
         { 
           id: 'preload2', 
