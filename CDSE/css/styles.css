@@ -195,6 +195,9 @@ table.data td textarea{resize:vertical;min-height:60px;overflow:visible;white-sp
   #annexPhotos .photogrid{grid-template-columns:repeat(3,1fr);gap:8px;}
   #annexPhotos .photobox .thumbwrap{aspect-ratio:4/3;}
   #annexPhotos.no-photos{display:none !important;}
+  .autofillbtn,.annex-remove-btn{display:none !important;}
+.photobox b{display:none !important;}
+.photobox input[type=file]{display:none !important;}
 }
 .photobox{border:2px dashed var(--border);border-radius:6px;padding:8px;background:#fbfcfe;min-width:0;}
 .photobox b{display:block;font-size:11.5px;color:var(--navy2);margin-bottom:6px;line-height:1.25;}
