@@ -1504,12 +1504,18 @@ function autofillFromRow(row){
       text += '\n\n Remove trees and brushes from the dam body/seepage area to allow proper inspection and monitoring.';
     }
 
-    // ---- Height >= 30m: EWS and Dam Break Analysis required
-    const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
-    console.log('DEBUG — raw height value:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal);
-    if(!isNaN(heightVal) && heightVal >= 30){
-      text += '\n\nAn Early Warning System (EWS) and Dam Break Analysis are mandatory and shall be carried out.';
+   // ---- Height >= 30m AND PAR > 1000: EWS and Dam Break Analysis required
+const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||'').toString().replace(/[^\d.]/g,''));
+const parVal = parseFloat((row['PAR']||'').toString().replace(/[^\d.]/g,''));
+
+console.log('DEBUG — raw height:', JSON.stringify(row['Height above Lowest Foundation Level(m)']), '| parsed heightVal:', heightVal,
+            '| raw PAR:', JSON.stringify(row['PAR']), '| parsed parVal:', parVal);
+
+if(!isNaN(heightVal) && heightVal >= 30 && !isNaN(parVal) && parVal > 1000){
+     text += '\n\nEWS installed at Dam Site';
     }
+  // EWS and Dam Break Analysis required
+}
 // ---- Seismic Zone III, IV or V: comprehensive seismic assessment required
     const zoneVal = (row['Seismic Zone']||'').toString().trim().toUpperCase();
     const isHighSeismicZone = /\b(3|III)\b/.test(zoneVal) || /\b(4|IV)\b/.test(zoneVal) || /\b(5|V)\b/.test(zoneVal);
