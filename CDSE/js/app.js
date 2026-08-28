@@ -70,8 +70,9 @@ function field(label, opts={}){
     <textarea
       data-field="${id}"${elId}${et}
       ${af?`data-autofill="${af}"`:''}
-      placeholder="${opts.ph||''}"000
+placeholder="${opts.ph||''}"
       oninput="autoResize(this)"
+      
     >${esc}</textarea>
   </div>`;
 }
@@ -1034,13 +1035,9 @@ let ch14 = '';
 ch14 += subhead('Summary of Findings');
 ch14 += statictext('Per Section 40(2), findings shall set out: (a) assessment of structure condition; (b) recommendations for emergency measures; (c) recommendations for remedial measures/actions (design, construction, O&M, inspection); (d) recommendations for additional studies/investigations; (e) recommendations for improvements in routine maintenance and inspection.');
 
-// Corrected syntax: changed '=:' to '='
-const Summary_of_Findings = `(a) Assessment of Structural Condition:
+const SUMMARY_FINDINGS_BASE = `(a) Assessment of Structural Condition:
 Based on the available records, site inspection, field observations and interactions with the project authorities, the dam and its appurtenant structures are observed to be generally in a condition conducive to safe operation. The assessment may be further enhanced through systematic compilation, updating and review of historical records, inspection data and relevant technical information.
 
-(b) Emergency Measures:
-Based on the conditions observed during the inspection, no immediate emergency intervention is considered necessary at this stage. The Dam Owner shall continue regular surveillance and promptly initiate appropriate action in the event of any abnormality, distress or unusual behaviour being noticed.const SUMMARY_FINDINGS_BASE = `(a) Assessment of Structural Condition:
-Based on the available records, site inspection, field observations and interactions with the project authorities, the dam and its appurtenant structures are observed to be generally in a condition conducive to safe operation. The assessment may be further enhanced through systematic compilation, updating and review of historical records, inspection data and relevant technical information.
 (b) Emergency Measures:
 Based on the conditions observed during the inspection, no immediate emergency intervention is considered necessary at this stage. The Dam Owner shall continue regular surveillance and promptly initiate appropriate action in the event of any abnormality, distress or unusual behaviour being noticed.
 (c) Remedial Measures/Actions:
