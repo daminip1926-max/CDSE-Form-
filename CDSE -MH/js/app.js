@@ -2794,7 +2794,7 @@ function exportExcel(){
 /* ---------- Submit to Google Drive (via Google Apps Script Web App) ---------- */
 // 1. Deploy the Apps Script (see setup guide provided separately) as a Web App.
 // 2. Paste the deployment URL below, replacing the placeholder.
-const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPxCe-HbnYB0psqdDEGrISvitzg4HirWx7LdSJ6Szey0N1q5b2lYAYz0f0vTxXAqvCNg/exec";
+const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuLEAcS_mFrrv557VihoMsG7ftgFSqkHl1Gv20l1aftA-Cpw-VnrytBQpUKK9HJ-4MrA/exec";
 
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
