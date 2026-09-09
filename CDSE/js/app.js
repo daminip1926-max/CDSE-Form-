@@ -913,7 +913,7 @@ ch11 += `<table class="data" id="riskIndexTable">
       <td id="riskSP"></td>
       <td id="riskPI"></td>
       <td id="riskFI"></td>
-      <td id="riskIndexVal"></td>
+      <td id="riskIndexVal"></td> 
     </tr>
   </tbody>
 </table>`;
