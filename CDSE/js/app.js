@@ -289,6 +289,15 @@ let coverHtml = `<div class="cover">
   </div>
 </div>`;
 
+/* ---------- Executive Summury ---------- */
+/* ---------- EXECUTIVE SAFETY SUMMARY ---------- */
+let execSummaryHtml = statictext('This Executive Safety Summary presents, at a glance, the overall condition and safety status of the dam as determined through this Comprehensive Dam Safety Evaluation. It is intended for quick reference by senior officials and does not replace the detailed findings in the chapters that follow.', 'section-box');
+execSummaryHtml += field('Overall Hazard Classification (as per Sec. 17)', {type:'textarea'});
+execSummaryHtml += field('Present Overall Safety Condition of the Dam', {type:'textarea'});
+execSummaryHtml += field('Key Findings / Deficiencies Observed', {type:'textarea'});
+execSummaryHtml += field('Major Recommendations (Emergency / Remedial / Further Study)', {type:'textarea'});
+execSummaryHtml += field('Recommended Fitness for Continued Operation', {type:'textarea'});
+
 /* ---------- CHAPTER 1 ---------- */
 let ch1 = subhead('1.1 Objective of CDSE');
 ch1 += statictext(`The CDSE is:
@@ -1105,6 +1114,8 @@ const tocEl = document.getElementById('toc');
 
 let tocHtml = `<a href="#cover" onclick="closeTocOnMobile()">Cover Page</a>`;
 mainEl.innerHTML += `<div class="chapter" id="cover"><div class="chapter-head">Cover Page</div><div class="chapter-body">${coverHtml}</div></div>`;
+tocHtml += `<a href="#execsummary" onclick="closeTocOnMobile()">Executive Safety Summary</a>`;
+mainEl.innerHTML += `<div class="chapter" id="execsummary"><div class="chapter-head">Executive Safety Summary</div><div class="chapter-body">${execSummaryHtml}</div></div>`;
 
 chapters.forEach(ch=>{
   const anchor = 'ch'+ch.no;
