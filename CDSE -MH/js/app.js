@@ -281,12 +281,20 @@ let coverHtml = `<div class="cover">
 </div>
 
   <div class="row" style="max-width:520px;margin:0 auto">
-    ${field('Tel (Office)',{autofill:'CE Contact'})}
+    ${field('Tel (Office)',{autofill:'Head of DSU Mobile'})}
     ${field('E-mail', {autofill:'CE Add'})}
   </div>
   <div class="row" style="max-width:420px;margin:0 auto">
     ${field('Report Year', {value:'2026'})}
   </div>
+</div>`;
+
+
+/* ---------- EXECUTIVE  SUMMARY ---------- */
+let execSummaryHtml = `<div class="field">
+  <label>Executive Summary (auto-drafted from report data — edit freely; click Regenerate to refresh)</label>
+  <textarea id="execNarrativeSummary" data-field="${nid()}" oninput="autoResize(this)" style="min-height:260px"></textarea>
+  <button type="button" class="addrow-btn" onclick="regenerateExecSummary()">🔄 Regenerate Draft from Current Data</button>
 </div>`;
 
 /* ---------- CHAPTER 1 ---------- */
@@ -350,7 +358,7 @@ ch3 += row(field('Top width of Embankment Dam (m)'), field('Top width of Masonry
 ch3 += row(field('Elevation of top of Embankment Dam (m)'), field('Elevation of top of Masonry/Concrete Dam (m)'));
 ch3 += row(field('Elevation of top of Upstream Solid Parapet Wall (m)'), field('Height of Embankment Dam above Lowest River Bed Level (m)', {autofill:'Height above Lowest Foundation Level(m)'}));
 ch3 += row(field('Height of Masonry/Concrete Dam above deepest foundation level (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Lowest River Bed Elevation (m)'));
-ch3 += field('Deepest Foundation Elevation (m)');
+ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Risk Index (RRSSD)'));
 
 ch3 += `<div class="cond saddle">`;
 ch3 += subsubhead('II. Saddle Dam');
@@ -879,7 +887,36 @@ ch11 += field('Roles, responsibilities, training, action plans, communications, 
 ch11 += subhead('Review of reservoir water quality');
 ch11 += selectAddField('Monitoring frequency/parameters, upstream polluting sources, dilution issues', ch11WaterQualityOptions);
 ch11 += field('Additional details', {type:'textarea', value:'No water quality issue'});
+
 ch11 += subhead('Risk Assessment (Section 35(2) of the Dam Safety Act, 2021)');
+ch11 += `<table class="data" id="riskIndexTable">
+  <thead>
+    <tr>
+      <th style="font-size:16px;">S.No</th>
+      <th style="font-size:16px;">PIC</th>
+      <th style="font-size:16px;">Dam Name</th>
+        <th style="font-size:16px;">TC</th>
+      <th style="font-size:16px;">EC</th>
+      <th style="font-size:16px;">SP</th>
+      <th style="font-size:16px;">PI</th>
+      <th style="font-size:16px;">FI</th>
+      <th style="font-size:16px;">Risk Index</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="riskIndexRow">
+      <td id="riskSNo"></td>
+      <td id="riskPIC"></td>
+      <td id="riskDamName"></td>
+      <td id="riskTC"></td>
+      <td id="riskEC"></td>
+      <td id="riskSP"></td>
+      <td id="riskPI"></td>
+      <td id="riskFI"></td>
+      <td id="riskIndexVal"></td>
+    </tr>
+  </tbody>
+</table>`;
 ch11 += selectAddField('Hazard/consequence assessment, inundation mapping, population/property at risk, integration with EAP, prioritisation of remedial measures', ch11RiskOptions);
 ch11 += field('Additional details', {type:'textarea', value:'RRSSD Completed for the Dam, Low risk Found'});
 ch11 += subhead('Review of Compliance with Statutory Obligations of the Owner (Sections 28, 30–37)');
@@ -1105,12 +1142,15 @@ const tocEl = document.getElementById('toc');
 
 let tocHtml = `<a href="#cover" onclick="closeTocOnMobile()">Cover Page</a>`;
 mainEl.innerHTML += `<div class="chapter" id="cover"><div class="chapter-head">Cover Page</div><div class="chapter-body">${coverHtml}</div></div>`;
+tocHtml += `<a href="#execsummary" onclick="closeTocOnMobile()">Executive Summary</a>`;
+mainEl.innerHTML += `<div class="chapter" id="execsummary"><div class="chapter-head">Executive Summary</div><div class="chapter-body">${execSummaryHtml}</div></div>`;
 
 chapters.forEach(ch=>{
   const anchor = 'ch'+ch.no;
   tocHtml += `<a href="#${anchor}" onclick="closeTocOnMobile()">Chapter ${ch.no}: ${ch.title}</a>`;
   mainEl.innerHTML += `<div class="chapter" id="${anchor}"><div class="chapter-head"><span class="chnum">${ch.no}</span><span>${ch.title}</span></div><div class="chapter-body">${ch.bodyHtml}</div></div>`;
 });
+document.getElementById('summaryFindingsInput')?.addEventListener('input', regenerateExecSummary);
 tocHtml += `<a href="#certification" onclick="closeTocOnMobile()">Certification</a>`;
 mainEl.innerHTML += `<div class="chapter" id="certification"><div class="chapter-head">Certification</div><div class="chapter-body">${certHtml}</div></div>`;
 
@@ -1424,7 +1464,9 @@ setTimeout(colorFilledFieldsPurple, 200);
 
 
 function autofillFromRow(row){
-   let serialNo = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
+  window.lastDamRow = row;
+     fillRiskIndexTable(row['PIC']);
+    let serialNo = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
 
   updateDocumentNo(row, serialNo);
 
@@ -1435,6 +1477,7 @@ function autofillFromRow(row){
     const lat = (row['Latitude']||'').toString().trim();
     const lng = (row['Longitude']||'').toString().trim();
     locEl.value = (lat && lng) ? `${lat}, ${lng}` : (lat || lng || emptyTextFor(locEl));
+      regenerateExecSummary();
   }
 
   document.querySelectorAll('[data-autofill]').forEach(el=>{
@@ -1580,10 +1623,16 @@ const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||''
   // scrollbar instead of growing (e.g. the Office Address box).
   document.querySelectorAll('textarea').forEach(autoResize);
 }
-const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add","CE Contact"];
-
-
-
+const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add"];
+//const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add","IPoE Member 1 Name","IPoE Member 1 Designation","IPoE Member 2 Name","IPoE Member 2 Designation","IPoE Member 3 Name","IPoE Member 3 Designation"];
+// const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add","DI Name","DI Email","DI Contact","DI Office"];
+// const DAM_HEADERS=["Sr.No", "PIC", "Name of Dam", "SDSO Name", "State", "Dam Incharge", "Dam Owner", "Latitude", "Longitude", "Year of Commission", "Type of Dam", "River Basin", "River Sub Basin", "River", "Nearest City", "District", "Seismic Zone", "Height above Lowest Foundation Level(m)", "Dam Length(m)", "Gross Storage Capacity(MCM)", "Reservoir Area(103 m2)", "Live Storage Capacity(MCM)", "Purpose", "Designed Spillway Capacity(m3/s)", "Max. Water Level(m)", "Full Reservoir Level(m)", "Gated", "Ungated", "Head of DSU Name", "Head of DSU Email", "Head of DSU Mobile", "Total Hydropower installed capacity", "Flood Cushion (MWL-FRL)(MCM)", "Catchment Area (km2)", "Reservoir Surface-Area(MWL)(km2)", "Available FreeBoard(m)", "Sub Dam Type", "Rule curve Available", "Design Inflow Flood (m3/s)", "Inflow Design Flood Year", "Has inflow Design Flood reviewed(Year of Review)", "Dead Storage Volume (m3/s)", "Type of Spillway(quantity)", "Spillway Type(Max. Discharge Capacity  in m3/s)", "Energy Dissipation structure Types", "Design discharge of EDA(m3/s)", "HRT available (No. of HRT if available)", "Deaign discharge per unit intake", "Type of gate ( Quantity)", "Valve Type (Quantity)", "Road type((Number of access road))", "Tunnel available", "Max. Design Discharge of tunnel(m3/s)", "Gallery / Shaft Type (Top Elevation level in m)", "Geotechnical Instruments(Installed/Total Type)", "Geodetic Instruments(Installed/Total Type)", "Hydrometeorological Instruments(Installed/Total Type)", "Seismic Instruments(Installed/Total Type)", "Other Instruments(Installed/Total Type)", "EAP Reports available (Yes/No)", "O&M (Yes/No)", "EWS-Hooter System", "EWS-Sign board-(YES/NO)", "EWS-Flood forecast", "EWS-Glacial lake outburst floo", "Is the display board installed at the dam site?-(YES/NO)", "Dam Safety Act, 2021 Display Board-(YES/NO)", "Rule Curve Display Board-(YES/NO)", "Independent Panel of Experts (IPoE)-(YES/NO)", "Dam Visited-(YES/NO)", "PAR Value", "CE Mail", "CE Add"];
+/* Load the dam dataset. Prefer the live Excel file (data/dam-database.xlsx) via
+   fetch — this only works when the page is served over http:// (a local server),
+   since browsers block fetch() of local files opened directly (file://). If that
+   fetch fails for any reason (no server running, opened by double-click, etc.),
+   fall back to the dataset bundled as a plain JS array in data/dam-data.js, which
+   always works with zero setup. */
 (async function loadDamDataset(){
   const statusEl = document.getElementById('autofillStatus');
   try{
@@ -1607,6 +1656,53 @@ const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Inchar
     }
   }
 })();
+
+let riskIndexByPIC = {};
+(async function loadRiskIndexDataset(){
+  try{
+    if(typeof XLSX === 'undefined') throw new Error('XLSX library not loaded');
+    const resp = await fetch('data/rrssd-risk-index.xlsx');
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    const buf = await resp.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array'});
+    wb.SheetNames.forEach(function(sheetName){
+      const sheet = wb.Sheets[sheetName];
+      const rows2d = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
+      rows2d.slice(2).forEach(function(r){
+        const pic = (r[1]||'').toString().trim();
+        if(!pic) return;
+        riskIndexByPIC[pic] = {
+          sNo: r[0], pic: r[1], damName: r[2], damType: r[3], sdso: r[4],
+          state: r[5], tc: r[6], ec: r[7], sp: r[8], pi: r[9], fi: r[10], riskIndex: r[11]
+        };
+      });
+    });
+    console.log('RRSSD Risk Index dataset loaded (' + Object.keys(riskIndexByPIC).length + ' dams across all states).');
+  }catch(e){
+    console.warn('Could not fetch data/rrssd-risk-index.xlsx — Risk Index table will stay blank until fixed.', e);
+  }
+})();
+
+function fillRiskIndexTable(pic){
+  const rec = riskIndexByPIC[(pic||'').trim()];
+  const ids = ['riskSNo','riskPIC','riskDamName','riskDamType','riskSDSO','riskState','riskTC','riskEC','riskSP','riskPI','riskFI','riskIndexVal'];
+  if(!rec){
+    ids.forEach(function(id, i){
+      const el = document.getElementById(id);
+      if(el) el.textContent = i===1 ? (pic||'') : (i===2 ? 'Not available in RRSSD dataset' : '');
+    });
+    return;
+  }
+  const vals = [rec.sNo, rec.pic, rec.damName, rec.damType, rec.sdso, rec.state, rec.tc, rec.ec, rec.sp, rec.pi, rec.fi, rec.riskIndex];
+  ids.forEach(function(id, i){
+    const el = document.getElementById(id);
+    if(el) el.textContent = (vals[i] != null) ? vals[i] : '';
+  });
+}
+
+
+
+
 
 /* ============================= CONDITIONAL LOGIC ============================= */
 function applyConditions(){
@@ -1792,6 +1888,40 @@ function onSpillwayChange(){
    Category II auto-selects "Significant", Category III auto-selects "Low"
    as the working Hazard Classification in Chapter 3 (editable — the IPoE
    can override it either way). */
+function buildExecSummaryNarrative(){
+  const row = window.lastDamRow || {};
+  const damName = row['Name of Dam'] || '';
+  const district = row['District'] || '';
+  const state = row['State'] || '';
+  const river = row['River'] || '';
+  const typeOfDam = row['Type of Dam'] || '';
+  const height = row['Height above Lowest Foundation Level(m)'] || '';
+  const parValue = row['PAR Value'] || '';
+
+  const catRadio = document.querySelector('input[name="safetyCategory"]:checked');
+  const cat = catRadio ? catRadio.dataset.safetyCat : '';
+  const catLabels = {I:'Unsafe; immediate action required', II:'Conditionally Safe; remedial / verification measures required', III:'Safe for continued operation'};
+  const catLabel = catLabels[cat] || '';
+
+  const findingsEl = document.getElementById('summaryFindingsInput');
+  const findingsText = findingsEl ? findingsEl.value.trim() : '';
+
+  const p1 = `${damName || '[Dam Name]'}, located in ${district || '[District]'} District, ${state || '[State]'}, is a ${typeOfDam || '[Type of Dam]'} dam constructed across the ${river || '[River/Nalla]'}. The dam has a maximum height of ${height || '[Height]'} m above the lowest foundation level, and therefore qualifies as a specified dam under Section 4(x) of the Dam Safety Act, 2021. The present Comprehensive Dam Safety Evaluation (CDSE) has been carried out based on the available project report, design drawings, construction records, inspection reports, Emergency Action Plan (EAP) and other relevant project documents.`;
+  const p2 = `Based on the available records and field inspections, the overall physical condition of the dam and its principal components is generally satisfactory, with no evidence of significant seepage, sinkholes, piping, slope instability or other distress affecting the immediate safety of the dam.`;
+  const p3 = `Independent verification of the original design against current hydrologic, hydraulic and seismic standards has not been completed for all aspects. Review of the design flood, spillway adequacy, freeboard and seismic parameters, along with selected geotechnical aspects, is recommended.`;
+  const p4 = parValue ? `The available EAP includes a Sunny Day Failure dam-break analysis, with a reported Population at Risk (PAR) of ${parValue} persons, which shall continue to form the basis for emergency planning and downstream preparedness.` : '';
+  const p5 = findingsText ? `Summary of Findings (Section 14.1):\n${findingsText}` : '';
+  const p6 = cat ? `Accordingly, ${damName || 'the dam'} is proposed to be classified as Category ${cat} – ${catLabel}. This classification is based on the observed physical condition of the dam and the absence of evidence indicating immediate instability or unsafe operation.` : '';
+  return [p1, p2, p3, p4, p5, p6].filter(Boolean).join('\n\n');
+}
+
+function regenerateExecSummary(){
+  const el = document.getElementById('execNarrativeSummary');
+  if(!el) return;
+  el.value = buildExecSummaryNarrative();
+  autoResize(el);
+}
+
 function onSafetyCategoryChange(radioEl){
   const wrap = document.getElementById('interimRestrictionsWrap');
   const cat = radioEl.dataset.safetyCat;
@@ -1802,6 +1932,7 @@ function onSafetyCategoryChange(radioEl){
     const assigned = document.getElementById('assignedClassificationInput');
     if(hazard) hazard.value = hazardValue;
     if(assigned) assigned.value = hazardValue;
+      regenerateExecSummary();
   }
 }
 
@@ -2794,7 +2925,7 @@ function exportExcel(){
 /* ---------- Submit to Google Drive (via Google Apps Script Web App) ---------- */
 // 1. Deploy the Apps Script (see setup guide provided separately) as a Web App.
 // 2. Paste the deployment URL below, replacing the placeholder.
-const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxmo6p_-AhL-fYG-c2bnCbn5N24_mzBaSeFGgAqTyqSNRNbphzN_tQAKxyR3q7BdFSLQA/exec";
+const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPxCe-HbnYB0psqdDEGrISvitzg4HirWx7LdSJ6Szey0N1q5b2lYAYz0f0vTxXAqvCNg/exec";
 
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
