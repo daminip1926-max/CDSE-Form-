@@ -435,8 +435,9 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
     padding:8px 9px;
     min-height:16px;
     box-sizing:border-box;
-    border: 1px solid #cfd3d8;
-    border-radius: 5px;
+    border: 1px solid #d1d5db;   /* very thin light-grey border */
+    border-radius: 5px;           /* slight rounded corners */
+    background: transparent;     
   }
 }
 
