@@ -1813,6 +1813,20 @@ function replaceCoverHeroImage(input){
    actual (empty) value afterwards so the on-screen editable form is unaffected. */
 let __emptyFieldsFilledForPrint = [];
 let __emptySelectsFilledForPrint = [];
+function prepareTextareasForPrint(){
+  document.querySelectorAll('.field textarea, table.data td textarea').forEach(function(ta){
+    let mirror = ta.nextElementSibling;
+    if(!mirror || !mirror.classList || !mirror.classList.contains('print-textarea-mirror')){
+      mirror = document.createElement('div');
+      mirror.className = 'print-textarea-mirror';
+      ta.insertAdjacentElement('afterend', mirror);
+    }
+    mirror.textContent = ta.value || '';
+  });
+}
+
+
+
 function fillEmptyFieldsForPrint(){
   __emptyFieldsFilledForPrint = [];
   document.querySelectorAll('.chapter input[data-field], .chapter textarea[data-field], .cover input[data-field], .cover textarea[data-field]').forEach(el=>{
@@ -1869,6 +1883,8 @@ function printReport(){
 window.addEventListener('beforeprint', () => {
   updateAnnexPhotosPrintVisibility();
   fillEmptyFieldsForPrint();
+      prepareTextareasForPrint();
+
 });
 window.addEventListener('afterprint', () => {
   const annexPhotos = document.getElementById('annexPhotos');
