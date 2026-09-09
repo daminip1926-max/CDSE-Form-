@@ -887,7 +887,42 @@ ch11 += field('Roles, responsibilities, training, action plans, communications, 
 ch11 += subhead('Review of reservoir water quality');
 ch11 += selectAddField('Monitoring frequency/parameters, upstream polluting sources, dilution issues', ch11WaterQualityOptions);
 ch11 += field('Additional details', {type:'textarea', value:'No water quality issue'});
+
 ch11 += subhead('Risk Assessment (Section 35(2) of the Dam Safety Act, 2021)');
+ch11 += `<table class="data" id="riskIndexTable">
+  <thead>
+    <tr>
+      <th style="font-size:16px;">S.No</th>
+      <th style="font-size:16px;">PIC</th>
+      <th style="font-size:16px;">Dam Name</th>
+      <th style="font-size:16px;">Dam Type</th>
+      <th style="font-size:16px;">SDSO</th>
+      <th style="font-size:16px;">State</th>
+      <th style="font-size:16px;">TC</th>
+      <th style="font-size:16px;">EC</th>
+      <th style="font-size:16px;">SP</th>
+      <th style="font-size:16px;">PI</th>
+      <th style="font-size:16px;">FI</th>
+      <th style="font-size:16px;">Risk Index</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr id="riskIndexRow">
+      <td id="riskSNo"></td>
+      <td id="riskPIC"></td>
+      <td id="riskDamName"></td>
+      <td id="riskDamType"></td>
+      <td id="riskSDSO"></td>
+      <td id="riskState"></td>
+      <td id="riskTC"></td>
+      <td id="riskEC"></td>
+      <td id="riskSP"></td>
+      <td id="riskPI"></td>
+      <td id="riskFI"></td>
+      <td id="riskIndexVal"></td>
+    </tr>
+  </tbody>
+</table>`;
 ch11 += selectAddField('Hazard/consequence assessment, inundation mapping, population/property at risk, integration with EAP, prioritisation of remedial measures', ch11RiskOptions);
 ch11 += field('Additional details', {type:'textarea', value:'RRSSD Completed for the Dam, Low risk Found'});
 ch11 += subhead('Review of Compliance with Statutory Obligations of the Owner (Sections 28, 30–37)');
@@ -1436,6 +1471,7 @@ setTimeout(colorFilledFieldsPurple, 200);
 
 function autofillFromRow(row){
   window.lastDamRow = row;
+     fillRiskIndexTable(row['PIC']);
     let serialNo = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
 
   updateDocumentNo(row, serialNo);
@@ -1626,6 +1662,53 @@ const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Inchar
     }
   }
 })();
+
+let riskIndexByPIC = {};
+(async function loadRiskIndexDataset(){
+  try{
+    if(typeof XLSX === 'undefined') throw new Error('XLSX library not loaded');
+    const resp = await fetch('data/rrssd-risk-index.xlsx');
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    const buf = await resp.arrayBuffer();
+    const wb = XLSX.read(buf, {type:'array'});
+    wb.SheetNames.forEach(function(sheetName){
+      const sheet = wb.Sheets[sheetName];
+      const rows2d = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
+      rows2d.slice(2).forEach(function(r){
+        const pic = (r[1]||'').toString().trim();
+        if(!pic) return;
+        riskIndexByPIC[pic] = {
+          sNo: r[0], pic: r[1], damName: r[2], damType: r[3], sdso: r[4],
+          state: r[5], tc: r[6], ec: r[7], sp: r[8], pi: r[9], fi: r[10], riskIndex: r[11]
+        };
+      });
+    });
+    console.log('RRSSD Risk Index dataset loaded (' + Object.keys(riskIndexByPIC).length + ' dams across all states).');
+  }catch(e){
+    console.warn('Could not fetch data/rrssd-risk-index.xlsx — Risk Index table will stay blank until fixed.', e);
+  }
+})();
+
+function fillRiskIndexTable(pic){
+  const rec = riskIndexByPIC[(pic||'').trim()];
+  const ids = ['riskSNo','riskPIC','riskDamName','riskDamType','riskSDSO','riskState','riskTC','riskEC','riskSP','riskPI','riskFI','riskIndexVal'];
+  if(!rec){
+    ids.forEach(function(id, i){
+      const el = document.getElementById(id);
+      if(el) el.textContent = i===1 ? (pic||'') : (i===2 ? 'Not available in RRSSD dataset' : '');
+    });
+    return;
+  }
+  const vals = [rec.sNo, rec.pic, rec.damName, rec.damType, rec.sdso, rec.state, rec.tc, rec.ec, rec.sp, rec.pi, rec.fi, rec.riskIndex];
+  ids.forEach(function(id, i){
+    const el = document.getElementById(id);
+    if(el) el.textContent = (vals[i] != null) ? vals[i] : '';
+  });
+}
+
+
+
+
 
 /* ============================= CONDITIONAL LOGIC ============================= */
 function applyConditions(){
