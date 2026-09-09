@@ -289,14 +289,13 @@ let coverHtml = `<div class="cover">
   </div>
 </div>`;
 
-/* ---------- Executive Summury ---------- */
+
 /* ---------- EXECUTIVE  SUMMARY ---------- */
-let execSummaryHtml = statictext('This Executive  Summary presents, at a glance, the overall condition and safety status of the dam as determined through this Comprehensive Dam Safety Evaluation. It is intended for quick reference by senior officials and does not replace the detailed findings in the chapters that follow.', 'section-box');
-execSummaryHtml += field('Overall Hazard Classification (as per Sec. 17)', {type:'textarea'});
-execSummaryHtml += field('Present Overall Safety Condition of the Dam', {type:'textarea'});
-execSummaryHtml += field('Key Findings / Deficiencies Observed', {type:'textarea'});
-execSummaryHtml += field('Major Recommendations (Emergency / Remedial / Further Study)', {type:'textarea', autofill:'Type of Dam');
-execSummaryHtml += field('Recommended Fitness for Continued Operation', {type:'textarea'});
+let execSummaryHtml = `<div class="field">
+  <label>Executive Summary (auto-drafted from report data — edit freely; click Regenerate to refresh)</label>
+  <textarea id="execNarrativeSummary" data-field="${nid()}" oninput="autoResize(this)" style="min-height:260px"></textarea>
+  <button type="button" class="addrow-btn" onclick="regenerateExecSummary()">🔄 Regenerate Draft from Current Data</button>
+</div>`;
 
 /* ---------- CHAPTER 1 ---------- */
 let ch1 = subhead('1.1 Objective of CDSE');
@@ -1122,6 +1121,7 @@ chapters.forEach(ch=>{
   tocHtml += `<a href="#${anchor}" onclick="closeTocOnMobile()">Chapter ${ch.no}: ${ch.title}</a>`;
   mainEl.innerHTML += `<div class="chapter" id="${anchor}"><div class="chapter-head"><span class="chnum">${ch.no}</span><span>${ch.title}</span></div><div class="chapter-body">${ch.bodyHtml}</div></div>`;
 });
+document.getElementById('summaryFindingsInput')?.addEventListener('input', regenerateExecSummary);
 tocHtml += `<a href="#certification" onclick="closeTocOnMobile()">Certification</a>`;
 mainEl.innerHTML += `<div class="chapter" id="certification"><div class="chapter-head">Certification</div><div class="chapter-body">${certHtml}</div></div>`;
 
@@ -1435,7 +1435,8 @@ setTimeout(colorFilledFieldsPurple, 200);
 
 
 function autofillFromRow(row){
-   let serialNo = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
+  window.lastDamRow = row;
+    let serialNo = Object.keys(csvIndex).indexOf(row['PIC']) + 1;
 
   updateDocumentNo(row, serialNo);
 
@@ -1446,6 +1447,7 @@ function autofillFromRow(row){
     const lat = (row['Latitude']||'').toString().trim();
     const lng = (row['Longitude']||'').toString().trim();
     locEl.value = (lat && lng) ? `${lat}, ${lng}` : (lat || lng || emptyTextFor(locEl));
+      regenerateExecSummary();
   }
 
   document.querySelectorAll('[data-autofill]').forEach(el=>{
@@ -1809,6 +1811,40 @@ function onSpillwayChange(){
    Category II auto-selects "Significant", Category III auto-selects "Low"
    as the working Hazard Classification in Chapter 3 (editable — the IPoE
    can override it either way). */
+function buildExecSummaryNarrative(){
+  const row = window.lastDamRow || {};
+  const damName = row['Name of Dam'] || '';
+  const district = row['District'] || '';
+  const state = row['State'] || '';
+  const river = row['River'] || '';
+  const typeOfDam = row['Type of Dam'] || '';
+  const height = row['Height above Lowest Foundation Level(m)'] || '';
+  const parValue = row['PAR Value'] || '';
+
+  const catRadio = document.querySelector('input[name="safetyCategory"]:checked');
+  const cat = catRadio ? catRadio.dataset.safetyCat : '';
+  const catLabels = {I:'Unsafe; immediate action required', II:'Conditionally Safe; remedial / verification measures required', III:'Safe for continued operation'};
+  const catLabel = catLabels[cat] || '';
+
+  const findingsEl = document.getElementById('summaryFindingsInput');
+  const findingsText = findingsEl ? findingsEl.value.trim() : '';
+
+  const p1 = `${damName || '[Dam Name]'}, located in ${district || '[District]'} District, ${state || '[State]'}, is a ${typeOfDam || '[Type of Dam]'} dam constructed across the ${river || '[River/Nalla]'}. The dam has a maximum height of ${height || '[Height]'} m above the lowest foundation level, and therefore qualifies as a specified dam under Section 4(x) of the Dam Safety Act, 2021. The present Comprehensive Dam Safety Evaluation (CDSE) has been carried out based on the available project report, design drawings, construction records, inspection reports, Emergency Action Plan (EAP) and other relevant project documents.`;
+  const p2 = `Based on the available records and field inspections, the overall physical condition of the dam and its principal components is generally satisfactory, with no evidence of significant seepage, sinkholes, piping, slope instability or other distress affecting the immediate safety of the dam.`;
+  const p3 = `Independent verification of the original design against current hydrologic, hydraulic and seismic standards has not been completed for all aspects. Review of the design flood, spillway adequacy, freeboard and seismic parameters, along with selected geotechnical aspects, is recommended.`;
+  const p4 = parValue ? `The available EAP includes a Sunny Day Failure dam-break analysis, with a reported Population at Risk (PAR) of ${parValue} persons, which shall continue to form the basis for emergency planning and downstream preparedness.` : '';
+  const p5 = findingsText ? `Summary of Findings (Section 14.1):\n${findingsText}` : '';
+  const p6 = cat ? `Accordingly, ${damName || 'the dam'} is proposed to be classified as Category ${cat} – ${catLabel}. This classification is based on the observed physical condition of the dam and the absence of evidence indicating immediate instability or unsafe operation.` : '';
+  return [p1, p2, p3, p4, p5, p6].filter(Boolean).join('\n\n');
+}
+
+function regenerateExecSummary(){
+  const el = document.getElementById('execNarrativeSummary');
+  if(!el) return;
+  el.value = buildExecSummaryNarrative();
+  autoResize(el);
+}
+
 function onSafetyCategoryChange(radioEl){
   const wrap = document.getElementById('interimRestrictionsWrap');
   const cat = radioEl.dataset.safetyCat;
@@ -1819,6 +1855,7 @@ function onSafetyCategoryChange(radioEl){
     const assigned = document.getElementById('assignedClassificationInput');
     if(hazard) hazard.value = hazardValue;
     if(assigned) assigned.value = hazardValue;
+      regenerateExecSummary();
   }
 }
 
