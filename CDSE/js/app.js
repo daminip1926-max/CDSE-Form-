@@ -895,10 +895,7 @@ ch11 += `<table class="data" id="riskIndexTable">
       <th style="font-size:16px;">S.No</th>
       <th style="font-size:16px;">PIC</th>
       <th style="font-size:16px;">Dam Name</th>
-      <th style="font-size:16px;">Dam Type</th>
-      <th style="font-size:16px;">SDSO</th>
-      <th style="font-size:16px;">State</th>
-      <th style="font-size:16px;">TC</th>
+        <th style="font-size:16px;">TC</th>
       <th style="font-size:16px;">EC</th>
       <th style="font-size:16px;">SP</th>
       <th style="font-size:16px;">PI</th>
@@ -911,9 +908,6 @@ ch11 += `<table class="data" id="riskIndexTable">
       <td id="riskSNo"></td>
       <td id="riskPIC"></td>
       <td id="riskDamName"></td>
-      <td id="riskDamType"></td>
-      <td id="riskSDSO"></td>
-      <td id="riskState"></td>
       <td id="riskTC"></td>
       <td id="riskEC"></td>
       <td id="riskSP"></td>
