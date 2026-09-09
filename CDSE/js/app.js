@@ -358,7 +358,8 @@ ch3 += row(field('Top width of Embankment Dam (m)'), field('Top width of Masonry
 ch3 += row(field('Elevation of top of Embankment Dam (m)'), field('Elevation of top of Masonry/Concrete Dam (m)'));
 ch3 += row(field('Elevation of top of Upstream Solid Parapet Wall (m)'), field('Height of Embankment Dam above Lowest River Bed Level (m)', {autofill:'Height above Lowest Foundation Level(m)'}));
 ch3 += row(field('Height of Masonry/Concrete Dam above deepest foundation level (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Lowest River Bed Elevation (m)'));
-ch3 += field('Deepest Foundation Elevation (m)');
+ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Risk Index (RRSSD)'));
+ch3 += f
 
 ch3 += `<div class="cond saddle">`;
 ch3 += subsubhead('II. Saddle Dam');
