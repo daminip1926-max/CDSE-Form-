@@ -254,7 +254,7 @@ let coverHtml = `<div class="cover">
   <div class="ministry">Government of India — Ministry of Jal Shakti</div>
   <div class="ministry">Department of Water Resources, River Development and Ganga Rejuvenation</div>
   <div class="ministry">National Dam Safety Authority</div>
- <img class="goi-emblem" alt="Government of India Emblem" src="https://etnowgbs.com/wp-content/uploads/2026/01/govt-maharashtra.png">
+ <img class="goi-emblem" alt="WRD" src="https://etnowgbs.com/wp-content/uploads/2026/01/govt-maharashtra.png">
   <h2>Comprehensive Dam Safety Evaluation (CDSE)</h2>
   <div class="sub2">Report for a Specified Dam</div>
 
@@ -282,7 +282,7 @@ let coverHtml = `<div class="cover">
 </div>
 
   <div class="row" style="max-width:520px;margin:0 auto">
-    ${field('Tel (Office)',{autofill:'Head of DSU Mobile'})}
+    ${field('Tel (Office)',{autofill:'CE Contact'})}
     ${field('E-mail', {autofill:'CE Add'})}
   </div>
   <div class="row" style="max-width:420px;margin:0 auto">
@@ -346,7 +346,7 @@ ch3 += subhead('Project Details');
 ch3 += row(field('PIC (Project Identification Code)', {autofill:'PIC', keepVisible:true, id:'picInput'}), field('Name of Dam', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
 ch3 += row(field('River', {autofill:'River'}), field('State', {autofill:'State'}));
 ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
-ch3 += row(field('Ownership / Owning Agency', {autofill:'Dam Owner', keepVisible:true}), field('Dam Type', {ph:'e.g. Gravity / Earthen / Composite / Barrage', autofill:'Type of Dam', keepVisible:true}));
+ch3 += row(field('Ownership / Owning Agency', {autofill:'CE Mail', keepVisible:true}), field('Dam Type', {ph:'e.g. Gravity / Earthen / Composite / Barrage', autofill:'Type of Dam', keepVisible:true}));
 
 
 ch3 += row(field('Dam Incharge Name ', {autofill:'Dam Incharge Name', keepVisible:true}), field('Designation'));
