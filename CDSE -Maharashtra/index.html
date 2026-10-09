@@ -8,6 +8,25 @@
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="stylesheet" href="css/styles.css">
+<style id="autofillSingleLine">
+/* Step 1 bar: everything on ONE line (scrolls sideways on narrow screens) */
+.autofillbox .autofillrow{
+  display:flex !important; flex-direction:row !important; flex-wrap:nowrap !important;
+  align-items:flex-end; gap:10px; overflow-x:auto; padding-bottom:6px;
+}
+.autofillbox .autofillrow > *{ flex:0 0 auto; }
+.autofillbox .circlerow{ display:block; min-width:170px; }
+.autofillbox .circlerow .field,
+.autofillbox .autofillrow > .field{ display:flex; flex-direction:column; gap:4px; margin:0; }
+.autofillbox .field label{ white-space:nowrap; font-size:11px; }
+.autofillbox .field input,
+.autofillbox .field select{ height:36px; box-sizing:border-box; }
+.autofillbox #circleSelect{ width:170px; }
+.autofillbox #picSearchInput{ width:190px; }
+.autofillbox #reservoirLevelQuickInput{ width:150px; }
+.autofillbox #ipoeNameInput, .autofillbox #ipoeDesigInput{ width:170px; }
+.autofillbox .autofillbtn{ height:36px; white-space:nowrap; align-self:flex-end; }
+</style>
 </head>
 <body>
 
