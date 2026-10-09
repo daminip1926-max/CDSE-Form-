@@ -385,44 +385,7 @@
     </div>
 </div>
 
-<div class="autofillbox no-print">
-  <!-- <div class="abtitle">🔎 Auto-fill Dam Details, Date of Visit &amp; IPoE Members</div> -->
 
-  <div class="circlerow">
-    <div class="field">
-      <label>Select IPoE Order No</label>
-      <select id="circleSelect" onchange="onCircleChange()">
-        <option value="">-- Select IPoE Order No --</option>
-      </select>
-      <!-- <span class="circlehint">Narrows the search box below to the dams under this IPoE Order only. Fetching a dam that's already been saved will resume it exactly where you left off — no separate "Load" step needed.</span> -->
-    </div>
-  </div>
-
-  <div class="autofillrow">
-    <div class="field">
-      <label>Search by PIC or Dam Name</label>
-      <input type="text"
-             id="picSearchInput"
-             list="picDataList"
-             placeholder="Select IPoE Order No above first...">
-      <datalist id="picDataList"></datalist>
-    </div>
-
-    <button type="button"
-            class="autofillbtn"
-            onclick="doAutofillFromSearch()">
-      Fetch &amp; Auto-fill
-    </button>
-
-    <div class="field">
-      <label>Date of Visit</label>
-      <input type="date" id="dateOfVisitQuickInput">
-    </div>
-   <div class="field">
-      <label>Dam Reservoir Level on the Day of Inspection
-      </label>
-      <input type="text" id="reservoirLevelQuickInput" placeholder="e.g. 0.00">
-    </div>
     <!-- <div class="field">
       <label>Name</label>
       <input type="text" id="ipoeNameInput" placeholder="e.g. Dr. A. B. Sharma">
