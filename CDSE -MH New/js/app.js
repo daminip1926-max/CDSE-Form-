@@ -330,7 +330,7 @@ addChapter(1, 'Objective and Regulatory Context of CDSE', ch1);
 
 /* ---------- CHAPTER 2 ---------- */
 let ch2 = statictext(`Regulations to constitute the Independent Panel of Experts (IPoE) are enclosed as Annexure. A signed declaration by each member of the IPoE, confirming no conflict of interest, is enclosed as Annexure. The order constituting the IPoE, along with its Terms of Reference and scope of work, is to be printed / attached here.`);
-ch2 += annexRefHtml('ipoeOrder');
+ch2 += field({type:'textarea',value:'The Declaration of no conflict of intrest is along part of the certificate signed by thw IPoE'});
 ch2 += field('Terms of Reference / Scope of Work (summary)', {type:'textarea',value:'Terms of Reference / Scope of Work (summary) As available at Annex -II'});
 addChapter(2, 'Constitution of Independent Panel of Experts (IPoE)', ch2);
 
