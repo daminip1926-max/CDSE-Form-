@@ -254,6 +254,7 @@ let coverHtml = `<div class="cover">
   <div class="ministry">Government of India — Ministry of Jal Shakti</div>
   <div class="ministry">Department of Water Resources, River Development and Ganga Rejuvenation</div>
   <div class="ministry">National Dam Safety Authority</div>
+ <img class="goi-emblem" alt="Government of India Emblem" src="https://etnowgbs.com/wp-content/uploads/2026/01/govt-maharashtra.png">
   <h2>Comprehensive Dam Safety Evaluation (CDSE)</h2>
   <div class="sub2">Report for a Specified Dam</div>
 
