@@ -561,8 +561,8 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 }
 
 .WRD {
-    width: 250px;
-    height: 250px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
 }
 
