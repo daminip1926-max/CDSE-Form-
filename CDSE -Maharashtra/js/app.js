@@ -1,4 +1,3 @@
-
 function autoResize(el) {
     el.style.height = "auto";
     el.style.height = el.scrollHeight + "px";
@@ -1405,7 +1404,24 @@ let csvHeaders = [];
 let savedPICs = new Set(); // PICs that already have a saved report on Drive
 let selectedIpoeOrder = ''; // IPoE Order No chosen from the dropdown
 
+// Cleans header names coming from Excel/CSV: trims spaces, removes hidden
+// characters (BOM / non-breaking space) and maps spelling variants such as
+// "IPoE Order No.", "ipoe order number", "IPOE Member 1 Name " to the exact
+// names the rest of the app expects.
+function normalizeDamHeaders(headers){
+  return headers.map(h=>{
+    const clean = (h==null?'':h).toString().replace(/[\uFEFF\u00A0]/g,' ').replace(/\s+/g,' ').trim();
+    const key = clean.toLowerCase().replace(/[^a-z0-9]/g,'');
+    if(/^ipoeorder(no|number|num)?$/.test(key)) return 'IPoE Order No';
+    if(/^ipoeordercontact(no|number)?$/.test(key)) return 'IPoE Order Contact No';
+    const m = key.match(/^ipoemember(\d+)(name|designation)$/);
+    if(m) return 'IPoE Member '+m[1]+' '+(m[2]==='name'?'Name':'Designation');
+    return clean;
+  });
+}
+
 function indexDamRows(headers, rows){
+  headers = normalizeDamHeaders(headers);
   csvHeaders = headers;
   csvIndex = {};
   const picI = headers.indexOf('PIC'), nameI = headers.indexOf('Name of Dam');
@@ -1437,9 +1453,11 @@ function populateIpoeOrderSelect(){
     const c = (row['IPoE Order No']||'').toString().trim();
     if(c && c !== '0' && c !== '#N/A') orders.add(c);
   });
-  const sorted = Array.from(orders).sort();
+  const sorted = Array.from(orders).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
   const remembered = (function(){ try{ return localStorage.getItem('cdseSelectedIpoeOrder')||''; }catch(e){ return ''; } })();
   if(!sorted.length){
+    console.warn('IPoE Order dropdown is empty. Dataset headers found:', csvHeaders.filter(h=>/ipoe/i.test(h)),
+                 '(if this list is empty, the column is missing from the Excel file)');
     sel.innerHTML = '<option value="">-- No IPoE Order data in dataset yet --</option>';
     selectedIpoeOrder = '';
     return;
