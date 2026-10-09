@@ -512,7 +512,7 @@ ch3 += subsubhead('Previous CDSE(s)');
 ch3 += field('Review of status of previous evaluation recommendations and completion status', {type:'textarea', value:'No'});
 ch3 += subsubhead('Hazard potential classification');
 ch3 += statictext('The hazard potential/vulnerability classification shall be assigned per Section 17 of the Dam Safety Act, 2021 and shall be consistent with the classification recorded by the SDSO.');
-ch3 += row(field('Assigned Classification', {type:'select', keepDropdown:true, id:'assignedClassificationInput', options:['Extreme','High','Significant','Low']}), field('Basis / Remarks', {autofill:'PAR Value'}));
+ch3 += row(field('Assigned Classification', {type:'select', keepDropdown:true, id:'assignedClassificationInput', options:['Extreme','High','Significant','Low']}), field('Basis / Remarks', {autofill:'PAR Value', id:'basisRemarksInput'}));
 
 addChapter(3, 'Project Description and Background', ch3);
 
@@ -1561,6 +1561,7 @@ function colorFilledFieldsPurple() {
   });
 }
 
+  }
 setTimeout(colorFilledFieldsPurple, 200);
 
 
@@ -1627,6 +1628,12 @@ function autofillFromRow(row){
       if(el.tagName !== 'SELECT') el.value = emptyTextFor(el);
     }
   });
+      // 3.5.4 Basis / Remarks: autofilled PAR value should read "PAR - <value>"
+  const basisEl = document.getElementById('basisRemarksInput');
+  if(basisEl){
+    const parRaw = (row['PAR Value']||'').toString().trim();
+    if(parRaw) basisEl.value = 'PAR - ' + parRaw;
+  }
   // Fields with no connection to the dataset at all (most of Chapters 3+,
   // e.g. spillway/outlet-works dimensions) never get touched above — fill
   // every other still-empty field in the report the same way, so the whole
@@ -1668,7 +1675,16 @@ function autofillFromRow(row){
     if(!isNaN(lenVal) && !isNaN(gscVal) && lenVal > 1000 && gscVal > 12){
       text += '\n\nDevelop a fisheries management/development plan for the reservoir in consultation with the State Fisheries Department.';
     }
+    // Catchment area more than 100 km²
+    const catchVal = parseFloat((row['Catchment Area (km2)']||'').toString().replace(/[^\d.]/g,''));
+    if(!isNaN(catchVal) && catchVal > 100){
+      text += '\n\nCatchment treatment to be done to reduce erosion and sedimentation.';
+    }
 
+    // Gross storage more than 100 MCM
+    if(!isNaN(gscVal) && gscVal > 100){
+      text += '\n\nPossibility of developing floating solar power to be explored.';
+    }
     // Seepage
     const seepageVal = (row['Seepage']||'').toString().trim().toLowerCase();
     if(seepageVal === 'yes'){
