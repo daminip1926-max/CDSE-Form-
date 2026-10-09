@@ -187,26 +187,8 @@ table.data td textarea{resize:vertical;min-height:60px;overflow:visible;white-sp
   }
 .cover .ministry{font-size:12.5px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;}
 .cover .goi-emblem{width:56px;height:auto;margin:0 auto 6px;display:block;}
-/* Screen */
-.cover .cover-hero-img{
-  width:500px;
-  height:300px;
-       /* chhoti screen par bahar na nikle */
-  object-fit:cover;      /* image stretch na ho */
-  border:1px solid var(--border);
-  border-radius:6px;
-  margin:14px auto;      /* center */
-  display:block;
-  box-shadow:0 1px 4px rgba(0,0,0,.12);
-}
-.cover-hero-wrap{
-  position:relative;
-  width:500px;
-  max-width:100%;
-  margin:14px auto;      /* center */
-  cursor:pointer;
-}
-.cover-hero-wrap .cover-hero-img{ margin:0; }
+.cover .cover-hero-img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:6px;margin:14px auto;display:block;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.cover-hero-wrap{position:relative;max-width:200px;margin:14px auto;cursor:pointer;}
 .cover-hero-wrap .cover-hero-img{margin:0;}
 .cover-hero-overlay{position:absolute;left:0;right:0;bottom:0;background:rgba(11,37,69,.78);color:#fff;font-size:11px;text-align:center;padding:4px 6px;border-radius:0 0 6px 6px;opacity:0;transition:opacity .15s;}
 .cover-hero-wrap:hover .cover-hero-overlay{opacity:1;}
@@ -388,12 +370,10 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
     font-size: 14px !important;
     margin: 4px 0 2px !important;
   }
-.cover-hero-img {
-  width:500px !important;
-  height:300px !important;
-  max-width:100% !important;
-  margin:6px auto !important;
-}
+  .cover-hero-img {
+    max-width: 120px !important;
+    margin: 6px auto !important;
+  }
   .cover .row {
     margin: 4px auto !important;
   }
@@ -561,15 +541,80 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 }
 
 .WRD {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
     object-fit: contain;
 }
 
+.all-in-one {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-end;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.all-in-one .field {
+    flex: 1 1 110px;
+    min-width: 110px;
+}
+
+.all-in-one .field input,
+.all-in-one .field select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.all-in-one label {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.all-in-one .autofillbtn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+/* chhoti screen par wrap */
+@media (max-width: 900px) {
+    .all-in-one { flex-wrap: wrap; }
+}
 
 
+.autofillbox {
+    overflow-x: auto;           /* chhoti screen par horizontal scroll */
+}
 
+.autofillrow,
+.autofillrow2 {
+    display: flex;
+    flex-wrap: nowrap;          /* sab ek line me rahe */
+    align-items: flex-end;      /* label ke neeche inputs align */
+    gap: 10px;
+}
 
+.circlerow {
+    display: contents;          /* circlerow ka wrapper hata deta hai, field seedha flex item ban jaata hai */
+}
+
+.autofillrow .field,
+.autofillrow2 .field {
+    flex: 1 1 0;
+    min-width: 130px;
+}
+
+.autofillrow .field input,
+.autofillrow .field select,
+.autofillrow2 .field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.autofillbtn {
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
 
 
 
