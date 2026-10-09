@@ -334,7 +334,7 @@
   <input type="file" id="jsonFile" accept=".json" style="display:none" onchange="importJSON(event)">
   <button class="secondary no-print" onclick="printReport()">Print / PDF</button>
   <button class="secondary no-print" onclick="downloadWord()">&#128196; Download Word (.docx)</button>
-  <button class="secondary no-print" onclick="exportExcel()">&#128202; Download Excel</button>
+  <!-- <button class="secondary no-print" onclick="exportExcel()">&#128202; Download Excel</button> -->
   <button id="driveSubmitBtn" onclick="submitToDrive()">&#9729;&#65039; Save</button>
   <span id="driveSubmitStatus" style="font-size:12.5px;color:var(--navy2);align-self:center;"></span>
 </div>
@@ -356,6 +356,7 @@
                 <option value="">-- Select IPoE Order No. --</option>
             </select>
         </div>
+  </div>
 
         <!-- Search by PIC or Dam Name -->
         <div class="field">
