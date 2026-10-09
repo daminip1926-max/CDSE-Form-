@@ -3577,7 +3577,7 @@ function populateContactModal(){
   body.innerHTML = `
     <div style="margin-bottom:10px;"><strong>${isOrderSpecific ? 'For queries regarding IPoE Order ' + selectedIpoeOrder + ':' : 'For queries regarding this CDSE form:'}</strong></div>
     <div style="font-size:16px;">📞 <a href="${telHref}" style="color:var(--navy2,#0b2748);font-weight:600;text-decoration:none;">${number}</a></div>
-    ${!isOrderSpecific && selectedIpoeOrder ? '<div style="margin-top:10px;font-size:12px;color:var(--muted,#6b7280);">A dedicated contact for this IPoE Order has not been added yet — showing the general number.</div>' : ''}
+    ${!isOrderSpecific && selectedIpoeOrder ? '<div style="margin-top:10px;font-size:12px;color:var(--muted,#6b7280);"></div>' : ''}
     ${!selectedIpoeOrder ? '<div style="margin-top:10px;font-size:12px;color:var(--muted,#6b7280);">Select an IPoE Order above for its dedicated contact, if available.</div>' : ''}
   `;
 }
