@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CDSE Report — Dynamic Form</title>
+<title>CDSE Report</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1E2761">
 <link rel="icon" href="icon-192.png">
@@ -27,7 +27,7 @@
     <button class="hamburger" id="hamburgerBtn" onclick="toggleToc()" aria-label="Menu">&#9776;</button>
     <div class="titlewrap">
       <h1>Comprehensive Dam Safety Evaluation (CDSE) Draft Template</h1>
-      <div class="sub">Government of India · National Dam Safety Authority · Regulation Wing · Western Region Pune</div>
+      <div class="sub">Government of India · National Dam Safety Authority · Regulation Wing </div>
     </div>
   </div>
 
@@ -313,7 +313,7 @@
   </div>
 </div>
 <div class="controls no-print">
-  <div class="grp">
+  <!-- <div class="grp">
     <label style="flex-direction:column;align-items:flex-start;">Main Dam Type
       <select id="ctrlDamType" onchange="applyConditions()">
         <option value="concrete">Automatically Selected</option>
@@ -323,15 +323,15 @@
         <option value="barrage">Barrage</option>
       </select>
     </label>
-  </div>
-  <div class="radiogrp no-print" id="spillwayRadio">
+  </div> -->
+  <!-- <div class="radiogrp no-print" id="spillwayRadio">
     <label id="lblUngated"><input type="radio" name="spillwayGate" id="ctrlUngated" value="ungated" checked onchange="onSpillwayChange()"> Ungated</label>
     <label id="lblGated"><input type="radio" name="spillwayGate" id="ctrlGated" value="gated" onchange="onSpillwayChange()"> Gated</label>
-  </div>
-  <div class="grp no-print"><label><input type="checkbox" id="ctrlSaddle" onchange="applyConditions()"> Saddle Dam Present</label></div>
-  <div class="grp no-print"><label><input type="checkbox" id="ctrlAux" onchange="applyConditions()"> Auxiliary Spillway</label></div>
-  <div class="grp no-print"><label><input type="checkbox" id="ctrlFuse" onchange="applyConditions()"> Fuse Plug</label></div>
-  <button onclick="exportJSON()" style="display:none">Save (JSON)</button>
+  </div> -->
+  <!-- <div class="grp no-print"><label><input type="checkbox" id="ctrlSaddle" onchange="applyConditions()"> Saddle Dam Present</label></div> -->
+  <!-- <div class="grp no-print"><label><input type="checkbox" id="ctrlAux" onchange="applyConditions()"> Auxiliary Spillway</label></div> -->
+  <!-- <div class="grp no-print"><label><input type="checkbox" id="ctrlFuse" onchange="applyConditions()"> Fuse Plug</label></div> -->
+ <button onclick="exportJSON()" style="display:none">Save </button>
   <button class="secondary no-print" onclick="document.getElementById('jsonFile').click()" style="display:none">Load JSON</button>
   <input type="file" id="jsonFile" accept=".json" style="display:none" onchange="importJSON(event)">
   <button class="secondary no-print" onclick="printReport()">Print / PDF</button>
@@ -348,15 +348,15 @@
 </div>
 
 <div class="autofillbox no-print">
-  <div class="abtitle">🔎 Auto-fill Dam Details, Date of Visit &amp; IPoE Members</div>
+  <!-- <div class="abtitle">🔎 Auto-fill Dam Details, Date of Visit &amp; IPoE Members</div> -->
 
   <div class="circlerow">
     <div class="field">
-      <label>Step 1 — Select IPoE Order No</label>
+      <label>Select IPoE Order No</label>
       <select id="circleSelect" onchange="onCircleChange()">
         <option value="">-- Select IPoE Order No --</option>
       </select>
-      <span class="circlehint">Narrows the search box below to the dams under this IPoE Order only. Fetching a dam that's already been saved will resume it exactly where you left off — no separate "Load" step needed.</span>
+      <!-- <span class="circlehint">Narrows the search box below to the dams under this IPoE Order only. Fetching a dam that's already been saved will resume it exactly where you left off — no separate "Load" step needed.</span> -->
     </div>
   </div>
 
@@ -385,14 +385,14 @@
       </label>
       <input type="text" id="reservoirLevelQuickInput" placeholder="e.g. 0.00">
     </div>
-    <div class="field">
+    <!-- <div class="field">
       <label>Name</label>
       <input type="text" id="ipoeNameInput" placeholder="e.g. Dr. A. B. Sharma">
     </div>
     <div class="field">
       <label>Designation</label>
       <input type="text" id="ipoeDesigInput" placeholder="e.g. Chief Engineer (Retd.)">
-    </div>
+    </div> -->
     <button type="button" class="autofillbtn" onclick="addIpoeMemberFromTop()">+ Add Member</button>
      
   </div>
