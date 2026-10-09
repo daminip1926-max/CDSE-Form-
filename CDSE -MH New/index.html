@@ -306,6 +306,11 @@
 
   </div>
 </div>
+     <button class="secondary no-print" onclick="printReport()">Print / PDF</button>
+  <button class="secondary no-print" onclick="downloadWord()">&#128196; Download Word (.docx)</button>
+  <button class="secondary no-print" onclick="exportExcel()">&#128202; Download Excel</button>
+  <button id="driveSubmitBtn" onclick="submitToDrive()">&#9729;&#65039; Save</button>
+<div class="controls no-print">
     <div class="autofillbox no-print">
   <!-- <div class="abtitle">🔎 Auto-fill Dam Details, Date of Visit &amp; IPoE Members</div> -->
 
@@ -344,11 +349,7 @@
       </label>
       <input type="text" id="reservoirLevelQuickInput" placeholder="e.g. 0.00">
     </div>
-        <button class="secondary no-print" onclick="printReport()">Print / PDF</button>
-  <button class="secondary no-print" onclick="downloadWord()">&#128196; Download Word (.docx)</button>
-  <button class="secondary no-print" onclick="exportExcel()">&#128202; Download Excel</button>
-  <button id="driveSubmitBtn" onclick="submitToDrive()">&#9729;&#65039; Save</button>
-<div class="controls no-print">
+       
   <!-- <div class="grp">
     <label style="flex-direction:column;align-items:flex-start;">Main Dam Type
       <select id="ctrlDamType" onchange="applyConditions()">
