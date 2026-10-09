@@ -254,7 +254,13 @@ let coverHtml = `<div class="cover">
   <div class="ministry">Government of India — Ministry of Jal Shakti</div>
   <div class="ministry">Department of Water Resources, River Development and Ganga Rejuvenation</div>
   <div class="ministry">National Dam Safety Authority</div>
- <img class="goi-emblem" alt="WRD" src="https://etnowgbs.com/wp-content/uploads/2026/01/govt-maharashtra.png">
+<img
+    alt="Government of Maharashtra"
+    src="https://etnowgbs.com/wp-content/uploads/2026/01/govt-maharashtra.png"
+    width="100"
+    height="100"
+    style="object-fit: contain;"
+>
   <h2>Comprehensive Dam Safety Evaluation (CDSE)</h2>
   <div class="sub2">Report for a Specified Dam</div>
 
@@ -334,7 +340,7 @@ let ch2 = statictext(`Regulations to constitute the Independent Panel of Experts
 ch2 += field({
     type: 'textarea',
     value: 'The Declaration of No Conflict of Interest shall form an integral part of the certificate signed by the IPoE.'
-}).outerHTML;
+});
 ch2 += field('Terms of Reference / Scope of Work (summary)', {type:'textarea',value:'Terms of Reference / Scope of Work (summary) As available at Annex -II'});
 addChapter(2, 'Constitution of Independent Panel of Experts (IPoE)', ch2);
 
