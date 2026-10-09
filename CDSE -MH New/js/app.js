@@ -334,7 +334,7 @@ let ch2 = statictext(`Regulations to constitute the Independent Panel of Experts
 ch2 += field({
     type: 'textarea',
     value: 'The Declaration of No Conflict of Interest shall form an integral part of the certificate signed by the IPoE.'
-});
+}).outerHTML;
 ch2 += field('Terms of Reference / Scope of Work (summary)', {type:'textarea',value:'Terms of Reference / Scope of Work (summary) As available at Annex -II'});
 addChapter(2, 'Constitution of Independent Panel of Experts (IPoE)', ch2);
 
