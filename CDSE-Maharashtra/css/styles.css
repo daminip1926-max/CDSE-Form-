@@ -187,7 +187,7 @@ table.data td textarea{resize:vertical;min-height:60px;overflow:visible;white-sp
   }
 .cover .ministry{font-size:12.5px;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;}
 .cover .goi-emblem{width:56px;height:auto;margin:0 auto 6px;display:block;}
-.cover .cover-hero-img{max-width:200px;width:100%;height:auto;border:1px solid var(--border);border-radius:6px;margin:14px auto;display:block;box-shadow:0 1px 4px rgba(0,0,0,.12);}
+.cover .cover-hero-img{max-width:1200px;width:100%;height:auto;border:1px solid var(--border);border-radius:6px;margin:14px auto;display:block;box-shadow:0 1px 4px rgba(0,0,0,.12);}
 .cover-hero-wrap{position:relative;max-width:200px;margin:14px auto;cursor:pointer;}
 .cover-hero-wrap .cover-hero-img{margin:0;}
 .cover-hero-overlay{position:absolute;left:0;right:0;bottom:0;background:rgba(11,37,69,.78);color:#fff;font-size:11px;text-align:center;padding:4px 6px;border-radius:0 0 6px 6px;opacity:0;transition:opacity .15s;}
@@ -370,10 +370,12 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
     font-size: 14px !important;
     margin: 4px 0 2px !important;
   }
-  .cover-hero-img {
-    max-width: 120px !important;
-    margin: 6px auto !important;
-  }
+.cover-hero-img {
+  width:500px !important;
+  height:300px !important;
+  max-width:100% !important;
+  margin:6px auto !important;
+}
   .cover .row {
     margin: 4px auto !important;
   }
