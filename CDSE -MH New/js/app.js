@@ -3174,8 +3174,10 @@ async function submitToDrive(overwrite){
     const csvBase64 = btoa(unescape(encodeURIComponent(buildCsvString())));
     files.push({fieldId:'excel_export', fileName: excelFileName(), label:'CDSE Data (Excel/CSV)', mimeType:'text/csv', base64: csvBase64});
     const reportId = damName.replace(/[^a-z0-9]+/gi,'_') + '_' + new Date().toISOString().slice(0,10);
-    const picEl = document.getElementById('picInput') || document.querySelector('[data-autofill="PIC"]');
-  const pic = (picEl && picInputEl.value ? picInputEl.value : '').trim();
+  //   const picEl = document.getElementById('picInput') || document.querySelector('[data-autofill="PIC"]');
+  // const pic = (picEl && picInputEl.value ? picInputEl.value : '').trim();
+      const picEl = document.getElementById('picInput') || document.querySelector('[data-autofill="PIC"]');
+const pic = (picEl && picEl.value ? picEl.value : '').trim();
 
     const resp = await fetch(DRIVE_SCRIPT_URL, {
       method:'POST',
