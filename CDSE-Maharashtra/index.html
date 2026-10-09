@@ -50,8 +50,8 @@
   <div style="display: flex; align-items: center; gap: 12px;">
     <button class="hamburger" id="hamburgerBtn" onclick="toggleToc()" aria-label="Menu">&#9776;</button>
     <div class="titlewrap">
-      <h1>Comprehensive Dam Safety Evaluation (CDSE)</h1>
-      <div class="sub">Government of India · National Dam Safety Authority </div>
+      <h1>Comprehensive Dam Safety Evaluation (CDSE) Draft Template</h1>
+      <div class="sub">Government of India · National Dam Safety Authority · Regulation Wing · Western Region Pune</div>
     </div>
   </div>
 
@@ -371,8 +371,10 @@
 
 <div class="autofillbox no-print">
 
-    <div class="autofillrow">
-  <div class="circlerow">
+    <div class="autofillrow all-in-one">
+
+        <!-- ===== Row 1 ke fields ===== -->
+
         <!-- Step 1: Select IPoE Order Number -->
         <div class="field">
             <label for="circleSelect">Step 1 — Select IPoE Order No.</label>
@@ -380,7 +382,6 @@
                 <option value="">-- Select IPoE Order No. --</option>
             </select>
         </div>
-  </div>
 
         <!-- Search by PIC or Dam Name -->
         <div class="field">
@@ -395,18 +396,11 @@
         </div>
 
         <!-- Fetch and Auto-fill -->
-        <button
-            type="button"
-            class="autofillbtn"
-            onclick="doAutofillFromSearch()"
-        >
+        <button type="button" class="autofillbtn" onclick="doAutofillFromSearch()">
             Fetch &amp; Auto-fill
         </button>
 
-    </div>
-
-    <!-- Row 2: Date of Visit, Reservoir Level, IPoE Member — all on ONE line -->
-    <div class="autofillrow autofillrow2">
+        <!-- ===== Row 2 ke fields ===== -->
 
         <!-- Date of Visit -->
         <div class="field">
@@ -416,9 +410,7 @@
 
         <!-- Reservoir Level -->
         <div class="field">
-            <label for="reservoirLevelQuickInput">
-                Reservoir Level (Day of Inspection)
-            </label>
+            <label for="reservoirLevelQuickInput">Reservoir Level (Day of Inspection)</label>
             <input
                 type="text"
                 id="reservoirLevelQuickInput"
@@ -426,51 +418,16 @@
             >
         </div>
 
-        <!-- IPoE Member Name -->
-        <div class="field">
-            <label for="ipoeNameInput">Name</label>
-            <input
-                type="text"
-                id="ipoeNameInput"
-                placeholder="e.g., Dr. A. B. Sharma"
-            >
-        </div>
-
-        <!-- IPoE Member Designation -->
-        <div class="field">
-            <label for="ipoeDesigInput">Designation</label>
-            <input
-                type="text"
-                id="ipoeDesigInput"
-                placeholder="e.g., Chief Engineer (Retd.)"
-            >
-        </div>
-
-        <!-- Add IPoE Member -->
-        <button
-            type="button"
-            class="autofillbtn"
-            onclick="addIpoeMemberFromTop()"
-        >
-            + Add Member
-        </button>
+    
 
     </div>
 
     <!-- Auto-fill Status -->
-    <div
-        class="autofillstatus no-print"
-        id="autofillStatus"
-        aria-live="polite"
-    >
+    <div class="autofillstatus no-print" id="autofillStatus" aria-live="polite">
         Dataset: loading...
     </div>
 
-    <!-- IPoE Member List -->
-    <div
-        id="ipoeQuickList"
-        style="margin-top: 8px; font-size: 12.5px; color: var(--navy2);"
-    ></div>
+   
 
 </div>
 
