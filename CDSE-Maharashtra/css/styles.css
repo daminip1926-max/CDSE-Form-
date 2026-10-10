@@ -638,7 +638,9 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
 
 
 
-
+@media print{
+  #execsummary{ break-before:page; page-break-before:always; }
+}
 
 
 
