@@ -3460,6 +3460,7 @@ window.addEventListener('load', () => {
           id: 'preload1', 
           name: 'Regulations For Independent Panel of Experts for CDSE of each specified dam', 
           filePath: 'Doc/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf', 
+            fileName: 'Regulations on Independent Panel of Experts for CDSE of each specified dam',
 
         },
         { 
