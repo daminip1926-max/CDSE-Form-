@@ -3297,6 +3297,7 @@ function applyDataObject(data){
   if(data.__annexFiles){
     Object.keys(data.__annexFiles).forEach(annexId=>{
       let guard = 0;
+        if(!document.getElementById('annex-'+annexId) && !/^extra\d+$/.test(annexId)) return;
       while(!document.getElementById('annex-'+annexId) && guard < 50){
         addNewAnnexure();
         guard++;
