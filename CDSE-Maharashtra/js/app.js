@@ -2999,18 +2999,8 @@ function wxBuildDocxDocument(data){
     numbering:{config:[{reference:'static-bullets', levels:[{level:0, format:NumberFormat.BULLET, text:'\u2022', alignment:AlignmentType.LEFT, style:{paragraph:{indent:{left:460,hanging:260}}}}]}]},
     styles:{default:{document:{run:{font:FONT_SANS, size:20, color:TEXT_C}}}},
     sections:[{
-      properties:{page:{size:{width:PAGE_W,height:PAGE_H}, margin:{top:MARGIN+700, bottom:MARGIN+500, left:MARGIN, right:MARGIN, header:400, footer:300}}},
-      headers:{default: new Header({children:[ new Table({
-        width:{size:CONTENT_W, type:WidthType.DXA}, columnWidths:[CONTENT_W],
-        borders:{top:noBorder(),bottom:noBorder(),left:noBorder(),right:noBorder(),insideHorizontal:noBorder(),insideVertical:noBorder()},
-        rows:[new TableRow({children:[new TableCell({
-          width:{size:CONTENT_W, type:WidthType.DXA}, shading:{fill:NAVY,type:ShadingType.CLEAR,color:'auto'}, margins:{top:120,bottom:120,left:200,right:200},
-          children:[
-            new Paragraph({spacing:{after:20}, children:[new TextRun({text:'Comprehensive Dam Safety Evaluation (CDSE) Report', bold:true, color:WHITE, size:20, font:FONT_SANS})]}),
-          new Paragraph({children:[new TextRun({text:'Government of India · National Dam Safety Authority · Research Wing, Western Region, Pune', color:'B7C4DA', size:14, font:FONT_SANS})]})
-          ]
-        })]})]
-      })]})},
+      properties:{page:{size:{width:PAGE_W,height:PAGE_H}, margin:{top:MARGIN, bottom:MARGIN+500, left:MARGIN, right:MARGIN, header:400, footer:300}}},
+   
       footers:{default: new Footer({children:[ new Paragraph({
         alignment:AlignmentType.CENTER, border:{top:{style:BorderStyle.SINGLE,size:4,color:BORDER_C,space:4}},
         children:[
