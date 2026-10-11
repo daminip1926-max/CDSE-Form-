@@ -3688,9 +3688,10 @@ function closeFaqModal() {
 // contact of its own yet in the master dataset (column "IPoE Order Contact
 // No" — add this column alongside "IPoE Order No" once the per-order
 // contact list is ready, and this will pick it up automatically).
-const DEFAULT_CONTACT_NAME = 'Ankush Kumar (Assistant Director,NDSA, Western Region, Pune)';
+
+
 const DEFAULT_CONTACT_NUMBER = '98211 25402';
-const DEFAULT_CONTACT_NUMBER = '82650 41965;
+
 
 function populateContactModal(){
   const body = document.getElementById('contactModalBody');
