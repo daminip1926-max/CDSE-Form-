@@ -262,7 +262,7 @@ let coverHtml = `<div class="cover">
   <div class="field" style="max-width:420px;margin:10px auto">
   <label>Document No.</label>
   <input type="text" data-field="${nid()}" id="coverDocNo"
-  placeholder="e.g. 1/MH293LH3309/CDSE/2026/WRD" >
+  placeholder="e.g. 1/MH293LH3309/CDSE/2026/SWCD" >
 </div> 
   <div class="damtitle" id="coverDamName">DAM</div>
   <div class="damtitle" id="coverDamPIC">PIC</div>
