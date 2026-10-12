@@ -1,6 +1,12 @@
 function autoResize(el) {
+    // Textareas inside a hidden (display:none) section report scrollHeight 0.
+    // Setting height to "0px" there collapses the field and hides its data once
+    // the section is shown again - so skip hidden ones; they get resized when
+    // the section becomes visible (see applyConditions).
+    if (!el || el.offsetParent === null) return;
     el.style.height = "auto";
-    el.style.height = el.scrollHeight + "px";
+    const h = el.scrollHeight;
+    if (h > 0) el.style.height = h + "px";
 }
 
 /* PDF.js needs a worker script to actually parse/render PDF files — without
@@ -85,12 +91,12 @@ placeholder="${opts.ph||''}"
       const elId = opts.id ? ` id="${opts.id}"` : '';
       return `${wrapOpen}<label>${label}${badge}</label><select data-field="${id}"${elId}${et} ${af?`data-autofill="${af}"`:''}><option value="">-- select --</option>${options}</select></div>`;
     }
-    return `${wrapOpen}<label>${label}${badge}</label><input type="text" data-field="${id}"${opts.id?` id="${opts.id}"`:''}${et} ${af?`data-autofill="${af}"`:''} placeholder="${opts.ph||''}" value="${(opts.value||'').replace(/"/g,'&quot;')}"></div>`;
+    return `${wrapOpen}<label>${label}${badge}</label><textarea data-field="${id}"${opts.id?` id="${opts.id}"`:''}${et} ${af?`data-autofill="${af}"`:''} placeholder="${opts.ph||''}" oninput="autoResize(this)">${(opts.value||'').replace(/</g,'&lt;')}</textarea></div>`;
   }
   if(type==='multiselect'){
     return `${wrapOpen}<label>${label}${badge}</label><textarea data-field="${id}"${et} ${af?`data-autofill="${af}"`:''} placeholder="${opts.ph||'Enter values, separated by commas'}" oninput="autoResize(this)"></textarea></div>`;
   }
-  return `${wrapOpen}<label>${label}${badge}</label><input type="text" data-field="${id}"${opts.id?` id="${opts.id}"`:''}${et} ${af?`data-autofill="${af}"`:''} placeholder="${opts.ph||''}" value="${(opts.value||'').replace(/"/g,'&quot;')}"></div>`;
+  return `${wrapOpen}<label>${label}${badge}</label><textarea data-field="${id}"${opts.id?` id="${opts.id}"`:''}${et} ${af?`data-autofill="${af}"`:''} placeholder="${opts.ph||''}" oninput="autoResize(this)">${(opts.value||'').replace(/</g,'&lt;')}</textarea></div>`;
 }
 
 function row(...fields){ return `<div class="row">${fields.join('')}</div>`; }
@@ -363,7 +369,7 @@ ch3 += row(field('Top width of Embankment Dam (m)'), field('Top width of Masonry
 ch3 += row(field('Elevation of top of Embankment Dam (m)'), field('Elevation of top of Masonry/Concrete Dam (m)'));
 ch3 += row(field('Elevation of top of Upstream Solid Parapet Wall (m)'), field('Height of Embankment Dam above Lowest River Bed Level (m)', {autofill:'Height above Lowest Foundation Level(m)'}));
 ch3 += row(field('Height of Masonry/Concrete Dam above deepest foundation level (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Lowest River Bed Elevation (m)'));
-ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Risk Index (RRSSD)', {autofill:'PAR Value', value:'RI-'}));
+ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}),field('Risk Index (RRSSD)', {autofill:'PAR Value', value:'RI-'}));
 
 ch3 += `<div class="cond saddle">`;
 ch3 += subsubhead('II. Saddle Dam');
@@ -1918,7 +1924,58 @@ const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Inchar
   }
 })();
 
+
 let riskIndexByPIC = {};
+let riskDatasetReady = false;
+function normPIC(p){ return (p==null ? '' : String(p)).replace(/\s+/g,'').toUpperCase(); }
+// Layout-independent reader: instead of trusting column positions, every row is scanned for a
+// cell that looks like a PIC (e.g. MH09LH0057). Dam Name = the text cell to its left; TC, EC, SP,
+// PI, FI and Risk Index = the first six numbers to its right. Works for every state sheet
+// (Maharashtra, Gujarat, Goa ...) whatever the blank/extra columns or heading rows are.
+const PIC_RE = /^[A-Z]{2}\d{2,3}[A-Z]{2}\d{3,5}$/i;
+function indexRiskSheet(rows2d){
+  const num = v => { const t = (v==null ? '' : String(v)).replace(/,/g,'').trim(); return /^-?\d+(\.\d+)?$/.test(t) ? t : null; };
+  let serial = 0;
+  rows2d.forEach(function(r){
+    const cells = r.map(c => (c==null ? '' : String(c)).trim());
+    const pc = cells.findIndex(c => PIC_RE.test(c.replace(/\s+/g,'')));
+    if(pc < 0) return;
+    const pic = cells[pc].replace(/\s+/g,'');
+    let damName = '', sNo = '';
+    for(let i=pc-1; i>=0; i--){ if(cells[i] && num(cells[i])===null){ damName = cells[i]; break; } }
+    for(let i=pc-1; i>=0; i--){ if(num(cells[i])!==null){ sNo = cells[i]; break; } }
+    const texts = [], nums = [];
+    for(let i=pc+1; i<cells.length; i++){
+      if(!cells[i]) continue;
+      const n = num(cells[i]);
+      if(n!==null) nums.push(n); else texts.push(cells[i]);
+    }
+    if(nums.length < 6) return;
+    serial++;
+    riskIndexByPIC[normPIC(pic)] = {
+      sNo: sNo || serial, pic: pic, damName: damName, damType: '', sdso: texts[1]||'',
+      state: texts[0]||'', tc: nums[0], ec: nums[1], sp: nums[2], pi: nums[3], fi: nums[4], riskIndex: nums[5]
+    };
+  });
+}
+// rows = data rows only: [S.No, PIC, Dam Name, Dam Type, SDSO, State, TC, EC, SP, PI, FI, Risk Index]
+function indexRiskRows(rows){
+  rows.forEach(function(r){
+    const pic = (r[1]||'').toString().trim();
+    if(!pic) return;
+    riskIndexByPIC[normPIC(pic)] = {
+      sNo: r[0], pic: r[1], damName: r[2], damType: r[3], sdso: r[4],
+      state: r[5], tc: r[6], ec: r[7], sp: r[8], pi: r[9], fi: r[10], riskIndex: r[11]
+    };
+  });
+}
+function loadRrssdScript(src){
+  return new Promise(function(res){
+    const sc = document.createElement('script');
+    sc.src = src; sc.onload = function(){ res(true); }; sc.onerror = function(){ res(false); };
+    document.head.appendChild(sc);
+  });
+}
 (async function loadRiskIndexDataset(){
   try{
     if(typeof XLSX === 'undefined') throw new Error('XLSX library not loaded');
@@ -1927,30 +1984,38 @@ let riskIndexByPIC = {};
     const buf = await resp.arrayBuffer();
     const wb = XLSX.read(buf, {type:'array'});
     wb.SheetNames.forEach(function(sheetName){
-      const sheet = wb.Sheets[sheetName];
-      const rows2d = XLSX.utils.sheet_to_json(sheet, {header:1, raw:false, defval:''});
-      rows2d.slice(2).forEach(function(r){
-        const pic = (r[1]||'').toString().trim();
-        if(!pic) return;
-        riskIndexByPIC[pic] = {
-          sNo: r[0], pic: r[1], damName: r[2], damType: r[3], sdso: r[4],
-          state: r[5], tc: r[6], ec: r[7], sp: r[8], pi: r[9], fi: r[10], riskIndex: r[11]
-        };
-      });
+      indexRiskSheet(XLSX.utils.sheet_to_json(wb.Sheets[sheetName], {header:1, raw:false, defval:''}));
     });
-    console.log('RRSSD Risk Index dataset loaded (' + Object.keys(riskIndexByPIC).length + ' dams across all states).');
-  }catch(e){
-    console.warn('Could not fetch data/rrssd-risk-index.xlsx — Risk Index table will stay blank until fixed.', e);
+  }catch(e){ console.warn('RRSSD xlsx could not be read:', e); }
+  // Opened straight from a computer (file://), or the Excel gave no rows:
+  // use the embedded copy in data/rrssd-data.js instead.
+  if(Object.keys(riskIndexByPIC).length === 0){
+    if(await loadRrssdScript('data/rrssd-data.js') && window.RRSSD_ROWS){
+      indexRiskRows(window.RRSSD_ROWS);
+    }
   }
+  riskDatasetReady = true;
+  const n = Object.keys(riskIndexByPIC).length;
+  if(n) console.log('RRSSD Risk Index dataset loaded (' + n + ' dams).');
+  else  console.warn('RRSSD Risk Index data could not be loaded (data/rrssd-risk-index.xlsx / data/rrssd-data.js missing?) - the Risk Index table will stay blank.');
+  // A dam may already have been fetched before the data finished loading.
+  const pic = (window.lastDamRow && window.lastDamRow['PIC']) || (document.getElementById('picInput')||{}).value || '';
+  if(pic) fillRiskIndexTable(pic);
 })();
 
 function fillRiskIndexTable(pic){
-  const rec = riskIndexByPIC[(pic||'').trim()];
+  const rec = riskIndexByPIC[normPIC(pic)];
+  // Chapter 3 "Risk Index (RRSSD)" field: RI-<risk index>, or Not available
+  const riField = document.getElementById('ch3RiskIndexInput');
+  if(riField && (rec || riskDatasetReady)) riField.value = (rec && rec.riskIndex !== '' && rec.riskIndex != null) ? ('RI-' + rec.riskIndex) : 'Not available';
   const ids = ['riskSNo','riskPIC','riskDamName','riskDamType','riskSDSO','riskState','riskTC','riskEC','riskSP','riskPI','riskFI','riskIndexVal'];
   if(!rec){
     ids.forEach(function(id, i){
       const el = document.getElementById(id);
-      if(el) el.textContent = i===1 ? (pic||'') : (i===2 ? 'Not available in RRSSD dataset' : '');
+      if(!el) return;
+      if(i===1) el.textContent = pic || '';
+      else if(i===2) el.textContent = riskDatasetReady ? 'Not available in RRSSD dataset' : 'Loading RRSSD data…';
+      else el.textContent = '';
     });
     return;
   }
@@ -1991,6 +2056,7 @@ function applyConditions(){
     el.classList.toggle('hidden', !show);
   });
   if(typeof numberContent === 'function') numberContent();
+  document.querySelectorAll('textarea').forEach(autoResize);
 }
 // function updateDocumentNo(row, serial) {
 //   const pic = (row['PIC'] || '').trim();
