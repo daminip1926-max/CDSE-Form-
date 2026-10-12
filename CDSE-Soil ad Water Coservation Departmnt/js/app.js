@@ -1136,6 +1136,11 @@ certHtml += statictext(
     'We hereby certify that this evaluation was conducted in accordance with generally accepted engineering practices and the applicable NDSA CDSE Regulations and Guidelines. This certification represents our professional engineering opinion regarding the current safety condition of the dam and does not guarantee its future performance. The findings, interpretations, and recommendations are those of the IPoE and are free from the influence of the Dam Owner. ' +
     'The IPoE members declare that they have no actual, potential, or perceived conflict of interest in conducting the CDSE and that the evaluation has been carried out independently, objectively, and impartially.'
 );
+certHtml += statictext(
+    '<b>CDSE Report Certification by Independent Panel of Experts</b><br>' +
+    'We hereby certify that this evaluation was conducted in accordance with ... (jaisa pehle tha) ...' +
+    '<mark class="hl">The IPoE members declare that they have no actual, potential, or perceived conflict of interest in conducting the CDSE and that the evaluation has been carried out independently, objectively, and impartially.</mark>'
+);
 certHtml += `<table class="data" id="ipoeTable"><thead><tr><th style="width:36px">Sl.No</th><th>Name</th><th>Designation / Discipline</th><th>Signature</th></tr></thead><tbody id="ipoeBody"></tbody></table>`;
 certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
 certHtml += statictext('This is to certify that the submitted CDSE Report for this  dam has been perused, due diligence and necessary appraisal done, and necessary suggestions given by SDSO/NDSA have been incorporated in the final CDSE Report. The dam owner has been directed to implement the suggestions/recommendations and submit a time-bound action plan for monitoring implementation. This CDSE Report is to be considered published.');
@@ -1489,7 +1494,7 @@ function refreshAutofillDropdown(){
     if(searchInput) searchInput.placeholder = 'Select IPoE Order No above first...';
     return;
   }
-  let opts = '';
+  let opts = ''
   Object.keys(csvIndex).forEach(picUpper=>{
     const row = csvIndex[picUpper];
     if((row['IPoE Order No']||'').toString().trim() !== selectedIpoeOrder) return;
@@ -1498,6 +1503,8 @@ function refreshAutofillDropdown(){
     opts += `<option value="${pic} — ${name}">`;
   });
   dl.innerHTML = opts;
+
+    
   if(searchInput) searchInput.placeholder = 'Start typing PIC or Dam Name...';
 }
 function parseCSV(text){
