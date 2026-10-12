@@ -1934,28 +1934,54 @@ function normPIC(p){ return (p==null ? '' : String(p)).replace(/\s+/g,'').toUppe
 // (Maharashtra, Gujarat, Goa ...) whatever the blank/extra columns or heading rows are.
 const PIC_RE = /^[A-Z]{2}\d{2,3}[A-Z]{2}\d{3,5}$/i;
 function indexRiskSheet(rows2d){
+  const norm = v => (v==null ? '' : String(v)).replace(/\s+/g,' ').trim().toLowerCase();
   const num = v => { const t = (v==null ? '' : String(v)).replace(/,/g,'').trim(); return /^-?\d+(\.\d+)?$/.test(t) ? t : null; };
+  // 1) Preferred: read columns by their HEADING names (S.No, PIC, Dam Name, ... Risk Index).
+  //    Needed because sheets differ - e.g. Maharashtra has Dam Name before PIC, others after.
+  let hdr = -1, m = null;
+  for(let i=0; i<Math.min(rows2d.length, 10); i++){
+    const h = rows2d[i].map(norm);
+    const pic = h.indexOf('pic'), ri = h.findIndex(c => c === 'risk index');
+    if(pic !== -1 && ri !== -1){
+      const f = (...n) => h.findIndex(c => n.indexOf(c) !== -1);
+      m = { sNo: f('s.no','s.no.','sr.no','sl.no'), pic: pic, damName: f('dam name','name of dam'), damType: f('dam type','type of dam'),
+            sdso: f('sdso'), state: f('state'), tc: f('tc'), ec: f('ec'), sp: f('sp'), pi: f('pi'), fi: f('fi'), riskIndex: ri };
+      hdr = i; break;
+    }
+  }
+  if(m){
+    let serial = 0;
+    rows2d.slice(hdr+1).forEach(function(r){
+      const g = k => (m[k] >= 0 && r[m[k]] != null) ? r[m[k]] : '';
+      const pic = String(g('pic')).replace(/\s+/g,'');
+      if(!pic) return;
+      serial++;
+      riskIndexByPIC[normPIC(pic)] = { sNo: g('sNo') || serial, pic: pic, damName: g('damName'), damType: g('damType'), sdso: g('sdso'),
+        state: g('state'), tc: g('tc'), ec: g('ec'), sp: g('sp'), pi: g('pi'), fi: g('fi'), riskIndex: g('riskIndex') };
+    });
+    return;
+  }
+  // 2) No usable heading: find the PIC-looking cell in each row; Dam Name = nearest text on its left
+  //    (or first text on its right), TC..Risk Index = the first six numbers after the PIC.
   let serial = 0;
   rows2d.forEach(function(r){
     const cells = r.map(c => (c==null ? '' : String(c)).trim());
     const pc = cells.findIndex(c => PIC_RE.test(c.replace(/\s+/g,'')));
     if(pc < 0) return;
     const pic = cells[pc].replace(/\s+/g,'');
-    let damName = '', sNo = '';
+    let damName = '';
     for(let i=pc-1; i>=0; i--){ if(cells[i] && num(cells[i])===null){ damName = cells[i]; break; } }
-    for(let i=pc-1; i>=0; i--){ if(num(cells[i])!==null){ sNo = cells[i]; break; } }
     const texts = [], nums = [];
     for(let i=pc+1; i<cells.length; i++){
       if(!cells[i]) continue;
       const n = num(cells[i]);
       if(n!==null) nums.push(n); else texts.push(cells[i]);
     }
+    if(!damName && texts.length) damName = texts.shift();
     if(nums.length < 6) return;
     serial++;
-    riskIndexByPIC[normPIC(pic)] = {
-      sNo: sNo || serial, pic: pic, damName: damName, damType: '', sdso: texts[1]||'',
-      state: texts[0]||'', tc: nums[0], ec: nums[1], sp: nums[2], pi: nums[3], fi: nums[4], riskIndex: nums[5]
-    };
+    riskIndexByPIC[normPIC(pic)] = { sNo: serial, pic: pic, damName: damName, damType: '', sdso: texts[texts.length-2]||'',
+      state: texts[texts.length-1]||'', tc: nums[0], ec: nums[1], sp: nums[2], pi: nums[3], fi: nums[4], riskIndex: nums[5] };
   });
 }
 // rows = data rows only: [S.No, PIC, Dam Name, Dam Type, SDSO, State, TC, EC, SP, PI, FI, Risk Index]
@@ -1991,7 +2017,9 @@ function loadRrssdScript(src){
   // use the embedded copy in data/rrssd-data.js instead.
   if(Object.keys(riskIndexByPIC).length === 0){
     if(await loadRrssdScript('data/rrssd-data.js') && window.RRSSD_ROWS){
+      // rrssd-data.js has a fixed layout: [S.No, PIC, Dam Name, Dam Type, SDSO, State, TC, EC, SP, PI, FI, Risk Index]
       indexRiskRows(window.RRSSD_ROWS);
+      if(Object.keys(riskIndexByPIC).length === 0) indexRiskSheet(window.RRSSD_ROWS);
     }
   }
   riskDatasetReady = true;
