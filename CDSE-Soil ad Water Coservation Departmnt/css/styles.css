@@ -642,6 +642,12 @@ body.reviewMode .field-autofilled{outline:1px dashed #cdbb84;background:#fffdf7;
   #execsummary{ break-before:page; page-break-before:always; }
 }
 
+mark.hl {
+    color: red;
+    background-color: transparent;
+    font-weight: bold;
+}
+
 
 
 
