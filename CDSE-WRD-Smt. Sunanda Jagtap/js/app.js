@@ -3434,7 +3434,7 @@ function exportExcel(){
 /* ---------- Submit to Google Drive (via Google Apps Script Web App) ---------- */
 // 1. Deploy the Apps Script (see setup guide provided separately) as a Web App.
 // 2. Paste the deployment URL below, replacing the placeholder.
-const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPxCe-HbnYB0psqdDEGrISvitzg4HirWx7LdSJ6Szey0N1q5b2lYAYz0f0vTxXAqvCNg/exec";
+const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4WmazE-KlPcIWaAOVg9uf9fTsPOKm9BUOwwd0ES3oUrtuicmZ8OuEZiKbhIE83oRF/exec";
 
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
@@ -3508,6 +3508,21 @@ async function submitToDrive(overwrite){
       if(confirmReplace) return submitToDrive(true);
       return;
     }
+    if(result && result.error){
+      // The script ran but failed - do not claim success
+      console.error('Drive script error:', result.error);
+      status.style.color = '#b23b2e';
+      status.textContent = '⚠ Save failed: ' + result.error;
+      return;
+    }
+    if(result && result.warnings && result.warnings.length){
+      // Folder/files saved, but something (e.g. the Google Sheet row) did not
+      console.warn('Drive script warnings:', result.warnings);
+      status.style.color = '#b26b00';
+      status.textContent = '⚠ Saved to Drive folder, but: ' + result.warnings.join(' | ');
+      delete prefetchedLoads[(pic||'').toUpperCase()];
+      return;
+    }
     status.style.color = '#2f7a3f';
     status.textContent = '✅ Saved to Google Drive';
     delete prefetchedLoads[(pic||'').toUpperCase()];
@@ -3517,7 +3532,7 @@ async function submitToDrive(overwrite){
     status.textContent = '⚠ Save failed — please check your internet connection and try again.';
   } finally {
     btn.disabled = false;
-    setTimeout(()=>{ status.textContent=''; }, 8000);
+    setTimeout(()=>{ status.textContent=''; }, 20000);
   }
 }
 /* Shared by importJSON (local file) and loadFromDriveByPic (Google Drive) —
@@ -3709,11 +3724,13 @@ window.addEventListener('load', () => {
           name: 'Regulations For Independent Panel of Experts for CDSE of each specified dam', 
           filePath: 'Doc/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf', 
             fileName: 'Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
-
+          altPaths: ['Doc/Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
+                     'document/Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
+                     'document/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf']
         },
         { 
-          id: 'preload2', 
-                   name: 'Order of IPoE ', 
+            id: 'preload2', 
+          name: 'Order of IPoE', 
           filePath: 'document/hydro_data.pdf', 
           fileName: 'Order of IPoE' 
         }
@@ -3746,13 +3763,22 @@ window.addEventListener('load', () => {
         //    from a computer (file://) browsers block this, so fall back to the
         //    copy embedded in data/preload-pdfs-b64.js.
         let blob = null;
-        try {
-          const response = await fetch(annx.filePath);
-          if (response.ok) blob = await response.blob();
-        } catch (fetchErr) { /* blocked on file:// — use the embedded copy below */ }
+        for (const p of [annx.filePath, ...(annx.altPaths || [])]) {
+          try {
+            const response = await fetch(p);
+            if (response.ok) { blob = await response.blob(); break; }
+          } catch (fetchErr) { /* blocked on file:// — try next path / embedded copy below */ }
+        }
         if (!blob) blob = await getEmbeddedPreloadBlob(annx.id);
         if (!blob) {
           console.warn('File not found in folder:', annx.filePath);
+          const warnWrap = document.getElementById('annex-pages-' + annx.id);
+          if (warnWrap) {
+            const w = document.createElement('div');
+            w.style.cssText = 'color:#8a2020;background:#fde8e8;padding:8px 12px;border-radius:6px;font-size:13px;margin:6px 0;';
+            w.textContent = 'Preloaded file not found: "' + annx.filePath + '". Put the PDF in that folder and open the page through a local server (http://localhost), or add it to data/preload-pdfs-b64.js.';
+            warnWrap.appendChild(w);
+          }
           continue; // skip this one and carry on with the next annexure
         }
         const file = new File([blob], annx.fileName, { type: blob.type || 'application/pdf' });
