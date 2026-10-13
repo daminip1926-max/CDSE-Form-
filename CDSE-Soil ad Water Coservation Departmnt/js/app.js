@@ -262,7 +262,7 @@ let coverHtml = `<div class="cover">
   <div class="field" style="max-width:420px;margin:10px auto">
   <label>Document No.</label>
   <input type="text" data-field="${nid()}" id="coverDocNo"
-  placeholder="e.g. 1/MH293LH3309/CDSE/2026/SWCD" >
+  placeholder="e.g. 1/MH293LH3309/CDSE/2026/WRD" >
 </div> 
   <div class="damtitle" id="coverDamName">DAM</div>
   <div class="damtitle" id="coverDamPIC">PIC</div>
@@ -369,7 +369,7 @@ ch3 += row(field('Top width of Embankment Dam (m)'), field('Top width of Masonry
 ch3 += row(field('Elevation of top of Embankment Dam (m)'), field('Elevation of top of Masonry/Concrete Dam (m)'));
 ch3 += row(field('Elevation of top of Upstream Solid Parapet Wall (m)'), field('Height of Embankment Dam above Lowest River Bed Level (m)', {autofill:'Height above Lowest Foundation Level(m)'}));
 ch3 += row(field('Height of Masonry/Concrete Dam above deepest foundation level (m)', {autofill:'Height above Lowest Foundation Level(m)'}), field('Lowest River Bed Elevation (m)'));
-ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}),field('Risk Index (RRSSD)', {autofill:'PAR Value', value:'RI-'}));
+ch3 += row(field('Deepest Foundation Elevation (m)', {autofill:'Height above Lowest Foundation Level(m)'}),field('Risk Index (RRSSD)', {autofill:'Risk Index', value:'RI-'}));
 
 ch3 += `<div class="cond saddle">`;
 ch3 += subsubhead('II. Saddle Dam');
@@ -1137,14 +1137,35 @@ certHtml += statictext(
      'We hereby certify that this evaluation was conducted in accordance with generally accepted engineering practices and the applicable NDSA CDSE Regulations and Guidelines. This certification represents our professional engineering opinion regarding the current safety condition of the dam and does not guarantee its future performance. The findings, interpretations, and recommendations are those of the IPoE and are free from the influence of the Dam Owner. ' +
         '<mark class="hl">The IPoE members declare that they have no actual, potential, or perceived conflict of interest in conducting the CDSE and that the evaluation has been carried out independently, objectively, and impartially.</mark>'
 ); 
-certHtml += `<table class="data" id="ipoeTable"><thead><tr><th style="width:36px">Sl.No</th><th>Name</th><th>Designation / Discipline</th><th>Signature</th></tr></thead><tbody id="ipoeBody"></tbody></table>`;
-certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
+// certHtml += `<table class="data" id="ipoeTable"><thead><tr><th style="width:36px">Sl.No</th><th>Name</th><th>Designation / Discipline</th><th>Signature</th></tr></thead><tbody id="ipoeBody"></tbody></table>`;
+certHtml += `
+<table class="data" id="ipoeTable">
+    <thead>
+        <tr>
+            <th style="width:36px">Sl.No</th>
+            <th>Name</th>
+            <th>Designation / Discipline</th>
+            <th>Signature</th>
+        </tr>
+    </thead>
+    <tbody id="ipoeBody"></tbody>
+</table>`;
+
+certHtml += `<button type="button" class="addrow-btn no-print" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
+// certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
 certHtml += statictext('This is to certify that the submitted CDSE Report for this  dam has been perused, due diligence and necessary appraisal done, and necessary suggestions given by SDSO/NDSA have been incorporated in the final CDSE Report. The dam owner has been directed to implement the suggestions/recommendations and submit a time-bound action plan for monitoring implementation. This CDSE Report is to be considered published.');
 // certHtml += row(field('Signature of Head SDSO — Name'), field('Date', {type:'date'}));
 certHtml += row(
-    field('Signature of Head SDSO — Name'),
+   field('Signature of Head SDSO — Name', {
+    autofill: 'IPoE Member 1 Name'
+}),
     field('Date', {type: 'date'})
 );
+
+
+
+
+
 
 certHtml += `
 <div class="field">
@@ -1881,7 +1902,7 @@ const heightVal = parseFloat((row['Height above Lowest Foundation Level(m)']||''
 }
 
 // damheader
-const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add","CE Contact","IPoE Order No","IPoE Member 1 Name","IPoE Member 1 Designation","IPoE Member 2 Name","IPoE Member 2 Designation","IPoE Member 3 Name","IPoE Member 3 Designation"];
+const DAM_HEADERS = ["Sr.No","PIC","Name of Dam","SDSO Name","State","Dam Incharge","Dam Owner","Latitude","Longitude","Year of Commission","Type of Dam","River Basin","River Sub Basin","River","Nearest City","District","Seismic Zone","Height above Lowest Foundation Level(m)","Dam Length(m)","Gross Storage Capacity(MCM)","Reservoir Area(103 m2)","Live Storage Capacity(MCM)","Purpose","Designed Spillway Capacity(m3/s)","Max. Water Level(m)","Full Reservoir Level(m)","Gated","Ungated","Head of DSU Name","Head of DSU Email","Head of DSU Mobile","Total Hydropower installed capacity","Flood Cushion (MWL-FRL)(MCM)","Catchment Area (km2)","Reservoir Surface-Area(MWL)(km2)","Available FreeBoard(m)","Sub Dam Type","Rule curve Available","Design Inflow Flood (m3/s)","Inflow Design Flood Year","Has inflow Design Flood reviewed(Year of Review)","Dead Storage Volume (m3/s)","Type of Spillway(quantity)","Spillway Type(Max. Discharge Capacity  in m3/s)","Energy Dissipation structure Types","Design discharge of EDA(m3/s)","HRT available (No. of HRT if available)","Deaign discharge per unit intake","Type of gate ( Quantity)","Valve Type (Quantity)","Road type((Number of access road))","Tunnel available","Max. Design Discharge of tunnel(m3/s)","Gallery / Shaft Type (Top Elevation level in m)","Geotechnical Instruments(Installed/Total Type)","Geodetic Instruments(Installed/Total Type)","Hydrometeorological Instruments(Installed/Total Type)","Seismic Instruments(Installed/Total Type)","Other Instruments(Installed/Total Type)","EAP Reports available (Yes/No)","O&M (Yes/No)","EWS-Hooter System","EWS-Sign board-(YES/NO)","EWS-Flood forecast","EWS-Glacial lake outburst floo","Is the display board installed at the dam site?-(YES/NO)","Dam Safety Act, 2021 Display Board-(YES/NO)","Rule Curve Display Board-(YES/NO)","Independent Panel of Experts (IPoE)-(YES/NO)","Dam Visited-(YES/NO)","PAR Value","CE Mail","CE Add","CE Contact","IPoE Order No","IPoE Member 1 Name","IPoE Member 1 Designation","IPoE Member 2 Name","IPoE Member 2 Designation","IPoE Member 3 Name","IPoE Member 3 Designation","Risk Index"];
 
 
 
@@ -3413,7 +3434,7 @@ function exportExcel(){
 /* ---------- Submit to Google Drive (via Google Apps Script Web App) ---------- */
 // 1. Deploy the Apps Script (see setup guide provided separately) as a Web App.
 // 2. Paste the deployment URL below, replacing the placeholder.
-const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPxCe-HbnYB0psqdDEGrISvitzg4HirWx7LdSJ6Szey0N1q5b2lYAYz0f0vTxXAqvCNg/exec";
+const DRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz4WmazE-KlPcIWaAOVg9uf9fTsPOKm9BUOwwd0ES3oUrtuicmZ8OuEZiKbhIE83oRF/exec";
 
 function fileToBase64(file){
   return new Promise((resolve,reject)=>{
@@ -3487,6 +3508,21 @@ async function submitToDrive(overwrite){
       if(confirmReplace) return submitToDrive(true);
       return;
     }
+    if(result && result.error){
+      // The script ran but failed - do not claim success
+      console.error('Drive script error:', result.error);
+      status.style.color = '#b23b2e';
+      status.textContent = '⚠ Save failed: ' + result.error;
+      return;
+    }
+    if(result && result.warnings && result.warnings.length){
+      // Folder/files saved, but something (e.g. the Google Sheet row) did not
+      console.warn('Drive script warnings:', result.warnings);
+      status.style.color = '#b26b00';
+      status.textContent = '⚠ Saved to Drive folder, but: ' + result.warnings.join(' | ');
+      delete prefetchedLoads[(pic||'').toUpperCase()];
+      return;
+    }
     status.style.color = '#2f7a3f';
     status.textContent = '✅ Saved to Google Drive';
     delete prefetchedLoads[(pic||'').toUpperCase()];
@@ -3496,7 +3532,7 @@ async function submitToDrive(overwrite){
     status.textContent = '⚠ Save failed — please check your internet connection and try again.';
   } finally {
     btn.disabled = false;
-    setTimeout(()=>{ status.textContent=''; }, 8000);
+    setTimeout(()=>{ status.textContent=''; }, 20000);
   }
 }
 /* Shared by importJSON (local file) and loadFromDriveByPic (Google Drive) —
@@ -3688,13 +3724,15 @@ window.addEventListener('load', () => {
           name: 'Regulations For Independent Panel of Experts for CDSE of each specified dam', 
           filePath: 'Doc/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf', 
             fileName: 'Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
-
+          altPaths: ['Doc/Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
+                     'document/Regulations on Independent Panel of Experts for CDSE of each specified dam.pdf',
+                     'document/Regulations  on Independent Panel of Experts for CDSE of each specified dam.pdf']
         },
         { 
-          id: 'preload2', 
-          name: 'Order Of IPoE', 
+            id: 'preload2', 
+          name: 'Order of IPoE', 
           filePath: 'document/hydro_data.pdf', 
-          fileName: 'hydro_data.pdf' 
+          fileName: 'Order of IPoE' 
         }
       ];
 
@@ -3725,13 +3763,22 @@ window.addEventListener('load', () => {
         //    from a computer (file://) browsers block this, so fall back to the
         //    copy embedded in data/preload-pdfs-b64.js.
         let blob = null;
-        try {
-          const response = await fetch(annx.filePath);
-          if (response.ok) blob = await response.blob();
-        } catch (fetchErr) { /* blocked on file:// — use the embedded copy below */ }
+        for (const p of [annx.filePath, ...(annx.altPaths || [])]) {
+          try {
+            const response = await fetch(p);
+            if (response.ok) { blob = await response.blob(); break; }
+          } catch (fetchErr) { /* blocked on file:// — try next path / embedded copy below */ }
+        }
         if (!blob) blob = await getEmbeddedPreloadBlob(annx.id);
         if (!blob) {
           console.warn('File not found in folder:', annx.filePath);
+          const warnWrap = document.getElementById('annex-pages-' + annx.id);
+          if (warnWrap) {
+            const w = document.createElement('div');
+            w.style.cssText = 'color:#8a2020;background:#fde8e8;padding:8px 12px;border-radius:6px;font-size:13px;margin:6px 0;';
+            w.textContent = 'Preloaded file not found: "' + annx.filePath + '". Put the PDF in that folder and open the page through a local server (http://localhost), or add it to data/preload-pdfs-b64.js.';
+            warnWrap.appendChild(w);
+          }
           continue; // skip this one and carry on with the next annexure
         }
         const file = new File([blob], annx.fileName, { type: blob.type || 'application/pdf' });
