@@ -1150,7 +1150,7 @@ certHtml += `
 
 certHtml += `<button type="button" class="addrow-btn no-print" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
 // certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
-<br>
+
 certHtml += ` <div class="certification-section"> <b>CDSE Report Certification by SDSO</b> <br><br> <div contenteditable="true" class="editable-certification" style="border:1px solid #ccc; padding:8px; min-height:100px; line-height:1.6; outline:none;"> This is to certify that the submitted CDSE Report for ……………..dam has been perused, due diligence and necessary appraisal done, and necessary suggestions given by SDSO/NDSA have been incorporated in the final CDSE Report. The dam owner has been directed to implement the suggestions and recommendations in the Report and to submit a time-bound action plan for further monitoring of the implementation of the official action plan for this dam. <mark class="hl">  This CDSE Report is to be considered published. </mark> </div> </div> `;
 
 certHtml += row(
