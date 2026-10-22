@@ -1150,8 +1150,8 @@ certHtml += `
 
 certHtml += `<button type="button" class="addrow-btn no-print" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
 // certHtml += `<button class="addrow-btn" onclick="addIpoeRow()">+ Add IPoE Member</button>`;
-
-certHtml += ` <div class="certification-section"> <b>CDSE Report Certification by SDSO</b> <br><br> <div contenteditable="true" class="editable-certification" style="border:1px solid #ccc; padding:8px; min-height:100px; line-height:1.6; outline:none;"> We hereby certify that this evaluation was conducted in a manner consistent with generally accepted engineering practices and the applicable NDSA CDSE Regulations and Guidelines.This certification represents my professional engineering opinion regarding the current safety condition of the dam and does not constitute a guarantee of future performance. The findings, interpretations and recommendations in this CDSE Report are those of the Independent Panel of Experts and are free from the influence of the Dam Owner.”  <mark class="hl"> The IPoE members declare that they have no actual, potential, or perceived conflict of interest in conducting the CDSE and that the evaluation has been carried out independently, objectively, and impartially. </mark> </div> </div> `;
+<br>
+certHtml += ` <div class="certification-section"> <b>CDSE Report Certification by SDSO</b> <br><br> <div contenteditable="true" class="editable-certification" style="border:1px solid #ccc; padding:8px; min-height:100px; line-height:1.6; outline:none;"> This is to certify that the submitted CDSE Report for ……………..dam has been perused, due diligence and necessary appraisal done, and necessary suggestions given by SDSO/NDSA have been incorporated in the final CDSE Report. The dam owner has been directed to implement the suggestions and recommendations in the Report and to submit a time-bound action plan for further monitoring of the implementation of the official action plan for this dam. <mark class="hl">  This CDSE Report is to be considered published. </mark> </div> </div> `;
 
 certHtml += row(
    field('Signature of Head SDSO — Name', {
