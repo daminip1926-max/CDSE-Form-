@@ -650,6 +650,26 @@ mark.hl {
 
 
 
+.editable-certification {
+    border: 1px dashed #999;
+    padding: 8px;
+    min-height: 100px;
+    outline: none;
+}
+
+.editable-certification:focus {
+    background-color: #fffef2;
+}
+
+@media print {
+    .editable-certification {
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+    }
+}
+
+
 
 
 
