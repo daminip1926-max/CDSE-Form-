@@ -353,9 +353,6 @@ ch3 += subhead('Project Details');
 ch3 += row(field('PIC (Project Identification Code)', {autofill:'PIC', keepVisible:true, id:'picInput'}), field('Name of Dam', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
 ch3 += row(field('River', {autofill:'River'}), field('State', {autofill:'State'}));
 ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
-ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
-
-
 ch3 += row(field('Gross Command Area (GCA)'), field('Cultivable Command Area (CCA)'));
 ch3 += row(field('Annual Irrigation Potential (AIP)'), field('Flood Protected Area (ha)');
 ch3 += row(field('Annual Water Supply (MCM)'), field('No of Population Benefitted (in Lakh)');
