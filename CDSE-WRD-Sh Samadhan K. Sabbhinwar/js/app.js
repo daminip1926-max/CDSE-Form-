@@ -357,8 +357,8 @@ ch3 += row(field('Gross Command Area (GCA)'), field('Cultivable Command Area (CC
 ch3 += row(field('Annual Irrigation Potential (AIP)'), field('Flood Protected Area (ha)'));
 ch3 += row(field('Annual Water Supply (MCM)'), field('No of Population Benefitted (in Lakh)'));
 ch3 += subhead('Hydropower Benifits');
-ch3 += row(field('Installed Capacity (MW)'), field('Firm Power (MW)');
-ch3 += row(field('Average Annual Energy Generation (MU)');
+ch3 += row(field('Installed Capacity (MW)'), field('Firm Power (MW)'));
+ch3 += row(field('Average Annual Energy Generation (MU)'));
 ch3 += row(field('Ownership / Owning Agency', {autofill:'CE Mail', keepVisible:true}), field('Dam Type', {ph:'e.g. Gravity / Earthen / Composite / Barrage', autofill:'Type of Dam', keepVisible:true}));
 
 
