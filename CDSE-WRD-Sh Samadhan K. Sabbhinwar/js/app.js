@@ -349,7 +349,7 @@ addChapter(2, 'Constitution of Independent Panel of Experts (IPoE)', ch2);
 let  = statictext(`The Panel shall record confirmation that the structure qualifies as a "specified dam" under Section 4(x) of the Dam Safety Act, 2021 (height above 15 m; or 10–15 m with crest length ≥ 500 m, or reservoir capacity ≥ 1 MCM, or maximum flood discharge ≥ 2000 m³/s, or specially difficult foundation, or unusual design), and shall state the basis of classification. Where CDSE has been triggered under Section 39, this shall also be recorded.`);
 
 
- += subhead('Project Details');
+ch3 += subhead('Project Details');
 ch3 += row(field('PIC (Project Identification Code)', {autofill:'PIC', keepVisible:true, id:'picInput'}), field('Name of Dam', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
 ch3 += row(field('River', {autofill:'River'}), field('State', {autofill:'State'}));
 ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
