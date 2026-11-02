@@ -346,17 +346,17 @@ ch2 += field('Terms of Reference / Scope of Work (summary)', {type:'textarea',va
 addChapter(2, 'Constitution of Independent Panel of Experts (IPoE)', ch2);
 
 /* ---------- CHAPTER 3 ---------- */
-let ch3 = statictext(`The Panel shall record confirmation that the structure qualifies as a "specified dam" under Section 4(x) of the Dam Safety Act, 2021 (height above 15 m; or 10–15 m with crest length ≥ 500 m, or reservoir capacity ≥ 1 MCM, or maximum flood discharge ≥ 2000 m³/s, or specially difficult foundation, or unusual design), and shall state the basis of classification. Where CDSE has been triggered under Section 39, this shall also be recorded.`);
+let  = statictext(`The Panel shall record confirmation that the structure qualifies as a "specified dam" under Section 4(x) of the Dam Safety Act, 2021 (height above 15 m; or 10–15 m with crest length ≥ 500 m, or reservoir capacity ≥ 1 MCM, or maximum flood discharge ≥ 2000 m³/s, or specially difficult foundation, or unusual design), and shall state the basis of classification. Where CDSE has been triggered under Section 39, this shall also be recorded.`);
 
 
-ch3 += subhead('Project Details');
+ += subhead('Project Details');
 ch3 += row(field('PIC (Project Identification Code)', {autofill:'PIC', keepVisible:true, id:'picInput'}), field('Name of Dam', {autofill:'Name of Dam', keepVisible:true, id:'coverDamInput'}));
 ch3 += row(field('River', {autofill:'River'}), field('State', {autofill:'State'}));
 ch3 += row(field('District', {autofill:'District'}), field('Location', {id:'locationLatLongInput', ph:'Latitude, Longitude'}));
 ch3 += row(field('Gross Command Area (GCA)'), field('Cultivable Command Area (CCA)'));
 ch3 += row(field('Annual Irrigation Potential (AIP)'), field('Flood Protected Area (ha)'));
 ch3 += row(field('Annual Water Supply (MCM)'), field('No of Population Benefitted (in Lakh)'));
-ch3 += subhead('Hydropower Benifits');
+ch3 += subhead('Hydropower Benefits');
 ch3 += row(field('Installed Capacity (MW)'), field('Firm Power (MW)'));
 ch3 += row(field('Average Annual Energy Generation (MU)'));
 ch3 += row(field('Ownership / Owning Agency', {autofill:'CE Mail', keepVisible:true}), field('Dam Type', {ph:'e.g. Gravity / Earthen / Composite / Barrage', autofill:'Type of Dam', keepVisible:true}));
