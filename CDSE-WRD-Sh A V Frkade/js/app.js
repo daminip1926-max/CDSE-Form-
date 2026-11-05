@@ -3737,6 +3737,12 @@ window.addEventListener('load', () => {
         { 
             id: 'preload2', 
           name: 'Order of IPoE', 
+          filePath: 'Doc/020_120-SE Level-GLIC Ambadi.pdf', 
+          fileName: 'Order of IPoE' 
+        },
+        { 
+            id: 'preload2', 
+          name: 'Order of IPoE', 
           filePath: 'document/hydro_data.pdf', 
           fileName: 'Order of IPoE' 
         }
