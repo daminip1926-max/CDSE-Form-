@@ -4034,3 +4034,5 @@ window.addEventListener('click', (event) => {
   buildTocPage();
   setTimeout(buildTocPage, 800);   // textareas resize hone ke baad numbers theek ho jayein
 })();
+  setTimeout(buildTocPage, 800);   // textareas resize hone ke baad numbers theek ho jayein
+})();
