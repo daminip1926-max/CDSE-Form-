@@ -4075,6 +4075,7 @@ window.addEventListener('click', (event) => {
         }
       });
     });
+    buildTocPage();
     buildSidebarToc();
   }
 
@@ -4084,7 +4085,7 @@ window.addEventListener('click', (event) => {
     if (!toc || typeof chapters === 'undefined') return;
     let h = `<div class="toclabel">TABLE OF CONTENTS</div>`;
     const link = (id, txt, cls) => `<a class="${cls || ''}" href="#${id}" onclick="closeTocOnMobile()">${txt}</a>`;
-    h += link('cover', 'Cover Page') + link('execsummary', 'Executive Summary');
+    h += link('cover', 'Cover Page') + link('tocpage', 'Table of Contents') + link('execsummary', 'Executive Summary');
     let n = 0;
     chapters.forEach(ch => {
       h += link('ch' + ch.no, `Chapter ${ch.no}: ${ch.title}`, 'toc-ch');
@@ -4102,10 +4103,50 @@ window.addEventListener('click', (event) => {
     toc.innerHTML = h;
   }
 
+
+  /* ---------------- TOC PAGE: Cover ke baad, Executive Summary se pehle ---------------- */
+  function buildTocPage() {
+    if (typeof chapters === 'undefined') return;
+    const exec = document.getElementById('execsummary');
+    if (!exec) return;
+    let page = document.getElementById('tocpage');
+    if (!page) {
+      page = document.createElement('div');
+      page.className = 'chapter';
+      page.id = 'tocpage';
+      page.innerHTML = '<div class="chapter-head">Table of Contents</div><div class="chapter-body"></div>';
+      exec.parentNode.insertBefore(page, exec);
+    }
+    const row = (href, num, text, cls) =>
+      `<a class="tp-row ${cls}" href="#${href}"><span class="tp-num">${num}</span><span class="tp-txt">${text}</span><span class="tp-dots"></span></a>`;
+    let h = '';
+    chapters.forEach(ch => {
+      h += row('ch' + ch.no, `Chapter ${ch.no}:`, ch.title, 'tp-ch');
+      document.querySelectorAll(`#ch${ch.no} .chapter-body .subhead, #ch${ch.no} .chapter-body .subsubhead, #ch${ch.no} .chapter-body .field > label`).forEach(el => {
+        const lab = el.querySelector(':scope > .numlabel');
+        if (!lab || el.closest('.cond.hidden')) return;
+        if (!el.id) el.id = 'tp-' + lab.textContent.trim().replace(/\./g, '-');
+        const txt = Array.from(el.childNodes).filter(n => n !== lab).map(n => n.textContent).join('').replace(/\s+/g, ' ').replace(/\bauto\b\s*$/i, '').trim();
+        const sub = lab.textContent.trim().split('.').length > 2 ? 'tp-l3' : 'tp-l2';
+        h += row(el.id, lab.textContent.trim(), txt, sub);
+      });
+    });
+    page.querySelector('.chapter-body').innerHTML = `<div class="toc-page">${h}</div>`;
+  }
+
   // CSS (nested TOC links)
   const st = document.createElement('style');
   st.textContent = `#toc a.toc-ch{font-weight:700}
-#toc a.toc-sub{padding-left:26px;font-size:.88em;opacity:.9}`;
+#toc a.toc-sub{padding-left:26px;font-size:.88em;opacity:.9}
+.toc-page{font-family:'Times New Roman',serif;color:#1c2530}
+.toc-page .tp-row{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit;padding:3px 0}
+.toc-page .tp-num{flex:0 0 auto;min-width:3.2em}
+.toc-page .tp-txt{flex:0 1 auto}
+.toc-page .tp-dots{flex:1 1 20px;border-bottom:1.5px dotted #8a8a8a;transform:translateY(-3px)}
+.toc-page .tp-ch{font-weight:700;font-style:italic;margin-top:14px;font-size:1.05em}
+.toc-page .tp-l2{font-weight:600;padding-left:18px}
+.toc-page .tp-l3{padding-left:38px;font-size:.92em}
+@media print{#tocpage{page-break-after:always}}`;
   document.head.appendChild(st);
 
   // purana numberContent() ko replace karo (applyConditions isi naam se call karta hai)
