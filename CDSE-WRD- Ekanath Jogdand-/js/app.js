@@ -3958,7 +3958,7 @@ window.addEventListener('click', (event) => {
     let h = `<div class="tp-title">TABLE OF CONTENTS</div>
 <div class="tp-tools no-print">
   <button type="button" id="tpRecalc">Recalculate page numbers</button>
-  <button type="button" id="tpCalib">Calibrate</button>
+
   <button type="button" id="tpReset">Reset my edits</button>
 </div>`;
     m.forEach((c, ci) => {
