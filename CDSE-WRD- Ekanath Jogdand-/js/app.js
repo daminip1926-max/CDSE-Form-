@@ -3890,268 +3890,63 @@ window.addEventListener('click', (event) => {
   }
 });
 /* ==========================================================================
-   CDSE TEMPLATE NUMBERING + TOC  (add-on)
-   Isko app.js ke BAAD load karo (ya app.js ke bilkul end mein paste karo).
-   - Headings/points ko NDSA template ke TOC ke hisaab se FIXED number deta hai
-     (6.1 Ungated, 6.2 Gated ... chahe koi section hidden ho)
-   - Hardcoded duplicate numbers ("1.1 1.1 Objective") hata deta hai
-   - Sidebar TOC mein chapter ke neeche sab sections dikhata hai
+   TABLE OF CONTENTS PAGE  (Executive Summary se pehle)
+   app.js ki bilkul last line ke baad paste karo. Baaki kuch change nahi hota.
    ========================================================================== */
 (function () {
-  const TEMPLATE = `
-1.1|Objective of CDSE
-1.2|Provision under the Dam Safety Act-2021
-1.2.1|Section 38
-1.2.2|Section 39
-1.2.3|Section 40
-1.3|Regulatory Purpose of CDSE
-1.4|Regulations related to the Comprehensive Dam Safety Evaluation made under the Act
-3.1|Project details
-3.2|Salient features of the dam
-3.3|Methodology and Scope of the Evaluation
-3.4|Documents and Data Reviewed
-3.5|Background history of the dam
-3.5.1|Design and construction history
-3.5.2|Comprehensive history of modifications, incidents, and major events affecting the dam
-3.5.3|Current operation and reservoir regime
-3.5.4|Previous CDSE(s), including review of the status of previous evaluation recommendations and completion status
-3.5.5|Hazard potential classification
-5.1|Hydrology
-5.2|Seismic Parameters
-5.3|Structural and Geotechnical Design
-5.4|Applicable Codes, Standards and Guidelines
-6.1|Ungated Spillway
-6.1.1|Type of ungated spillway, such as Ogee/Chute/Flushbar, etc.
-6.1.2|Review and analysis of design data
-6.1.3|Spillway body material
-6.1.4|Spillway Location
-6.1.5|Spillway crest
-6.1.6|Spillway downstream profile
-6.1.7|Energy Dissipation Arrangement
-6.2|Gated Spillway
-6.2.1|Type of gated spillway
-6.2.2|Review of design data
-6.2.3|Spillway body material
-6.2.4|Spillway Location
-6.2.5|Spillway crest/Bridge deck
-6.2.6|Spillway downstream profile
-6.2.7|Energy Dissipation Arrangement
-6.2.8|Gate Hoisting Arrangement
-6.2.9|Gantry Crane Arrangement
-6.2.10|Lifting beam & Counter weight
-6.2.11|Trunnion beam & Walkway
-6.2.12|Gates, seals and embedded parts
-6.2.13|River Sluice Gates, seals and embedded parts
-6.3|Foundation gallery and other Galleries
-6.3.1|Review of design data
-6.3.2|Galleries body material
-6.3.3|Gallery Location
-6.3.4|Foundation drains
-6.3.5|Block joint drains
-6.3.6|Form drains
-6.3.7|General condition of the gallery
-6.3.8|Sump
-6.4|Non-Overflow Concrete/Masonry Block
-6.4.1|Review of design data
-6.4.2|Dam body material
-6.4.3|Crest
-6.4.4|Downstream profile
-6.4.5|Stability of Block as per the latest codal provision
-6.5|Non-Overflow earthen/Rockfill Block
-6.5.1|Review of design data
-6.5.2|Dam body material
-6.5.3|Crest
-6.5.4|Downstream slope
-6.5.5|Upstream Slope
-6.5.6|Downstream toe drain
-6.5.7|Recommendation on the Possibility of Failure
-6.5.8|Filters
-6.6|Barrage
-6.6.1|Review of design data
-6.6.2|Pier
-6.6.3|Bridge deck
-6.6.4|Foundation
-6.6.5|Energy Dissipation Arrangement
-6.6.6|Gate Hoisting Arrangement
-6.6.7|Gantry crane Arrangement
-6.6.8|Lifting beam & Counter weight
-6.6.9|Trunnion beam & Walkway
-6.6.10|Gates, seals and embedded parts
-6.7|Saddle Dam (Gated/Ungated)
-6.7.1|Review of design data
-6.7.2|Dam body material
-6.7.3|Crest
-6.7.4|Downstream slope
-6.7.5|Upstream Slope
-6.7.6|Downstream toe drain
-6.7.7|Stability of Block as per the latest codal provision
-6.7.8|Recommendation on the Possibility of Failure
-6.7.9|Filters
-6.8|Water Conduits, Intake Structures, Penstocks / Tunnels and River Training Works
-6.9|Reservoir Rim, Reservoir Slopes and Landslide / GLOF Susceptibility
-7.1.1|Summary of instruments installed with data availability and performance
-7.1.2|Data storage, analysis, and dissemination methods
-7.1.3|Recommendation on Instrumentation for Dam Health
-8.1|Field Investigations and Material Testing
-11.1|Review of Safety Plans Timelines
-11.2|Review of Operation & Maintenance Manual (O&M Manual)
-11.3|Review of Emergency Action Plan (EAP)
-11.4|Review of Reservoir Rule Curve (RRC)
-11.5|Inflow Flood Forecasting, Warning and Communication System
-11.6|Adequacy of preparedness for extreme events
-11.7|Review of reservoir water quality
-11.8|Risk Assessment (Section 35(2) of the Dam Safety Act, 2021)
-11.9|Review of Compliance with Statutory Obligations of the Owner (Sections 28 and 30–37)
-14.1|Summary of findings
-14.2|Regulatory recommendations to SDSO / NDSA
-14.3|Proposed timeline for next CDSE
-14.4|Prioritised Recommendations and Action Plan`;
-
-  // Jis template point ka app mein alag label hai, uska alias (normalised)
-  const LABEL_ALIAS = { '14.2': ['standardrecommendations'], '6.1.2': ['reviewofdesigndata'] };
-
-  const norm = s => String(s || '')
-    .replace(/&amp;/g, '&').replace(/\([^)]*\)/g, ' ')
-    .toLowerCase().replace(/\bthe\b/g, ' ').replace(/[^a-z0-9]+/g, '');
-
-  const entries = TEMPLATE.trim().split('\n').map(l => {
-    const [num, title] = l.split('|');
-    return { num, title, key: norm(title), depth: num.split('.').length };
-  });
-  const byChapter = {};
-  entries.forEach(e => { (byChapter[e.num.split('.')[0]] = byChapter[e.num.split('.')[0]] || []).push(e); });
-
-  function pick(scope, key, used, allowFuzzy) {
-    let m = scope.find(e => !used.has(e.num) && (e.key === key || (LABEL_ALIAS[e.num] || []).includes(key)));
-    if (!m && allowFuzzy && key.length >= 8)
-      m = scope.find(e => !used.has(e.num) && (e.key.startsWith(key) || key.startsWith(e.key)));
-    return m;
-  }
-
-  // heading ke start ka hardcoded "1.2.1 " hata do
-  function stripHardNumber(el) {
-    const tn = Array.from(el.childNodes).find(n => n.nodeType === 3 && n.textContent.trim());
-    if (tn) tn.textContent = tn.textContent.replace(/^\s*\d+(?:\.\d+)+\s+|^\s*\d+\.\d+\s+/, '');
-  }
-  function setLabel(el, num, isField) {
-    const old = el.querySelector(':scope > .numlabel');
-    if (old) old.remove();
-    el.insertAdjacentHTML('afterbegin', `<span class="num numlabel">${num}</span> `);
-  }
-
-  function templateNumberContent() {
-    (typeof chapters !== 'undefined' ? chapters : []).forEach(ch => {
-      const body = document.querySelector('#ch' + ch.no + ' .chapter-body');
-      const list = byChapter[String(ch.no)] || [];
-      if (!body) return;
-      const used = new Set();
-      let curSub = null;
-
-      body.querySelectorAll('.subhead, .subsubhead, .field > label').forEach(el => {
-        const old = el.querySelector(':scope > .numlabel');
-        if (old) old.remove();
-        const isHead = el.classList.contains('subhead') || el.classList.contains('subsubhead');
-        if (isHead) stripHardNumber(el);
-        const key = norm(el.textContent);
-        if (!key) return;
-
-        if (el.classList.contains('subhead')) {
-          const m = pick(list, key, used, true);
-          curSub = m ? m.num : null;
-          if (m) { used.add(m.num); setLabel(el, m.num); }
-        } else if (el.classList.contains('subsubhead')) {
-          const scope = curSub ? list.filter(e => e.num.startsWith(curSub + '.') && e.depth === curSub.split('.').length + 1) : [];
-          const m = pick(scope, key, used, true);
-          if (m) { used.add(m.num); setLabel(el, m.num); }
-        } else if (curSub) {                              // field label (e.g. "Spillway Location", "Type of ...")
-          const d = curSub.split('.').length + 1;
-          const scope = list.filter(e => e.num.startsWith(curSub + '.') && e.depth === d);
-          let m = pick(scope, key, used, true);
-          if (!m) m = scope.find(e => !used.has(e.num) && (LABEL_ALIAS[e.num] || []).includes(key));
-          if (m) { used.add(m.num); setLabel(el, m.num); }
-        } else {                                          // subhead ke bahar wale labels (ch14.2 etc.)
-          const m = list.find(e => !used.has(e.num) && (LABEL_ALIAS[e.num] || []).includes(key));
-          if (m) { used.add(m.num); setLabel(el, m.num); }
-        }
-      });
-    });
-    buildTocPage();
-    buildSidebarToc();
-  }
-
-  /* ---------------- Sidebar TOC: chapter + uske sections ---------------- */
-  function buildSidebarToc() {
-    const toc = document.getElementById('toc');
-    if (!toc || typeof chapters === 'undefined') return;
-    let h = `<div class="toclabel">TABLE OF CONTENTS</div>`;
-    const link = (id, txt, cls) => `<a class="${cls || ''}" href="#${id}" onclick="closeTocOnMobile()">${txt}</a>`;
-    h += link('cover', 'Cover Page') + link('tocpage', 'Table of Contents') + link('execsummary', 'Executive Summary');
-    let n = 0;
-    chapters.forEach(ch => {
-      h += link('ch' + ch.no, `Chapter ${ch.no}: ${ch.title}`, 'toc-ch');
-      document.querySelectorAll(`#ch${ch.no} .chapter-body .subhead`).forEach(sh => {
-        const lab = sh.querySelector(':scope > .numlabel');
-        if (!lab) return;
-        if (!sh.id) sh.id = 'sec-' + (++n);
-        const cls = sh.closest('.cond.hidden') ? 'toc-sub hidden-sec' : 'toc-sub';
-        if (cls.includes('hidden-sec')) return;
-        const txt = sh.textContent.replace(/\s+/g, ' ').trim();
-        h += link(sh.id, txt, cls);
-      });
-    });
-    h += link('certification', 'Certification') + link('annexures', 'Annexures') + link('annexPhotos', 'Annexure — Photographs');
-    toc.innerHTML = h;
-  }
-
-
-  /* ---------------- TOC PAGE: Cover ke baad, Executive Summary se pehle ---------------- */
   function buildTocPage() {
     if (typeof chapters === 'undefined') return;
     const exec = document.getElementById('execsummary');
     if (!exec) return;
+
     let page = document.getElementById('tocpage');
     if (!page) {
       page = document.createElement('div');
-      page.className = 'chapter';
       page.id = 'tocpage';
-      page.innerHTML = '<div class="chapter-head">Table of Contents</div><div class="chapter-body"></div>';
+      page.className = 'toc-page-wrap';
       exec.parentNode.insertBefore(page, exec);
     }
-    const row = (href, num, text, cls) =>
-      `<a class="tp-row ${cls}" href="#${href}"><span class="tp-num">${num}</span><span class="tp-txt">${text}</span><span class="tp-dots"></span></a>`;
-    let h = '';
+
+    const row = (href, num, text, level) =>
+      `<a class="tp-row tp-${level}" href="#${href}">` +
+      `<span class="tp-num">${num}</span><span class="tp-txt">${text}</span><span class="tp-dots"></span></a>`;
+
+    let h = '<div class="tp-title">TABLE OF CONTENTS</div>';
     chapters.forEach(ch => {
-      h += row('ch' + ch.no, `Chapter ${ch.no}:`, ch.title, 'tp-ch');
-      document.querySelectorAll(`#ch${ch.no} .chapter-body .subhead, #ch${ch.no} .chapter-body .subsubhead, #ch${ch.no} .chapter-body .field > label`).forEach(el => {
+      h += row('ch' + ch.no, `Chapter ${ch.no}:`, ch.title, 'ch');
+      document.querySelectorAll(`#ch${ch.no} .chapter-body .subhead, #ch${ch.no} .chapter-body .subsubhead`).forEach(el => {
         const lab = el.querySelector(':scope > .numlabel');
         if (!lab || el.closest('.cond.hidden')) return;
-        if (!el.id) el.id = 'tp-' + lab.textContent.trim().replace(/\./g, '-');
-        const txt = Array.from(el.childNodes).filter(n => n !== lab).map(n => n.textContent).join('').replace(/\s+/g, ' ').replace(/\bauto\b\s*$/i, '').trim();
-        const sub = lab.textContent.trim().split('.').length > 2 ? 'tp-l3' : 'tp-l2';
-        h += row(el.id, lab.textContent.trim(), txt, sub);
+        const num = lab.textContent.trim();
+        if (!el.id) el.id = 'tp-' + num.replace(/\./g, '-');
+        const txt = Array.from(el.childNodes).filter(n => n !== lab).map(n => n.textContent)
+          .join('').replace(/\s+/g, ' ').trim();
+        h += row(el.id, num, txt, num.split('.').length > 2 ? 'l3' : 'l2');
       });
     });
-    page.querySelector('.chapter-body').innerHTML = `<div class="toc-page">${h}</div>`;
+    page.innerHTML = h;
   }
 
-  // CSS (nested TOC links)
   const st = document.createElement('style');
-  st.textContent = `#toc a.toc-ch{font-weight:700}
-#toc a.toc-sub{padding-left:26px;font-size:.88em;opacity:.9}
-.toc-page{font-family:'Times New Roman',serif;color:#1c2530}
-.toc-page .tp-row{display:flex;align-items:baseline;gap:10px;text-decoration:none;color:inherit;padding:3px 0}
-.toc-page .tp-num{flex:0 0 auto;min-width:3.2em}
-.toc-page .tp-txt{flex:0 1 auto}
-.toc-page .tp-dots{flex:1 1 20px;border-bottom:1.5px dotted #8a8a8a;transform:translateY(-3px)}
-.toc-page .tp-ch{font-weight:700;font-style:italic;margin-top:14px;font-size:1.05em}
-.toc-page .tp-l2{font-weight:600;padding-left:18px}
-.toc-page .tp-l3{padding-left:38px;font-size:.92em}
-@media print{#tocpage{page-break-after:always}}`;
+  st.textContent = `
+.toc-page-wrap{max-width:900px;margin:0 auto 18px;padding:20px 24px;background:#fff;border:1px solid #d8d2c2;border-radius:6px;font-family:'Times New Roman',serif;color:#1c2530;font-weight:400}
+.toc-page-wrap .tp-title{font-size:20px;letter-spacing:1px;margin-bottom:12px;font-weight:400}
+.toc-page-wrap .tp-row{display:flex;align-items:baseline;gap:10px;padding:3px 0;color:inherit;text-decoration:none;font-weight:400;font-style:normal}
+.toc-page-wrap .tp-row *{font-weight:400;font-style:normal}
+.toc-page-wrap .tp-num{flex:0 0 auto;min-width:3.4em}
+.toc-page-wrap .tp-dots{flex:1 1 20px;border-bottom:1.5px dotted #8a8a8a;transform:translateY(-3px)}
+.toc-page-wrap .tp-ch{margin-top:12px}
+.toc-page-wrap .tp-l2{padding-left:18px}
+.toc-page-wrap .tp-l3{padding-left:38px;font-size:.92em}
+@media print{.toc-page-wrap{border:none;page-break-after:always}}`;
   document.head.appendChild(st);
 
-  // purana numberContent() ko replace karo (applyConditions isi naam se call karta hai)
-  window.numberContent = templateNumberContent;
-  try { numberContent = templateNumberContent; } catch (e) {}
-  templateNumberContent();
-  if (typeof applyConditions === 'function') applyConditions();
+  // Numbering jab bhi dobara chale (dam type toggle etc.), TOC bhi refresh ho — numbering ka behaviour same rehta hai
+  if (typeof numberContent === 'function') {
+    const orig = numberContent;
+    const wrapped = function () { const r = orig.apply(this, arguments); buildTocPage(); return r; };
+    try { numberContent = wrapped; } catch (e) {}
+    window.numberContent = wrapped;
+  }
+  buildTocPage();
 })();
