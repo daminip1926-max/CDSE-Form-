@@ -3889,3 +3889,148 @@ window.addEventListener('click', (event) => {
     closeFaqModal();
   }
 });
+/* ==========================================================================
+   TABLE OF CONTENTS PAGE + AUTO PAGE NUMBERS (editable)
+   app.js ki bilkul last line ke baad paste karo. Baaki kuch change nahi hota.
+   ========================================================================== */
+(function () {
+  /* ---- Settings (zaroorat ho to yahan badlo) ---- */
+  const DEFAULT_PAGE_PX = 980;      // ek printed page mein kitne px content aata hai (A4)
+  const CHAPTER_NEW_PAGE = true;    // har chapter naye page se shuru
+  const FIRST_PAGE_NO   = 1;        // Chapter 1 kaunse page number se shuru (template mein 1)
+
+  const LS_PX = 'cdse_toc_pagepx', LS_EDIT = 'cdse_toc_pg_edits';
+  const lsGet = (k, d) => { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+
+  let pagePx = lsGet(LS_PX, DEFAULT_PAGE_PX);
+  let edits = lsGet(LS_EDIT, {});
+
+  /* ---- Page number estimate ---- */
+  function measure() {
+    return chapters.map(ch => {
+      const box = document.getElementById('ch' + ch.no);
+      if (!box) return null;
+      const top = box.getBoundingClientRect().top;
+      const heads = [];
+      box.querySelectorAll('.chapter-body .subhead, .chapter-body .subsubhead').forEach(el => {
+        const lab = el.querySelector(':scope > .numlabel');
+        if (!lab || el.closest('.cond.hidden')) return;
+        heads.push({ el, rel: el.getBoundingClientRect().top - top });
+      });
+      return { ch, height: box.offsetHeight, heads };
+    }).filter(Boolean);
+  }
+  function chapterStarts(m, px) {
+    const starts = []; let p = FIRST_PAGE_NO;
+    m.forEach(c => {
+      starts.push(p);
+      p += CHAPTER_NEW_PAGE ? Math.max(1, Math.ceil(c.height / px)) : Math.floor(c.height / px);
+    });
+    return starts;
+  }
+  function pageOf(m, starts, ci, rel, px) { return starts[ci] + Math.floor(Math.max(0, rel) / px); }
+
+  /* ---- Build TOC page ---- */
+  let lastModel = [];
+  function buildTocPage() {
+    if (typeof chapters === 'undefined') return;
+    const exec = document.getElementById('execsummary');
+    if (!exec) return;
+
+    let page = document.getElementById('tocpage');
+    if (!page) {
+      page = document.createElement('div');
+      page.id = 'tocpage';
+      page.className = 'toc-page-wrap';
+      exec.parentNode.insertBefore(page, exec);
+    }
+    const m = measure();
+    const starts = chapterStarts(m, pagePx);
+    lastModel = m;
+
+    const row = (href, num, text, level, key, pg) =>
+      `<div class="tp-row tp-${level}"><span class="tp-num">${num}</span>` +
+      `<a class="tp-txt" href="#${href}">${text}</a><span class="tp-dots"></span>` +
+      `<span class="tp-pg" contenteditable="true" spellcheck="false" inputmode="numeric" data-key="${key.replace(/"/g, '&quot;')}">${pg}</span></div>`;
+
+    let h = `<div class="tp-title">TABLE OF CONTENTS</div>
+<div class="tp-tools no-print">
+  <button type="button" id="tpRecalc">Recalculate page numbers</button>
+
+  <button type="button" id="tpReset">Reset my edits</button>
+</div>`;
+    m.forEach((c, ci) => {
+      const ch = c.ch, k = `${ch.no}|chapter`;
+      h += row('ch' + ch.no, `Chapter ${ch.no}:`, ch.title, 'ch', k, edits[k] != null ? edits[k] : starts[ci]);
+      c.heads.forEach(hd => {
+        const el = hd.el, lab = el.querySelector(':scope > .numlabel'), num = lab.textContent.trim();
+        if (!el.id) el.id = 'tp-' + num.replace(/\./g, '-');
+        const txt = Array.from(el.childNodes).filter(n => n !== lab).map(n => n.textContent).join('').replace(/\s+/g, ' ').trim();
+        const key = `${ch.no}|${txt}`;
+        const auto = pageOf(m, starts, ci, hd.rel, pagePx);
+        h += row(el.id, num, txt, num.split('.').length > 2 ? 'l3' : 'l2', key, edits[key] != null ? edits[key] : auto);
+      });
+    });
+    page.innerHTML = h;
+    wire(page);
+  }
+
+  function wire(page) {
+    page.querySelectorAll('.tp-pg').forEach(s => {
+      s.addEventListener('input', () => { edits[s.dataset.key] = s.textContent.trim(); lsSet(LS_EDIT, edits); });
+      s.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); s.blur(); } });
+    });
+    page.querySelector('#tpRecalc').onclick = () => {
+      edits = {}; lsSet(LS_EDIT, edits); buildTocPage();       // auto numbers wapas
+    };
+    page.querySelector('#tpReset').onclick = () => { edits = {}; lsSet(LS_EDIT, edits); buildTocPage(); };
+    page.querySelector('#tpCalib').onclick = () => {
+      const last = lastModel[lastModel.length - 1];
+      if (!last) return;
+      const ans = prompt(`Print preview mein Chapter ${last.ch.no} kis page number par shuru hota hai?\n(Chapter 1 = page ${FIRST_PAGE_NO} maan kar)`);
+      const target = parseInt(ans, 10);
+      if (!target || target < FIRST_PAGE_NO) return;
+      let best = pagePx, bestDiff = Infinity;
+      for (let px = 300; px <= 3000; px += 5) {
+        const st = chapterStarts(lastModel, px);
+        const d = Math.abs(st[st.length - 1] - target);
+        if (d < bestDiff || (d === bestDiff && Math.abs(px - DEFAULT_PAGE_PX) < Math.abs(best - DEFAULT_PAGE_PX))) { bestDiff = d; best = px; }
+      }
+      pagePx = best; lsSet(LS_PX, pagePx);
+      edits = {}; lsSet(LS_EDIT, edits);
+      buildTocPage();
+    };
+  }
+
+  /* ---- Style (kuch bhi bold/italic nahi) ---- */
+  const st = document.createElement('style');
+  st.textContent = `
+.toc-page-wrap{max-width:900px;margin:0 auto 18px;padding:20px 24px;background:#fff;border:1px solid #d8d2c2;border-radius:6px;font-family:'Times New Roman',serif;color:#1c2530;font-weight:400}
+.toc-page-wrap .tp-title{font-size:20px;letter-spacing:1px;margin-bottom:10px;font-weight:400}
+.toc-page-wrap .tp-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.toc-page-wrap .tp-tools button{padding:4px 10px;border:1px solid #8a8a8a;background:#fff;border-radius:4px;cursor:pointer;font:inherit;font-size:13px;font-weight:400}
+.toc-page-wrap .tp-row{display:flex;align-items:baseline;gap:10px;padding:3px 0;font-weight:400;font-style:normal}
+.toc-page-wrap .tp-row *{font-weight:400;font-style:normal}
+.toc-page-wrap .tp-num{flex:0 0 auto;min-width:3.4em}
+.toc-page-wrap .tp-txt{flex:0 1 auto;color:inherit;text-decoration:none}
+.toc-page-wrap .tp-dots{flex:1 1 20px;border-bottom:1.5px dotted #8a8a8a;transform:translateY(-3px)}
+.toc-page-wrap .tp-pg{flex:0 0 auto;min-width:2.2em;text-align:right;padding:0 3px;border-radius:3px;outline:none}
+.toc-page-wrap .tp-pg:hover,.toc-page-wrap .tp-pg:focus{background:#fff8d6}
+.toc-page-wrap .tp-ch{margin-top:12px}
+.toc-page-wrap .tp-l2{padding-left:18px}
+.toc-page-wrap .tp-l3{padding-left:38px;font-size:.92em}
+@media print{.toc-page-wrap{border:none;page-break-after:always}.toc-page-wrap .tp-tools{display:none}.toc-page-wrap .tp-pg:hover{background:none}}`;
+  document.head.appendChild(st);
+
+  /* ---- Numbering dobara chale / print se pehle to TOC refresh ---- */
+  if (typeof numberContent === 'function') {
+    const orig = numberContent;
+    const wrapped = function () { const r = orig.apply(this, arguments); buildTocPage(); return r; };
+    try { numberContent = wrapped; } catch (e) {}
+    window.numberContent = wrapped;
+  }
+  window.addEventListener('beforeprint', buildTocPage);
+  buildTocPage();
+  setTimeout(buildTocPage, 800);   // textareas resize hone ke baad numbers theek ho jayein
+})();
