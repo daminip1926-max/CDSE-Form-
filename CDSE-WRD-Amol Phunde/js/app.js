@@ -3889,6 +3889,8 @@ window.addEventListener('click', (event) => {
     closeFaqModal();
   }
 });
+
+
 /* ==========================================================================
    TABLE OF CONTENTS PAGE + AUTO PAGE NUMBERS (editable)
    app.js ki bilkul last line ke baad paste karo. Baaki kuch change nahi hota.
