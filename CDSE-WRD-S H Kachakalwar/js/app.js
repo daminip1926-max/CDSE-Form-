@@ -3889,3 +3889,140 @@ window.addEventListener('click', (event) => {
     closeFaqModal();
   }
 });
+/* ==========================================================================
+   ATTACHMENT FIX  (annexure files, annexure names, signature)
+   app.js ke BAAD paste / load karo (cdse_toc_page.js ke saath ya pehle).
+   Kuch bhi delete / clear nahi karta — sirf missing attachments restore karta hai.
+   ========================================================================== */
+(function () {
+  /* Page build hone ke turant baad FID ki value = static fields ki seema.
+     Isse bade ids runtime mein bane rows/annexures ke hote hain (unke ids har session mein alag ho jate hain). */
+  const STATIC_MAX = FID;
+  const TBODIES = ['actionPlanBody', 'ipoeBody'];
+  const rowVals = tr => Array.from(tr.querySelectorAll('input:not([type=file]),textarea,select')).map(e => e.value);
+
+  /* ---------- 1) Signature: blob: URL ki jagah data: URL (taaki save ho sake) ---------- */
+  window.previewSignature = function (event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('signaturePreview');
+    if (!file || !preview) return;
+    const r = new FileReader();
+    r.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+    r.readAsDataURL(file);
+  };
+
+  /* ---------- 2) Save: signature + annexure titles bhi data mein jodo ---------- */
+  const origBuild = buildDataObject;
+  function patchedBuild() {
+    const data = origBuild.apply(this, arguments);
+    try {
+      const sig = document.getElementById('signaturePreview');
+      if (sig && sig.src && sig.src.indexOf('data:') === 0) data.__signature = sig.src;
+
+      // runtime-banay fields ke ids (alag session mein doosre field se takra sakte hain)
+      data.__dynIds = [];
+      document.querySelectorAll('[data-field]').forEach(el => {
+        const m = /^f(\d+)$/.exec(el.dataset.field);
+        if (m && parseInt(m[1], 10) >= STATIC_MAX) data.__dynIds.push(el.dataset.field);
+      });
+      // extra table rows ko id se nahi, position se save karo
+      data.__tableRows = {};
+      TBODIES.forEach(id => {
+        const tb = document.getElementById(id);
+        if (tb) data.__tableRows[id] = Array.from(tb.children).map(rowVals);
+      });
+
+      data.__annexNames = {};
+      document.querySelectorAll('#annexureList .annex-block').forEach(b => {
+        const id = b.dataset.annexId;
+        if (/^preload/.test(id)) return;
+        const n = b.querySelector('.annex-name-input');
+        if (n && n.value) data.__annexNames[id] = n.value;
+      });
+    } catch (e) { console.warn('attachment fix (save):', e); }
+    return data;
+  }
+
+  /* ---------- 3) Load: extra annexures ko unki SAHI id par banao ---------- */
+  function createExtraAnnexure(id) {
+    const div = document.createElement('div');
+    div.innerHTML = annexBlockHtml(id, '', true);
+    document.getElementById('annexureList').appendChild(div.firstElementChild);
+    const n = parseInt(id.replace('extra', ''), 10) || 0;
+    if (n > annexExtraCount) annexExtraCount = n;
+    renumberAnnexures();
+  }
+  function blockHasFiles(blk) {
+    return !!blk.querySelector('img.single-img[src^="data:"], .pdf-pages img, .annex-page input[type=file]');
+  }
+  function nextFreeExtraId() {
+    let n = annexExtraCount + 1;
+    while (document.getElementById('annex-extra' + n)) n++;
+    return 'extra' + n;
+  }
+
+  const origApply = applyDataObject;
+  function patchedApply(data) {
+    let d = data;
+    try {
+      if (data && data.__annexFiles) {
+        const files = {}, names = {};
+        Object.keys(data.__annexFiles).forEach(id => {
+          if (!/^extra\d+$/.test(id)) { files[id] = data.__annexFiles[id]; return; }
+          let useId = id;
+          const existing = document.getElementById('annex-' + id);
+          if (existing && blockHasFiles(existing)) useId = nextFreeExtraId();  // pehle wale attachments overwrite na hon
+          if (!document.getElementById('annex-' + useId)) createExtraAnnexure(useId);
+          files[useId] = data.__annexFiles[id];
+          if (data.__annexNames && data.__annexNames[id]) names[useId] = data.__annexNames[id];
+        });
+        d = Object.assign({}, data, { __annexFiles: files });
+        d.__annexNamesResolved = names;
+      }
+    } catch (e) { console.warn('attachment fix (load, prepare):', e); }
+
+    // naye saves: runtime ids ko hata do — warna wo galat field mein ghus jate hain
+    try {
+      if (d && Array.isArray(d.__dynIds) && d.__dynIds.length) {
+        d = Object.assign({}, d);
+        d.__dynIds.forEach(k => { delete d[k]; });
+      }
+    } catch (e) { console.warn('attachment fix (strip):', e); }
+
+    const r = origApply.call(this, d);
+
+    try {
+      // annexure titles
+      const names = (d && d.__annexNamesResolved) || {};
+      Object.keys(names).forEach(id => {
+        const inp = document.querySelector(`#annex-${id} .annex-name-input`);
+        if (inp && !inp.value) inp.value = names[id];
+      });
+      // signature
+      if (d && d.__signature) {
+        const sig = document.getElementById('signaturePreview');
+        if (sig) { sig.src = d.__signature; sig.style.display = 'block'; }
+      }
+      // extra table rows: position ke hisaab se values wapas
+      if (d && d.__tableRows) {
+        TBODIES.forEach(id => {
+          const tb = document.getElementById(id), rows = d.__tableRows[id];
+          if (!tb || !rows) return;
+          rows.forEach((vals, i) => {
+            const tr = tb.children[i];
+            if (!tr) return;
+            const fields = tr.querySelectorAll('input:not([type=file]),textarea,select');
+            vals.forEach((v, j) => { if (fields[j]) { fields[j].value = v; if (fields[j].tagName === 'TEXTAREA' && typeof autoResize === 'function') autoResize(fields[j]); } });
+          });
+        });
+      }
+      renumberAnnexures();
+    } catch (e) { console.warn('attachment fix (load, finish):', e); }
+    return r;
+  }
+
+  try { buildDataObject = patchedBuild; applyDataObject = patchedApply; } catch (e) {}
+  window.buildDataObject = patchedBuild;
+  window.applyDataObject = patchedApply;
+})();
+
