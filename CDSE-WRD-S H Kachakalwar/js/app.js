@@ -3889,7 +3889,7 @@ window.addEventListener('click', (event) => {
     closeFaqModal();
   }
 });
-/* ==========================================================================
+      /* ==========================================================================
    ATTACHMENT FIX  (annexure files, annexure names, signature)
    app.js ke BAAD paste / load karo (cdse_toc_page.js ke saath ya pehle).
    Kuch bhi delete / clear nahi karta — sirf missing attachments restore karta hai.
@@ -3932,6 +3932,27 @@ window.addEventListener('click', (event) => {
         if (tb) data.__tableRows[id] = Array.from(tb.children).map(rowVals);
       });
 
+      // Preloaded annexure (Regulations / Order of IPoE) ke ANDAR user ne jo documents jode, wo bhi save karo
+      data.__preloadExtra = {};
+      document.querySelectorAll('#annexureList .annex-block').forEach(b => {
+        const id = b.dataset.annexId;
+        if (!/^preload/.test(id)) return;
+        const entries = [];
+        b.querySelectorAll('.annex-page').forEach(page => {
+          const inp = page.querySelector('input[type=file]');
+          if (inp && inp.style.display === 'none') return;           // ye folder se aaya preloaded page hai
+          const img = page.querySelector('img.single-img');
+          const pdfImgs = Array.from(page.querySelectorAll('.pdf-pages img')).map(i => i.src);
+          const pill = page.querySelector('.filepill');
+          const e = {};
+          if (img && img.src && img.src.indexOf('data:') === 0) e.img = shrinkImgToDataUrl(img, 1600, 0.82);
+          if (pdfImgs.length) e.pdfPages = pdfImgs;
+          if (pill && pill.textContent && pill.style.display !== 'none') e.name = pill.textContent;
+          if (e.img || e.pdfPages || e.name) entries.push(e);
+        });
+        if (entries.length) data.__preloadExtra[id] = entries;
+      });
+
       data.__annexNames = {};
       document.querySelectorAll('#annexureList .annex-block').forEach(b => {
         const id = b.dataset.annexId;
@@ -3959,6 +3980,23 @@ window.addEventListener('click', (event) => {
     let n = annexExtraCount + 1;
     while (document.getElementById('annex-extra' + n)) n++;
     return 'extra' + n;
+  }
+
+  function restorePreloadExtra(id, entries, tries) {
+    tries = tries || 0;
+    const wrap = document.getElementById('annex-pages-' + id);
+    const ready = wrap && (wrap.querySelector('input[type=file][style*="display:none"], input[type=file][style*="display: none"]') || tries > 40);
+    if (!ready) { setTimeout(() => restorePreloadExtra(id, entries, tries + 1), 500); return; }
+    wrap.querySelectorAll('.annex-page[data-restored-extra]').forEach(p => p.remove());
+    entries.forEach(e => {
+      addAnnexPage(id);
+      const page = wrap.lastElementChild;
+      page.dataset.restoredExtra = '1';
+      const img = page.querySelector('img.single-img'), pdfWrap = page.querySelector('.pdf-pages'), pill = page.querySelector('.filepill');
+      if (e.img && img) { img.src = e.img; img.style.display = 'block'; }
+      if (e.pdfPages && pdfWrap) pdfWrap.innerHTML = e.pdfPages.map(x => `<img class="pdf-page-img" src="${x}">`).join('');
+      if (e.name && pill) { pill.textContent = e.name; pill.style.display = 'block'; }
+    });
   }
 
   const origApply = applyDataObject;
@@ -4003,6 +4041,10 @@ window.addEventListener('click', (event) => {
         const sig = document.getElementById('signaturePreview');
         if (sig) { sig.src = d.__signature; sig.style.display = 'block'; }
       }
+      // preloaded annexure ke andar wale user documents
+      if (d && d.__preloadExtra) {
+        Object.keys(d.__preloadExtra).forEach(id => restorePreloadExtra(id, d.__preloadExtra[id]));
+      }
       // extra table rows: position ke hisaab se values wapas
       if (d && d.__tableRows) {
         TBODIES.forEach(id => {
@@ -4025,4 +4067,3 @@ window.addEventListener('click', (event) => {
   window.buildDataObject = patchedBuild;
   window.applyDataObject = patchedApply;
 })();
-
