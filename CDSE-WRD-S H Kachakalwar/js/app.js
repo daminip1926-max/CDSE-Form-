@@ -3889,7 +3889,7 @@ window.addEventListener('click', (event) => {
     closeFaqModal();
   }
 });
-      /* ==========================================================================
+    /* ==========================================================================
    ATTACHMENT FIX  (annexure files, annexure names, signature)
    app.js ke BAAD paste / load karo (cdse_toc_page.js ke saath ya pehle).
    Kuch bhi delete / clear nahi karta — sirf missing attachments restore karta hai.
@@ -3985,7 +3985,10 @@ window.addEventListener('click', (event) => {
   function restorePreloadExtra(id, entries, tries) {
     tries = tries || 0;
     const wrap = document.getElementById('annex-pages-' + id);
-    const ready = wrap && (wrap.querySelector('input[type=file][style*="display:none"], input[type=file][style*="display: none"]') || tries > 40);
+    const preloadDone = wrap && (
+      wrap.querySelector('input[type=file][style*="display:none"], input[type=file][style*="display: none"]') ||
+      Array.from(wrap.children).some(c => /^Preloaded file not found/.test(c.textContent || '')));   // folder wali file na mile tab bhi aage badho
+    const ready = wrap && (preloadDone || tries > 40);
     if (!ready) { setTimeout(() => restorePreloadExtra(id, entries, tries + 1), 500); return; }
     wrap.querySelectorAll('.annex-page[data-restored-extra]').forEach(p => p.remove());
     entries.forEach(e => {
